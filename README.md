@@ -1,47 +1,55 @@
-# ModProWeb--Dev6
+# EduTools - Gestión y Sandbox Pedagógico 🎓
 
-# Gestión Proyecto - Programador Web (Dev6)
+EduTools es una plataforma web diseñada para optimizar el flujo de trabajo entre los equipos de Asesoría Pedagógica y Maquetación en entornos de educación a distancia (Canvas LMS). 
 
-## 📖 Descripción del Proyecto
-Este proyecto es una aplicación web Full Stack desarrollada para la asignatura Módulo Programador Web. El sistema permite [COMPLETAR ACÁ BREVEMENTE QUÉ HACE TU SISTEMA], ofreciendo una interfaz web moderna y un backend seguro conectado a una base de datos relacional.
+## 1. Situación Problemática
+Se ha detectado una brecha crítica en el montaje de aulas virtuales:
+* **Dispersión de la Información:** Instructivos y manuales fragmentados.
+* **Dependencia Técnica:** Los asesores no pueden previsualizar contenidos con estilos institucionales antes de la maquetación.
+* **Iteraciones Ineficientes:** El 30% de los tickets sufren demoras por desajustes técnicos o estéticos.
 
-## ⚙️ Instrucciones de Instalación y Uso Básico
+## 2. Solución Propuesta
+EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoja de estilos institucional. Esto permite generar un "output" HTML limpio, asegurando la coherencia visual desde la fase de diseño y optimizando el traspaso al equipo técnico.
 
-### 1. Clonar el repositorio
-\`\`\`bash
-git clone https://github.com/TU-USUARIO/ModProWeb--Dev6.git
-cd ModProWeb--Dev6
-\`\`\`
-
-### 2. Configurar el Backend (Django Rest Framework)
-\`\`\`bash
-cd Backend
-python -m venv venv
-source venv/Scripts/activate  # En Windows
-pip install -r requirements.txt
-# Crear archivo .env basándose en .env_modelo
-python manage.py migrate
-python manage.py runserver
-\`\`\`
-
-### 3. Configurar el Frontend (Angular)
-\`\`\`bash
-cd ../Frontend
-npm install
-ng serve
-\`\`\`
-*El uso básico consiste en levantar ambos servidores localmente; la API de Django correrá en el puerto 8000 y el Frontend de Angular en el puerto 4200.*
-
-## 📋 Especificación de Requerimientos
+## 3. Requerimientos del Sistema (Evidencia 1)
 
 ### Requerimientos Funcionales (RF)
-1. El sistema debe permitir a los usuarios registrarse e iniciar sesión de forma segura.
-2. El usuario debe poder visualizar un listado principal con los registros/servicios disponibles en la base de datos.
-3. El sistema debe permitir al administrador crear, editar y eliminar registros mediante endpoints del backend.
-4. El sistema debe contar con un buscador o sistema de filtros en la vista principal.
-5. El usuario debe poder actualizar la información básica de su perfil.
+* **RF1 - Gestión de Recursos (CRUD):** El sistema permite administrar manuales, links y plantillas.
+* **RF2 - Filtros de Búsqueda:** Clasificación de recursos por etiquetas (H5P, LTI, Exámenes).
+* **RF3 - Editor Sandbox:** Interfaz de edición con previsualización CSS institucional en tiempo real.
+* **RF4 - Galería de Componentes:** Biblioteca de elementos visuales (acordeones, banners) listos para usar.
+* **RF5 - Gestión de Roles:** Acceso diferenciado para Administradores (Maquetadores) y Usuarios (Asesores).
 
 ### Requerimientos No Funcionales (RNF)
-1. **Seguridad:** Las contraseñas deben estar encriptadas y se debe utilizar un archivo `.env` para proteger las credenciales de conexión a MySQL.
-2. **Usabilidad:** La interfaz Frontend desarrollada en Angular debe ser intuitiva y contar con estilos estructurados.
-3. **Arquitectura:** El sistema debe respetar la separación estricta en dos carpetas independientes: Frontend (Angular) y Backend (Django DRF).
+* **RNF1 - Persistencia:** Almacenamiento relacional en MySQL.
+* **RNF2 - Integración:** Comunicación segura entre Frontend y Backend mediante CORS.
+* **RNF3 - Interfaz:** Diseño responsivo basado en Bootstrap 5.
+
+## 4. Stack Tecnológico
+* **Frontend:** Angular 18 (Signals & Standalone Components).
+* **Backend:** Django 6.0 + Django REST Framework.
+* **Base de Datos:** MySQL.
+* **Estilos:** Bootstrap 5.
+
+---
+
+## 🛠️ Instalación y Configuración
+
+### Backend (Django)
+1. Navegar a la carpeta: `cd Backend`
+2. Crear entorno virtual: `python -m venv venv`
+3. Activar entorno: `venv\Scripts\activate` (Windows)
+4. Instalar dependencias: `pip install django django-cors-headers djangorestframework mysqlclient python-dotenv`
+5. Configurar el archivo `.env` con tus credenciales de MySQL.
+6. Correr migraciones: `python manage.py migrate`
+7. Iniciar servidor: `python manage.py runserver`
+   * *Nota: El servidor cuenta con redirección automática a la API en `http://127.0.0.1:8000/`*
+
+### Frontend (Angular)
+1. Navegar a la carpeta: `cd Frontend`
+2. Instalar paquetes: `npm install`
+3. Iniciar servidor: `ng serve`
+4. Abrir en el navegador: `http://localhost:4200`
+
+---
+**Desarrollado por:** DEV6
