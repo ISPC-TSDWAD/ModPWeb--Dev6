@@ -53,3 +53,12 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 ---
 **Desarrollado por:** DEV6
+
+
+## 📸 Evidencias de Funcionamiento
+
+### Conexión Exitosa con el Backend
+![Backend API](docs/capturas/Test%20conection%20-%20backend.png)
+
+### Integración Frontend y Consola
+![Frontend Console](docs/capturas/Test%20conection%20-%20frontend.png)
