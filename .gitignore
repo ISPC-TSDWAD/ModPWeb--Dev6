@@ -1,0 +1,12 @@
+# Entornos Virtuales y Python
+venv/
+__pycache__/
+*.pyc
+
+# Variables de entorno
+.env
+
+# Angular y Node
+node_modules/
+dist/
+.angular/
