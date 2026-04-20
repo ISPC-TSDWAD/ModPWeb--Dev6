@@ -35,21 +35,23 @@ Brinda una base funcional para el desarrollo de aplicaciones web completas, faci
 
 ## 📂 Estructura del proyecto
 
+```
 ModPWeb--Dev6/
 │
 ├── Frontend/
-│ └── frontend-app/
+│   └── frontend-app/
 │
 ├── Backend/
-│ ├── core/
-│ ├── api/
-│ ├── env/
-│ ├── requirements.txt
+│   ├── core/
+│   ├── api/
+│   ├── env/
+│   └── requirements.txt
+│
+├── docs/
+│   └── capturas/
 │
 └── README.md
-
-
----
+```
 
 ## 🚀 Instalación
 
@@ -58,14 +60,15 @@ ModPWeb--Dev6/
 cd Frontend/frontend-app
 npm install
 ng serve
-
-cd Backend
+```
+### 🔹 Backend
+```cd Backend
 python -m venv env
 env\Scripts\activate
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py runserver
-
+```
 🧪 Uso básico
 
 Acceder a:
@@ -73,22 +76,24 @@ Acceder a:
 http://127.0.0.1:8000/api/test-conexion/
 
 Permite:
-
-visualizar registros
-crear nuevos registros
-probar la conexión con la base de datos
+---
+- visualizar registros
+- crear nuevos registros
+- probar la conexión con la base de datos
+---
 📋 Requerimientos Funcionales (RF)
-El sistema debe permitir visualizar registros almacenados en la base de datos.
-El sistema debe permitir crear nuevos registros mediante el endpoint API.
-El sistema debe permitir validar la conexión entre backend y base de datos.
-El sistema debe integrar un frontend funcional con Angular.
-El sistema debe permitir la interacción básica mediante una interfaz web.
+--
+* El sistema debe permitir visualizar registros almacenados en la base de datos.
+* El sistema debe permitir crear nuevos registros mediante el endpoint API.
+* El sistema debe permitir validar la conexión entre backend y base de datos.
+* El sistema debe integrar un frontend funcional con Angular.
+* El sistema debe permitir la interacción básica mediante una interfaz web.
+---
 📋 Requerimientos No Funcionales (RNF)
-El sistema debe ser accesible desde un navegador web.
-El sistema debe utilizar tecnologías modernas y escalables.
-El sistema debe garantizar la seguridad de credenciales mediante el uso de variables de entorno (.env).
-🔐 Configuración de entorno
+--
+* El sistema debe ser accesible desde un navegador web.
+* El sistema debe utilizar tecnologías modernas y escalables.
+* El sistema debe garantizar la seguridad de credenciales mediante el uso de variables de entorno (.env).
 
 
-
-Alejandro Corvalán
+---
