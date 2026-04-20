@@ -1,19 +1,23 @@
-import { Component, OnInit } from '@angular/core';
-import { HttpClient } from '@angular/common/http'; // Necesitás esto para pedir datos
+import { TestBed } from '@angular/core/testing';
+import { App } from './app';
 
-@Component({
-  selector: 'app-root',
-  templateUrl: './app.html',
-  styleUrls: ['./app.css']
-})
-export class AppComponent implements OnInit {
-  constructor(private http: HttpClient) {}
+describe('App', () => {
+  beforeEach(async () => {
+    await TestBed.configureTestingModule({
+      imports: [App],
+    }).compileComponents();
+  });
 
-  ngOnInit() {
-    // Esta es la línea que hace la magia:
-    this.http.get('http://localhost:8000/api/test/').subscribe({
-      next: (data) => console.log('Datos del Backend:', data),
-      error: (err) => console.error('Error de conexión:', err)
-    });
-  }
-}
+  it('should create the app', () => {
+    const fixture = TestBed.createComponent(App);
+    const app = fixture.componentInstance;
+    expect(app).toBeTruthy();
+  });
+
+  it('should render title', async () => {
+    const fixture = TestBed.createComponent(App);
+    await fixture.whenStable();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('h1')?.textContent).toContain('Hello, Frontend');
+  });
+});
