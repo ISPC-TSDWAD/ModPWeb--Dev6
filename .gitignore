@@ -4,6 +4,7 @@ __pycache__/
 *.pyc
 
 # Variables de entorno
+**/ .env
 .env
 
 # Angular y Node
