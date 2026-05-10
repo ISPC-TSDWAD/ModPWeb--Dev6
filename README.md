@@ -61,3 +61,5 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 ### Integración Frontend y Consola
 ![Frontend Console](docs/capturas/Test%20conection%20-%20frontend.png)
+
+$
