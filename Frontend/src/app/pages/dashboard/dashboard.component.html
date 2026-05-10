@@ -1,0 +1,84 @@
+<div class="container py-5">
+  <div class="row mb-4">
+    <div class="col-12">
+      <h2 class="fw-bold text-primary">Panel de Control (Asesor Pedagógico)</h2>
+      <p class="text-muted">Carga de nuevos recursos y plantillas para maquetación.</p>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col-md-8 mx-auto">
+      <div class="card shadow-sm">
+        <div class="card-header bg-dark text-white">
+          <h5 class="card-title mb-0">Subir Nuevo Recurso</h5>
+        </div>
+        <div class="card-body">
+          
+          <div *ngIf="mensajeExito" class="alert alert-success">
+            ¡Recurso guardado correctamente!
+          </div>
+
+          <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()">
+            
+            <div class="mb-3">
+              <label for="titulo" class="form-label">Título del Recurso *</label>
+              <input 
+                type="text" 
+                id="titulo" 
+                class="form-control" 
+                formControlName="titulo"
+                [ngClass]="{'is-invalid': esCampoInvalido('titulo')}"
+                placeholder="Ej: Plantilla Examen Canvas">
+              <div class="invalid-feedback">
+                El título es obligatorio.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="categoria" class="form-label">Categoría *</label>
+              <select 
+                id="categoria" 
+                class="form-select" 
+                formControlName="categoria"
+                [ngClass]="{'is-invalid': esCampoInvalido('categoria')}">
+                <option value="">Seleccione una categoría...</option>
+                <option value="H5P">Elemento H5P</option>
+                <option value="LTI">Herramienta LTI externa</option>
+                <option value="EXAMEN">Plantilla de Examen</option>
+                <option value="ESTILOS">Fragmento de Estilos CSS</option>
+              </select>
+              <div class="invalid-feedback">
+                Debe seleccionar una categoría.
+              </div>
+            </div>
+
+            <div class="mb-3">
+              <label for="url" class="form-label">Enlace / URL de origen *</label>
+              <input 
+                type="url" 
+                id="url" 
+                class="form-control" 
+                formControlName="url"
+                [ngClass]="{'is-invalid': esCampoInvalido('url')}"
+                placeholder="https://...">
+              <div class="invalid-feedback">
+                El enlace es obligatorio.
+              </div>
+            </div>
+
+            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
+              <!-- El botón se desactiva si el formulario es inválido -->
+              <button 
+                type="submit" 
+                class="btn btn-primary" 
+                [disabled]="recursoForm.invalid">
+                <i class="bi bi-save"></i> Guardar Recurso
+              </button>
+            </div>
+            
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
