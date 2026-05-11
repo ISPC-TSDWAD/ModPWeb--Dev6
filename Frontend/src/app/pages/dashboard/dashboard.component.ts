@@ -19,9 +19,9 @@ export class DashboardComponent {
 
   constructor() {
     this.recursoForm = this.fb.group({
-      titulo: ['', Validators.required],
+      titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
       categoria: ['', Validators.required],
-      url: ['', Validators.required]
+      url: ['', [Validators.required, Validators.pattern('https?://.+')]]
     });
   }
 
