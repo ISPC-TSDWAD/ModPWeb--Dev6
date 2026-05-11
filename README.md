@@ -1,6 +1,6 @@
 # EduTools - Gestión y Sandbox Pedagógico 🎓
 
-EduTools es una plataforma web diseñada para optimizar el flujo de trabajo entre los equipos de Asesoría Pedagógica y Maquetación en entornos de educación a distancia (Canvas LMS). 
+EduTools es una plataforma web diseñada para optimizar el flujo de trabajo entre los equipos de Asesoría Pedagógica y Maquetación en entornos de educación a distancia (Canvas LMS).
 
 ## 1. Situación Problemática
 Se ha detectado una brecha crítica en el montaje de aulas virtuales:
@@ -11,48 +11,119 @@ Se ha detectado una brecha crítica en el montaje de aulas virtuales:
 ## 2. Solución Propuesta
 EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoja de estilos institucional. Esto permite generar un "output" HTML limpio, asegurando la coherencia visual desde la fase de diseño y optimizando el traspaso al equipo técnico.
 
-## 3. Especificación de Requerimientos (Evidencia 1)
+---
 
-### Requerimientos Funcionales (RF)
-* **RF1:** El sistema deberá permitir al **[Usuario Administrador]** gestionar (crear, leer, actualizar y eliminar) el repositorio central de manuales, links y plantillas.
-* **RF2:** El sistema deberá permitir al **[Usuario Asesor Pedagógico]** buscar, explorar y filtrar los recursos visuales disponibles mediante etiquetas y categorías (H5P, LTI, Exámenes).
-* **RF3:** El sistema deberá permitir al **[Usuario Asesor Pedagógico]** editar contenido en el Sandbox y visualizar los estilos institucionales en tiempo real.
-* **RF4:** El sistema deberá permitir al **[Usuario Maquetador]** previsualizar, seleccionar y copiar el código de los elementos visuales desde la Galería de Componentes para su inyección directa.
-* **RF5:** El sistema deberá permitir a los **[Usuarios Autenticados]** iniciar sesión de forma segura y acceder a diferentes módulos según su nivel de privilegios (Administrador o Asesor).
+## 3. Equipo DEV6
 
-### Requerimientos No Funcionales (RNF)
-* **RNF1 - Persistencia e Integridad:** El sistema garantizará la persistencia de datos en un motor relacional (MySQL), aplicando restricciones de integridad referencial (Foreign Keys) estrictas para evitar datos huérfanos.
-* **RNF2 - Desempeño y Usabilidad:** La interfaz de usuario asegurará tiempos de renderizado en la previsualización del Sandbox inferiores a 2 segundos bajo condiciones de red estándar, manteniendo la consistencia visual responsiva del framework Bootstrap 5 en resoluciones desde 320px hasta 4K.
-* **RNF3 - Arquitectura e Integración:** La plataforma respetará una arquitectura desacoplada, comunicando el frontend (SPA) con el backend única y exclusivamente a través de una API REST, aplicando políticas de CORS seguras.
+| Integrante | Rol | Responsabilidad |
+|-----------|-----|----------------|
+| Jonathan Guillén | PM / BA / Dev Full Stack | Liderazgo técnico, Product Discovery, gestión del repositorio |
+| Ale Corva | Developer | Arquitectura Angular, routing, servicios y vistas |
+| Gonzalo Velasco | Developer | Modelado de datos (DER), endpoints CRUD y script SQL |
+| Daniela Salvo | Developer | Vistas frontend, Sandbox y documentación |
+| Gerardo Romero | Developer | Componentes compartidos, formularios y vista About |
+
+---
 
 ## 4. Stack Tecnológico
-* **Frontend:** Angular 18 (Signals & Standalone Components).
-* **Backend:** Django 6.0 + Django REST Framework.
-* **Base de Datos:** MySQL.
-* **Estilos:** Bootstrap 5.
+
+| Capa | Tecnología |
+|------|-----------|
+| Frontend | Angular **21.x** (Signals + Standalone Components) |
+| Backend | Django **6.0.4** + Django REST Framework |
+| Base de datos | MySQL |
+| Estilos | Bootstrap **5.3** |
 
 ---
 
-## 🛠️ Instalación y Configuración
+## 5. Especificación de Requerimientos (Sprint 1 — refinados)
+
+### Requerimientos Funcionales (RF)
+* **RF1:** El sistema debe permitir a los usuarios iniciar sesión mediante un formulario con credenciales, validando los campos antes del envío.
+* **RF2:** El sistema debe mostrar un panel interactivo (Dashboard) con los estándares institucionales (videos, lecturas, actividades, acordeones e infografías), obtenidos desde el servicio API.
+* **RF3:** El sistema debe permitir cargar nuevos recursos pedagógicos a través de un formulario reactivo con validaciones de campos requeridos, longitud mínima y formato.
+* **RF4:** El sistema debe listar las plantillas disponibles en la vista Home como tarjetas, mostrando nombre y categoría sin hardcoding en el HTML.
+* **RF5:** El sistema debe mostrar la identidad, misión y propósito del equipo en la sección "Quiénes Somos" (About).
+
+### Requerimientos No Funcionales (RNF)
+* **RNF1 - Persistencia e Integridad:** El sistema garantiza la persistencia de datos en MySQL, con restricciones de integridad referencial (Foreign Keys) en los modelos Usuario, Categoría, Asignatura y Recurso.
+* **RNF2 - Desempeño y Usabilidad:** La interfaz es responsive (Bootstrap 5, desde 320px hasta 4K) con tiempos de carga inferiores a 2 segundos bajo condiciones normales de red.
+* **RNF3 - Arquitectura e Integración:** Arquitectura desacoplada: SPA Angular ↔ API REST Django, con CORS configurado y estructura modular en `pages/`, `components/` y `services/`.
+
+---
+
+## 6. Instrucciones de Instalación y Ejecución
 
 ### Backend (Django)
-1. Navegar a la carpeta: `cd Backend`
-2. Crear entorno virtual: `python -m venv venv`
-3. Activar entorno: `venv\Scripts\activate` (Windows)
-4. Instalar dependencias: `pip install -r requirements.txt` *(Nota: incluye django, cors-headers, djangorestframework, mysqlclient, python-dotenv)*
-5. Configurar el archivo `.env` basándose en el `.env_modelo` con las credenciales de MySQL local.
-6. Correr migraciones: `python manage.py migrate`
-7. Iniciar servidor: `python manage.py runserver`
-   * *Nota: El servidor cuenta con redirección automática a la API en `http://127.0.0.1:8000/`*
+
+```bash
+cd Backend
+python -m venv venv
+venv\Scripts\activate        # Windows
+pip install -r requirements.txt
+```
+
+Crear el archivo `.env` basándose en `.env_modelo` con las credenciales MySQL locales:
+
+```
+DB_NAME=edutools_db
+DB_USER=tu_usuario
+DB_PASSWORD=tu_contraseña
+DB_HOST=localhost
+DB_PORT=3306
+```
+
+```bash
+python manage.py migrate
+python manage.py runserver
+# API disponible en: http://127.0.0.1:8000/api/
+```
 
 ### Frontend (Angular)
-1. Navegar a la carpeta: `cd Frontend`
-2. Instalar paquetes: `npm install`
-3. Iniciar servidor: `ng serve`
-4. Abrir en el navegador: `http://localhost:4200`
+
+```bash
+cd Frontend
+npm install
+ng serve
+# Aplicación en: http://localhost:4200
+```
+
+> El frontend se conecta al backend en `http://127.0.0.1:8000/api/`. Asegurarse de tener el backend corriendo antes de iniciar el frontend.
 
 ---
-**Desarrollado por:** DEV6
+
+## 7. Estructura del Proyecto
+
+```
+ModPWeb--Dev6/
+├── Backend/
+│   ├── api/
+│   │   ├── models.py        # Usuario, Categoría, Asignatura, Recurso
+│   │   ├── serializers.py   # Serializadores DRF
+│   │   ├── views.py         # ViewSets CRUD
+│   │   └── urls.py          # Rutas API
+│   ├── core/
+│   │   └── settings.py      # Configuración MySQL, CORS, timezone ARG
+│   └── .env_modelo          # Modelo de variables de entorno
+├── Frontend/
+│   └── src/app/
+│       ├── components/      # Header y Footer compartidos
+│       ├── pages/           # Home, About, Dashboard, Login
+│       └── services/        # ApiService (HttpClient + RxJS)
+└── docs/
+    ├── der.md               # Diagrama Entidad-Relación
+    └── sql/                 # Script de creación de BD
+```
+
+---
+
+## 8. Documentación
+
+* [Wiki del Proyecto](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki)
+* [Diagrama Entidad-Relación](docs/der.md)
+* [Script SQL](docs/sql/script_database.sql)
+
+---
 
 ## 📸 Evidencias de Funcionamiento
 
@@ -61,5 +132,3 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 ### Integración Frontend y Consola
 ![Frontend Console](docs/capturas/Test%20conection%20-%20frontend.png)
-
-$
