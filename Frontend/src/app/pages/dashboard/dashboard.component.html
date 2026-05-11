@@ -1,93 +1,236 @@
-<div class="container py-5">
-  <div class="row mb-4">
-    <div class="col-12">
-      <h2 class="fw-bold text-primary">Panel de Control (Asesor Pedagógico)</h2>
-      <p class="text-muted">Carga de nuevos recursos y plantillas para maquetación.</p>
-    </div>
-  </div>
-
-  <div class="row">
-    <div class="col-md-8 mx-auto">
-      <div class="card shadow-sm">
-        <div class="card-header bg-dark text-white">
-          <h5 class="card-title mb-0">Subir Nuevo Recurso</h5>
-        </div>
-        <div class="card-body">
-          
-          <div *ngIf="mensajeExito" class="alert alert-success">
-            ¡Recurso guardado correctamente!
-          </div>
-
-          <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()">
-            
-            <div class="mb-3">
-              <label for="titulo" class="form-label">Título del Recurso *</label>
-              <input 
-                type="text" 
-                id="titulo" 
-                class="form-control" 
-                formControlName="titulo"
-                [ngClass]="{'is-invalid': esCampoInvalido('titulo')}"
-                placeholder="Ej: Plantilla Examen Canvas">
-              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['required']">
-                El título es obligatorio.
-              </div>
-              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['minlength']">
-                El título debe tener al menos 5 caracteres.
-              </div>
-              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['maxlength']">
-                El título no puede exceder los 50 caracteres.
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="categoria" class="form-label">Categoría *</label>
-              <select 
-                id="categoria" 
-                class="form-select" 
-                formControlName="categoria"
-                [ngClass]="{'is-invalid': esCampoInvalido('categoria')}">
-                <option value="">Seleccione una categoría...</option>
-                <option value="H5P">Elemento H5P</option>
-                <option value="LTI">Herramienta LTI externa</option>
-                <option value="EXAMEN">Plantilla de Examen</option>
-                <option value="ESTILOS">Fragmento de Estilos CSS</option>
-              </select>
-              <div class="invalid-feedback">
-                Debe seleccionar una categoría.
-              </div>
-            </div>
-
-            <div class="mb-3">
-              <label for="url" class="form-label">Enlace / URL de origen *</label>
-              <input 
-                type="url" 
-                id="url" 
-                class="form-control" 
-                formControlName="url"
-                [ngClass]="{'is-invalid': esCampoInvalido('url')}"
-                placeholder="https://...">
-              <div class="invalid-feedback" *ngIf="recursoForm.get('url')?.errors?.['required']">
-                El enlace es obligatorio.
-              </div>
-              <div class="invalid-feedback" *ngIf="recursoForm.get('url')?.errors?.['pattern']">
-                El enlace debe ser una URL válida (ej. https://...).
-              </div>
-            </div>
-
-            <div class="d-grid gap-2 d-md-flex justify-content-md-end mt-4">
-              <!-- El botón se desactiva si el formulario es inválido -->
-              <button 
-                type="submit" 
-                class="btn btn-primary" 
-                [disabled]="recursoForm.invalid">
-                <i class="bi bi-save"></i> Guardar Recurso
-              </button>
-            </div>
-            
-          </form>
-        </div>
+<div class="flex w-full min-h-[calc(100vh-64px)]">
+  <!-- NavigationDrawer -->
+  <aside class="flex flex-col w-[300px] h-[calc(100vh-64px)] fixed left-0 top-16 z-40 bg-surface-container border-r border-outline-variant hidden lg:flex overflow-y-auto">
+    <div class="p-lg flex items-center gap-md">
+      <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+        <span class="material-symbols-outlined">school</span>
       </div>
+      <div>
+        <p class="text-label-md font-bold text-primary">Referencial Institucional</p>
+        <p class="text-label-sm text-on-surface-variant">Estándares de Diseño</p>
+      </div>
+    </div>
+    <nav class="flex-1 overflow-y-auto">
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/login">
+        <span class="material-symbols-outlined">library_books</span>
+        <span class="text-label-md font-label-md">Componentes</span>
+      </div>
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/home">
+        <span class="material-symbols-outlined">science</span>
+        <span class="text-label-md font-label-md">Sandbox</span>
+      </div>
+      <div class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container border-l-4 border-primary scale-[0.99] transition-transform cursor-pointer" routerLink="/dashboard">
+        <span class="material-symbols-outlined">folder_open</span>
+        <span class="text-label-md font-label-md">Panel de Recursos</span>
+      </div>
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/about">
+        <span class="material-symbols-outlined">settings</span>
+        <span class="text-label-md font-label-md">Configuración</span>
+      </div>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <div class="flex-1 lg:ml-[300px] p-lg flex flex-col items-center">
+    <div class="max-w-[1200px] w-full">
+      <!-- Hero Section -->
+      <section class="mb-xl rounded-xl overflow-hidden bg-white border border-outline-variant">
+        <div class="h-48 relative">
+          <img class="w-full h-full object-cover" data-alt="A clean and professional banner featuring a modern workspace with an open laptop, a notebook, and soft natural sunlight. The aesthetic is academic and productive, using a color palette of whites, soft greys, and deep blues to convey a sense of focus and institutional reliability." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAKM78N0KbZaEOQLGF9vZO7MQTeCf79BmaUgmlZ3Sfmc9dZxfh5n7l5Ms5lnsCrCSVASZyPQk99dvrzy2XrB_mHHiBC5wcXe0M4qSWcjdD1JOMtxd6_TnBtIz5dABKtK03NxG-dJ0WCFtdPDsRsuFznnRmm7Z6p4VyhSFCCQd1T_d2sGYe6OBlIF-u-BwxpN1MFeoCgXfhyShFINZRRh8pKX0aZgxVYrL0gSzJNF-SSSsy-29s-XT1XSBvwvybNBk-Ssk_wL4MMW-Q"/>
+          <div class="absolute inset-0 bg-primary/40 flex items-center px-lg">
+            <h2 class="text-display-lg text-white font-display-lg">Galería de Estándares Institucionales</h2>
+          </div>
+        </div>
+        <div class="p-lg">
+          <p class="text-body-lg text-on-surface-variant">
+            Esta galería presenta los elementos pedagógicos aprobados para el diseño de materiales de aprendizaje. 
+            Cada componente ha sido diseñado para garantizar la accesibilidad y la consistencia visual en todos los entornos institucionales.
+          </p>
+        </div>
+      </section>
+
+      <!-- Section: CTAs Content -->
+      <section class="mb-xl" id="ctas">
+        <div class="flex items-center gap-sm mb-md">
+          <span class="material-symbols-outlined text-primary" data-icon="ads_click">ads_click</span>
+          <h3 class="text-headline-lg font-headline-lg text-primary">Llamados a la Acción (CTA)</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+          <!-- Video CTA -->
+          <div class="bg-white border border-outline-variant rounded p-lg flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start mb-md">
+                <span class="text-label-sm font-bold text-primary-fixed-dim bg-primary-container px-2 py-1 rounded">ESTÁNDAR: VIDEO</span>
+              </div>
+              <div class="border border-primary rounded-lg overflow-hidden mb-md">
+                <div class="bg-primary p-2 flex items-center gap-xs">
+                  <span class="material-symbols-outlined text-white text-[18px]" data-icon="videocam">videocam</span>
+                  <span class="text-white text-label-md font-bold">Video</span>
+                </div>
+                <div class="p-md">
+                  <p class="text-body-sm mb-xs">Introducción o invitación al video</p>
+                  <span class="text-secondary font-bold text-body-sm">Ver video (LINK)</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-label-sm text-on-surface-variant italic">Uso: Indicar material audiovisual obligatorio o complementario.</p>
+          </div>
+          <!-- Reading CTA -->
+          <div class="bg-white border border-outline-variant rounded p-lg flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start mb-md">
+                <span class="text-label-sm font-bold text-primary-fixed-dim bg-primary-container px-2 py-1 rounded">ESTÁNDAR: LECTURA</span>
+              </div>
+              <div class="border border-primary rounded-lg overflow-hidden mb-md">
+                <div class="bg-primary p-2 flex items-center gap-xs">
+                  <span class="material-symbols-outlined text-white text-[18px]" data-icon="book">book</span>
+                  <span class="text-white text-label-md font-bold">Lectura</span>
+                </div>
+                <div class="p-md">
+                  <p class="text-body-sm mb-xs">Introducción o invitación a la lectura</p>
+                  <span class="text-secondary font-bold text-body-sm">Acceso al documento (LINK)</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-label-sm text-on-surface-variant italic">Uso: Identificar bibliografía y documentos de soporte.</p>
+          </div>
+          <!-- Podcast CTA -->
+          <div class="bg-white border border-outline-variant rounded p-lg flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start mb-md">
+                <span class="text-label-sm font-bold text-primary-fixed-dim bg-primary-container px-2 py-1 rounded">ESTÁNDAR: PODCAST</span>
+              </div>
+              <div class="border border-primary rounded-lg overflow-hidden mb-md">
+                <div class="bg-primary p-2 flex items-center gap-xs">
+                  <span class="material-symbols-outlined text-white text-[18px]" data-icon="podcasts">podcasts</span>
+                  <span class="text-white text-label-md font-bold">Podcast</span>
+                </div>
+                <div class="p-md">
+                  <p class="text-body-sm mb-xs">Introducción o invitación al audio</p>
+                  <span class="text-secondary font-bold text-body-sm">Escuchar podcast (LINK)</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-label-sm text-on-surface-variant italic">Uso: Recursos auditivos, entrevistas y debates grabados.</p>
+          </div>
+          <!-- Activity CTA -->
+          <div class="bg-white border border-outline-variant rounded p-lg flex flex-col justify-between">
+            <div>
+              <div class="flex justify-between items-start mb-md">
+                <span class="text-label-sm font-bold text-on-secondary-container bg-secondary-container px-2 py-1 rounded">ESTÁNDAR: ACTIVIDAD</span>
+              </div>
+              <div class="border border-secondary rounded-lg overflow-hidden mb-md">
+                <div class="bg-secondary p-2 flex items-center gap-xs">
+                  <span class="material-symbols-outlined text-white text-[18px]" data-icon="assignment">assignment</span>
+                  <span class="text-white text-label-md font-bold">Actividad: NOMBRE</span>
+                </div>
+                <div class="p-md">
+                  <p class="text-body-sm mb-xs">Introducción o invitación a la actividad evaluativa</p>
+                  <span class="text-secondary font-bold text-body-sm">Acceso a la consigna</span>
+                </div>
+              </div>
+            </div>
+            <p class="text-label-sm text-on-surface-variant italic">Uso: Dirigir a espacios de entrega, foros o cuestionarios.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Highlights -->
+      <section class="mb-xl" id="resaltados">
+        <div class="flex items-center gap-sm mb-md">
+          <span class="material-symbols-outlined text-primary" data-icon="auto_awesome">auto_awesome</span>
+          <h3 class="text-headline-lg font-headline-lg text-primary">Resaltados en Contenido</h3>
+        </div>
+        <div class="space-y-lg">
+          <!-- Quote / Cita -->
+          <div class="bg-white border border-outline-variant rounded p-lg">
+            <div class="mb-md">
+              <h4 class="text-headline-sm font-headline-sm">Cita Textual</h4>
+            </div>
+            <div class="border-l-4 border-primary bg-surface-container-low p-lg italic">
+              <p class="text-body-md text-on-surface-variant">"La educación no es preparación para la vida; la educación es la vida misma. El conocimiento se construye a través del diálogo y la reflexión crítica."</p>
+            </div>
+            <p class="mt-md text-label-sm text-on-surface-variant italic">Uso: Para fragmentos literales de autores o documentos oficiales.</p>
+          </div>
+          <!-- Deep Dive / Profundización -->
+          <div class="bg-white border border-outline-variant rounded p-lg">
+            <div class="mb-md">
+              <h4 class="text-headline-sm font-headline-sm">Profundización</h4>
+            </div>
+            <div class="flex border border-outline-variant rounded overflow-hidden">
+              <div class="bg-tertiary w-12 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" data-icon="lightbulb">lightbulb</span>
+              </div>
+              <div class="p-md flex-1">
+                <h5 class="text-label-lg font-bold text-tertiary mb-xs">Para saber más / Reflexionar</h5>
+                <p class="text-body-sm italic">Explora las teorías constructivistas aplicadas al entorno digital para entender cómo los estudiantes asimilan conceptos complejos de manera asincrónica.</p>
+              </div>
+            </div>
+            <p class="mt-md text-label-sm text-on-surface-variant italic">Uso: Contenido complementario para estudiantes que deseen ir más allá.</p>
+          </div>
+          <!-- Attention / Importante -->
+          <div class="bg-white border border-outline-variant rounded p-lg">
+            <div class="mb-md">
+              <h4 class="text-headline-sm font-headline-sm">Atención / Importante</h4>
+            </div>
+            <div class="flex border border-error/30 bg-error-container/20 rounded overflow-hidden">
+              <div class="bg-error w-12 flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" data-icon="report">report</span>
+              </div>
+              <div class="p-md flex-1">
+                <h5 class="text-label-lg font-bold text-error mb-xs">Atención / Importante</h5>
+                <p class="text-body-sm font-medium">Recuerde que los murales colaborativos requieren una consigna específica y el título no debe estar duplicado en el espacio de entrega.</p>
+              </div>
+            </div>
+            <p class="mt-md text-label-sm text-on-surface-variant italic">Uso: Advertencias críticas o aclaraciones sobre procedimientos y fechas.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- Section: Organization -->
+      <section class="mb-xl" id="organizacion">
+        <div class="flex items-center gap-sm mb-md">
+          <span class="material-symbols-outlined text-primary" data-icon="account_tree">account_tree</span>
+          <h3 class="text-headline-lg font-headline-lg text-primary">Elementos de Organización</h3>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+          <!-- Synchronous Class -->
+          <div class="bg-white border border-outline-variant rounded p-lg">
+            <div class="mb-xl">
+              <h4 class="text-headline-sm font-headline-sm">Clase Sincrónica</h4>
+            </div>
+            <div class="relative pt-6">
+              <div class="absolute -top-4 left-4 bg-white border border-primary px-4 py-2 rounded">
+                <span class="text-primary font-bold text-label-lg">Clase Sincrónica</span>
+              </div>
+              <div class="border border-primary rounded p-lg pt-8 bg-surface-container-low">
+                <p class="text-body-sm text-on-surface-variant">Detalle de la conexión, horario y objetivos de la sesión en vivo a través de videoconferencia.</p>
+              </div>
+            </div>
+            <p class="mt-md text-label-sm text-on-surface-variant italic">Uso: Para el inicio de cada semana o módulo indicando el encuentro en vivo.</p>
+          </div>
+          <!-- Accordion Sample -->
+          <div class="bg-white border border-outline-variant rounded p-lg">
+            <div class="mb-md">
+              <h4 class="text-headline-sm font-headline-sm">Acordeón de Contenido</h4>
+            </div>
+            <div class="border border-outline-variant rounded overflow-hidden">
+              <div class="bg-surface-container-high p-md flex items-center gap-md">
+                <span class="material-symbols-outlined text-primary" data-icon="expand_more">expand_more</span>
+                <span class="text-label-lg font-bold">Módulo 1: Introducción a la Plataforma</span>
+              </div>
+              <div class="p-lg bg-white border-t border-outline-variant">
+                <p class="text-body-sm text-on-surface-variant">Este módulo cubre las bases necesarias para navegar el LMS y utilizar las herramientas efectivamente.</p>
+              </div>
+            </div>
+            <p class="mt-md text-label-sm text-on-surface-variant italic">Uso: Para organizar grandes bloques de información de forma jerárquica.</p>
+          </div>
+        </div>
+      </section>
+
+      <footer class="border-t border-outline-variant pt-lg mb-xl text-center">
+        <p class="text-body-sm text-on-surface-variant">© 2024 EduTools - Repositorio de Estándares Visuales para Entornos Virtuales de Aprendizaje</p>
+      </footer>
     </div>
   </div>
 </div>

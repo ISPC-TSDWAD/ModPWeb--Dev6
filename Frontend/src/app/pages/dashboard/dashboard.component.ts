@@ -1,12 +1,13 @@
 import { Component, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
@@ -31,7 +32,7 @@ export class DashboardComponent {
       this.apiService.createResource(this.recursoForm.value).subscribe(() => {
         this.mensajeExito = true;
         this.recursoForm.reset();
-        
+
         setTimeout(() => {
           this.mensajeExito = false;
         }, 3000);
