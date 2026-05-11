@@ -1,23 +1,40 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ApiService } from '../../services/api.service';
 import { TestData } from '../../models/api-response.model';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, ReactiveFormsModule],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css'
 })
 export class HomeComponent implements OnInit {
   private apiService = inject(ApiService);
+  private fb = inject(FormBuilder);
   
   recursos: any[] = [];
   cargando: boolean = true;
 
+  recursoForm: FormGroup;
+  mensajeExito: boolean = false;
+
+  constructor() {
+    this.recursoForm = this.fb.group({
+      titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
+      categoria: ['', Validators.required],
+      url: ['', [Validators.required, Validators.pattern('https?://.+')]]
+    });
+  }
+
   ngOnInit(): void {
     // Consumimos los datos directamente desde el servicio simulado
+    this.cargarRecursos();
+  }
+
+  cargarRecursos(): void {
     this.apiService.getRecursosMock().subscribe({
       next: (data) => {
         this.recursos = data;
@@ -28,6 +45,29 @@ export class HomeComponent implements OnInit {
         this.cargando = false;
       }
     });
+  }
+
+  onSubmit(): void {
+    if (this.recursoForm.valid) {
+      // Simular envío a la API
+      this.apiService.createResource(this.recursoForm.value).subscribe(() => {
+        this.mensajeExito = true;
+        this.recursoForm.reset();
+        
+        // Recargar la lista simulada
+        this.cargando = true;
+        this.cargarRecursos();
+
+        setTimeout(() => {
+          this.mensajeExito = false;
+        }, 3000);
+      });
+    }
+  }
+
+  esCampoInvalido(campo: string): boolean {
+    const control = this.recursoForm.get(campo);
+    return !!control && control.invalid && (control.dirty || control.touched);
   }
 
   copiarHTML(recurso: any): void {
