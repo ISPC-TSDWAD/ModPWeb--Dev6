@@ -1,22 +1,84 @@
-<div class="container py-5">
-  <div class="row align-items-center">
-    <div class="col-lg-6 mb-4 mb-lg-0">
-      <h2 class="display-5 fw-bold text-dark mb-4">Acerca de EduTools</h2>
-      <p class="lead text-muted mb-4">
-        EduTools es una plataforma diseñada para optimizar la colaboración entre Asesoría Pedagógica y Maquetación, asegurando la consistencia y escalabilidad visual.
-      </p>
-      <ul class="list-unstyled">
-        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Sandbox de previsualización en tiempo real.</li>
-        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Flujo de trabajo centralizado.</li>
-        <li class="mb-3"><i class="bi bi-check-circle-fill text-primary me-2"></i> Código limpio e inyectable para Canvas LMS.</li>
-      </ul>
+<main class="container py-5" style="max-width: 1200px;">
+  <!-- Hero Section -->
+  <section class="hero-section">
+    <img alt="Sobre EduTools" class="hero-bg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobFNCReoHTjvXFQZZ0Q-rZ7A6ZDf9gDjoZin-3oSAq-2B9-PDMKh2NngTrm7Sols5mv00uRDMCYDut2etOrsXf90KjrbJDVDQFsXgAtqPXjE-hnhGX8VacoB4OdJXBvhkuf5t1RIvBTxAIuvBWO_VxUpVP6ROREXv24LryAylVzqErkTM_7IHEfTjzyrnVCr39f3Syb3U8IrJPCB9r812nbVLoTS2UxwTuvvKDIWEUWf18xb8mQ-udqK4LfxDbQkxW1ZFZTUOL2g"/>
+    <div class="hero-content">
+      <h2 class="hero-title">{{ hero.title }}</h2>
+      <p class="hero-text">{{ hero.text }}</p>
     </div>
-    <div class="col-lg-6">
-      <div class="p-5 bg-light rounded-4 shadow-sm text-center">
-        <i class="bi bi-tools text-primary" style="font-size: 5rem;"></i>
-        <h4 class="mt-4 fw-bold">El Puente entre Diseño y Técnica</h4>
-        <p class="text-muted mt-2">Nuestra misión es reducir el 30% de los tickets por desajustes visuales.</p>
+  </section>
+
+  <!-- Mission & Vision Section -->
+  <section class="row g-4 mb-5">
+    <div class="col-md-6">
+      <div class="mission-vision-card">
+        <div class="card-header-custom">
+          <span class="material-symbols-outlined">{{ mision.icon }}</span>
+          <h3>{{ mision.title }}</h3>
+        </div>
+        <div class="card-body-custom">
+          {{ mision.text }}
+        </div>
       </div>
     </div>
-  </div>
-</div>
+    <div class="col-md-6">
+      <div class="mission-vision-card">
+        <div class="card-header-custom">
+          <span class="material-symbols-outlined">{{ vision.icon }}</span>
+          <h3>{{ vision.title }}</h3>
+        </div>
+        <div class="card-body-custom">
+          {{ vision.text }}
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Institutional Values -->
+  <section class="mb-5">
+    <h3 class="section-title">Valores Institucionales</h3>
+    <div class="row g-4">
+      @for (valor of valores; track valor.title) {
+        <div class="col-sm-6 col-lg-3">
+          <div class="value-card">
+            <div class="icon-container">
+              <span class="material-symbols-outlined">{{ valor.icon }}</span>
+            </div>
+            <h4>{{ valor.title }}</h4>
+            <p>{{ valor.text }}</p>
+          </div>
+        </div>
+      }
+    </div>
+  </section>
+
+  <!-- Our Team Section -->
+  <section class="mb-5">
+    <h3 class="section-title">Nuestro Equipo</h3>
+    <div class="row">
+      <div class="col-12">
+        <div class="team-card">
+          <div class="team-header">
+            <span class="material-symbols-outlined">data_object</span>
+            <h4>Equipo de Desarrolladores</h4>
+          </div>
+          <div class="team-body">
+            <div class="d-flex align-items-center mb-3">
+              <div class="avatars">
+                <img alt="Dev 1" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCivWYawIR0u5ccILdXsnqnmYOsZLst0O2_jaam7H0UJrz8ffAHMA4oJTe00JCBEzyT461WNj1X4rg7YcMbJWz_SVwMRzX26h4ZwpVnRgDesTIfTygGloSzFEwrwVbWV2nqDH2lSEITU2R3aO3NKYXLNmTAYVjAyHE9JclcXKzQvbkAaTEr-OP8lsVQl9xjJpJvnzyuAPId-i4jZKI8uNY89_6mDU5iaJuVt71T9dzQBbnUlauO0OOpUirQB-flhZin4m5Ygpw8j5Q"/>
+                <img alt="Dev 2" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-igD9GPhmNR0u9Qj2iYQGAZuCMYOW2iVo1_2clyD0W-skyEYKYsDwTqMrsT9BWdg5ZacnYSX8N1mMkk0GiOQRs8nGcue922FkVUv5GUl69WpBxrLBYbS34UzGtpv7ERrhb5umq7eAlkerkdwnPt2JjVDwsLyT6cucoNKsdYgNtfIW7a46yf0b8WJUnAwqf-2KTHHdETyiQLGbbAl4AQX76NMwW8IOj7tavP14gpieXUb2yCGafAQ_Zk5A9680GwiiB1j1CbEK6f4"/>
+                <img alt="Dev 3" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBifhmqDwArPTMb-VjQe2OlIz_0aXqdAqzs7uVsl0OB5GJGP-dxkwyjm9t7MdR8_lQSOEUH_dN10Hbw2QgSdCdoqx8UGrP_JZyJmXOaxEgpvD7rh4jZjJK9GNoOsklColgXoGjevrzC-uxCseIQRzxGB0HbQCQkM5tLctNi4xoaiWCNmN_uRGdeKFJv6GJSLT2vy1nK-4gfZ8bugiSFnxmE1hEZ12stiffEdnFHvO3LeTTKXPntTJUwhX5ckweJRVnTFk60mGoinyE"/>
+                <div class="avatar-more">+2</div>
+              </div>
+              <span class="team-count">5 Desarrolladores</span>
+            </div>
+            <p class="team-description">
+              Encargados de transformar las visiones pedagógicas en código limpio, accesible y responsive. Expertos en CSS modular y estándares LTI.
+            </p>
+            <button class="btn btn-outline-custom">Conocer el Stack</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>

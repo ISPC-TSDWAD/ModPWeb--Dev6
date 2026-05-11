@@ -29,8 +29,14 @@
                 formControlName="titulo"
                 [ngClass]="{'is-invalid': esCampoInvalido('titulo')}"
                 placeholder="Ej: Plantilla Examen Canvas">
-              <div class="invalid-feedback">
+              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['required']">
                 El título es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['minlength']">
+                El título debe tener al menos 5 caracteres.
+              </div>
+              <div class="invalid-feedback" *ngIf="recursoForm.get('titulo')?.errors?.['maxlength']">
+                El título no puede exceder los 50 caracteres.
               </div>
             </div>
 
@@ -61,8 +67,11 @@
                 formControlName="url"
                 [ngClass]="{'is-invalid': esCampoInvalido('url')}"
                 placeholder="https://...">
-              <div class="invalid-feedback">
+              <div class="invalid-feedback" *ngIf="recursoForm.get('url')?.errors?.['required']">
                 El enlace es obligatorio.
+              </div>
+              <div class="invalid-feedback" *ngIf="recursoForm.get('url')?.errors?.['pattern']">
+                El enlace debe ser una URL válida (ej. https://...).
               </div>
             </div>
 
