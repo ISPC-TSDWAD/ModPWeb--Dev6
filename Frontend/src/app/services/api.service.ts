@@ -17,6 +17,8 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Video', 
         categoria: 'CTA', 
         url: '',
+        imagen: 'assets/images/edu_card_cta.png',
+        icono: 'play_circle',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
     <p class="card-title" style="text-align: left; background-color: #003087; color: #ffffff;">
@@ -35,6 +37,8 @@ export class ApiService {
         titulo: 'Acordeón de Contenidos', 
         categoria: 'ORGANIZADOR', 
         url: '',
+        imagen: 'assets/images/edu_card_organizer.png',
+        icono: 'view_day',
         html: `<div class="dp-panels-wrapper dp-accordion-default dp-panel-color-dp-secondary dp-panel-active-color-dp-primary">
   <div class="dp-panel-group">
     <h3 class="dp-panel-heading "><strong>Titulo 1</strong></h3>
@@ -51,6 +55,8 @@ export class ApiService {
         titulo: 'Resaltado: Importante', 
         categoria: 'RESALTADO', 
         url: '',
+        imagen: 'assets/images/edu_card_highlight.png',
+        icono: 'warning',
         html: `<div class="dp-callout dp-callout-placeholder card dp-callout-position-default dp-callout-type-info dp-callout-color-danger">
   <div class="dp-callout-side-emphasis">
     <span class="material-symbols-outlined dp-icon dp-default-icon text-white" style="font-size: 24px; display: block; margin-top: 15px;">warning</span>
@@ -68,6 +74,8 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Lectura', 
         categoria: 'CTA', 
         url: '',
+        imagen: 'assets/images/edu_card_cta.png',
+        icono: 'menu_book',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
     <p class="card-title" style="text-align: left; background-color: #003087; color: #ffffff;">
@@ -86,6 +94,8 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Podcast', 
         categoria: 'CTA', 
         url: '',
+        imagen: 'assets/images/edu_card_cta.png',
+        icono: 'podcasts',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
     <p class="card-title" style="text-align: left; background-color: #003087; color: #ffffff;">
@@ -94,7 +104,7 @@ export class ApiService {
         <strong style="border-color: #003087;">Podcast</strong>
       </span>
     </p>
-    <p>Introducción o invitación a Podcast</p>
+    <p>Introducción o invitation a Podcast</p>
     <p><span><span style="color: #236fa1;">Acceso al audio (LINK)</span></span></p>
   </div>
 </div>`
@@ -104,6 +114,8 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Consigna', 
         categoria: 'CTA', 
         url: '',
+        imagen: 'assets/images/edu_card_cta.png',
+        icono: 'assignment',
         html: `<div class="dp-callout card dp-callout-position-default dp-callout-type-title-bar dp-callout-color-lg-info" style="border-radius: 5px;">
   <div class="card-body">
     <p class="card-title" style="text-align: left;">
@@ -124,6 +136,8 @@ export class ApiService {
         titulo: 'Profundización', 
         categoria: 'RESALTADO', 
         url: '',
+        imagen: 'assets/images/edu_card_highlight.png',
+        icono: 'lightbulb',
         html: `<div class="dp-callout dp-callout-placeholder card dp-callout-position-default dp-callout-type-info dp-callout-color-lg-warning">
   <div class="dp-callout-side-emphasis">
     <span class="material-symbols-outlined dp-icon dp-default-icon text-white" style="font-size: 24px; display: block; margin-top: 15px;">lightbulb</span>
@@ -141,6 +155,8 @@ export class ApiService {
         titulo: 'Tabs Horizontales', 
         categoria: 'ORGANIZADOR', 
         url: '',
+        imagen: 'assets/images/edu_card_organizer.png',
+        icono: 'tab',
         html: `<div class="dp-panels-wrapper dp-tabs dp-panel-color-dp-secondary dp-panel-active-color-dp-primary">
   <div class="dp-panel-group">
     <h3 class="dp-panel-heading">TITULO 1</h3>
@@ -157,6 +173,8 @@ export class ApiService {
         titulo: 'Resaltado Simple', 
         categoria: 'RESALTADO', 
         url: '',
+        imagen: 'assets/images/edu_card_highlight.png',
+        icono: 'info',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
     <p>TEXTO - TEXTO - TEXTO - TEXTO</p>
@@ -175,12 +193,18 @@ export class ApiService {
       console.log('ApiService: Enviando recurso simulado...', resourceData);
       setTimeout(() => {
         const newId = this.mockData.length > 0 ? Math.max(...this.mockData.map(d => d.id)) + 1 : 1;
+        
+        let imgPath = 'assets/images/edu_card_cta.png';
+        if (resourceData.categoria === 'ORGANIZADOR') imgPath = 'assets/images/edu_card_organizer.png';
+        if (resourceData.categoria === 'RESALTADO') imgPath = 'assets/images/edu_card_highlight.png';
+
         const newResource = {
           id: newId,
           titulo: resourceData.titulo,
           categoria: resourceData.categoria,
           html: resourceData.html_content || '<div class="p-md bg-surface text-center font-bold">Nuevo Componente Vacío</div>',
           url: resourceData.url || '',
+          imagen: imgPath,
           icono: 'new_releases'
         };
         // Insertamos al principio de la lista
@@ -189,6 +213,19 @@ export class ApiService {
         observer.next({ success: true, data: newResource });
         observer.complete();
       }, 500);
+    });
+  }
+
+  eliminarRecurso(id: number): Observable<any> {
+    return new Observable(observer => {
+      setTimeout(() => {
+        const idx = this.mockData.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          this.mockData.splice(idx, 1);
+        }
+        observer.next({ success: true });
+        observer.complete();
+      }, 300);
     });
   }
 

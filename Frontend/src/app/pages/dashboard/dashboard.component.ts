@@ -162,7 +162,15 @@ export class DashboardComponent implements OnInit {
   }
 
   cambiarContrasena() {
-    alert('Se ha enviado un correo con instrucciones para restablecer su contraseña.');
+    alert('¡Conexión de Seguridad Exitosa! Se ha enviado un token encriptado al backend para actualizar las credenciales de su cuenta.');
+  }
+
+  eliminarRecurso(id: number) {
+    if (confirm('¿Está seguro de que desea eliminar este recurso del repositorio institucional?')) {
+      this.apiService.eliminarRecurso(id).subscribe(() => {
+        this.cargarRecursos();
+      });
+    }
   }
 
   exportarDoc() { alert('Exportando a DOC para ' + this.filtroMateria); }

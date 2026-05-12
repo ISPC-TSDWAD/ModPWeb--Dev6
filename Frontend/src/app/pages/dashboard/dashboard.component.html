@@ -28,10 +28,11 @@
   </aside>
 
   <!-- Main Content Area -->
+  <!-- Modificado para que ocupe el ancho sin margin sobrante -->
   <main class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full">
 
     <!-- REPOSITORIO -->
-    <div *ngIf="seccionActiva === 'recursos'" class="w-full flex-1 max-w-[1400px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'recursos'" class="w-full max-w-[1400px] mx-auto animate-fade-in flex flex-col">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Repositorio de Recursos</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Gestione e integre los recursos y plantillas institucionales.</p>
@@ -89,11 +90,14 @@
 
        <!-- LISTADO RECURSOS -->
        <div *ngIf="cargando" class="text-center py-xl font-bold text-outline">Cargando recursos...</div>
-       <div *ngIf="!cargando" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
+       <div *ngIf="!cargando" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg pb-xl">
          <div *ngFor="let recurso of getRecursosFiltrados()" class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden flex flex-col group hover:shadow-md transition-shadow">
             <div class="h-32 bg-surface-container dark:bg-[#2d2d2d] flex items-center justify-center relative">
-               <span class="material-symbols-outlined text-5xl text-outline opacity-50 group-hover:scale-110 transition-transform">{{recurso.icono || 'extension'}}</span>
+               <!-- Imagen Dinamica en vez de solo icono -->
+               <img *ngIf="recurso.imagen" [src]="recurso.imagen" class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity">
+               <span *ngIf="!recurso.imagen" class="material-symbols-outlined text-5xl text-outline opacity-50 group-hover:scale-110 transition-transform">{{recurso.icono || 'extension'}}</span>
                <span class="absolute top-2 right-2 text-xs font-bold bg-white dark:bg-black px-2 py-1 rounded text-primary dark:text-primary-fixed border border-outline-variant dark:border-outline shadow-sm">{{recurso.categoria}}</span>
+               <button (click)="eliminarRecurso(recurso.id)" class="absolute top-2 left-2 bg-[#ba1a1a] text-white rounded w-8 h-8 flex items-center justify-center hover:scale-110 transition-transform shadow"><span class="material-symbols-outlined text-sm">delete</span></button>
             </div>
             <div class="p-md flex-1 flex flex-col">
                <h4 class="font-bold text-label-lg mb-1">{{recurso.titulo}}</h4>
@@ -108,7 +112,7 @@
     </div>
 
     <!-- SANDBOX -->
-    <div *ngIf="seccionActiva === 'sandbox'" class="w-full flex flex-col h-full animate-fade-in max-w-[1600px] mx-auto">
+    <div *ngIf="seccionActiva === 'sandbox'" class="w-full max-w-[1400px] mx-auto flex flex-col h-[calc(100vh-80px)] animate-fade-in">
        <header class="mb-md">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Sandbox de Diseño</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Entorno estructurado para editar y previsualizar componentes HTML.</p>
@@ -150,13 +154,13 @@
 
          <!-- Right Col: Editor (Visual/HTML) -->
          <div class="flex-1 flex flex-col bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden shadow-sm">
-            <!-- Tabs -->
-            <div class="flex border-b border-outline-variant dark:border-outline bg-surface-container-low dark:bg-[#121212]">
-              <button (click)="modoEditor = 'visual'" [class.border-b-2]="modoEditor === 'visual'" [class.border-primary]="modoEditor === 'visual'" [class.text-primary]="modoEditor === 'visual'" class="px-lg py-sm font-bold text-sm transition-colors hover:bg-surface-container dark:hover:bg-[#2d2d2d]">Editor Visual (Rich Text)</button>
-              <button (click)="modoEditor = 'html'" [class.border-b-2]="modoEditor === 'html'" [class.border-primary]="modoEditor === 'html'" [class.text-primary]="modoEditor === 'html'" class="px-lg py-sm font-bold text-sm transition-colors hover:bg-surface-container dark:hover:bg-[#2d2d2d]">Código HTML Interno</button>
+            <!-- Tabs Mejoradas -->
+            <div class="flex bg-surface-container-low dark:bg-[#121212] pt-2 px-2 gap-2">
+              <button (click)="modoEditor = 'visual'" [class.bg-white]="modoEditor === 'visual'" [class.dark:bg-[#1e1e1e]]="modoEditor === 'visual'" [class.border-t-4]="modoEditor === 'visual'" [class.border-primary]="modoEditor === 'visual'" [class.text-primary]="modoEditor === 'visual'" [class.dark:text-primary-fixed]="modoEditor === 'visual'" class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a]">Editor Visual (Rich Text)</button>
+              <button (click)="modoEditor = 'html'" [class.bg-white]="modoEditor === 'html'" [class.dark:bg-[#1e1e1e]]="modoEditor === 'html'" [class.border-t-4]="modoEditor === 'html'" [class.border-primary]="modoEditor === 'html'" [class.text-primary]="modoEditor === 'html'" [class.dark:text-primary-fixed]="modoEditor === 'html'" class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a]">Código HTML Interno</button>
             </div>
             
-            <div class="flex flex-1 overflow-hidden">
+            <div class="flex flex-1 overflow-hidden border-t border-outline-variant dark:border-outline">
                <!-- HTML Editor Mode -->
                <div *ngIf="modoEditor === 'html'" class="flex-1 flex flex-col animate-fade-in">
                   <textarea class="flex-1 bg-[#1e1e1e] text-[#d4d4d4] p-md font-mono text-sm resize-none focus:outline-none" (input)="onHtmlChange($event)" [value]="recursoSeleccionado?.htmlEditado" spellcheck="false"></textarea>
@@ -170,11 +174,11 @@
                   </div>
                </div>
             </div>
-            <!-- Bottom Toolbar -->
+            <!-- Bottom Toolbar - Mejorada separación -->
             <div class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-t border-outline-variant dark:border-outline flex justify-between items-center">
                <div class="flex gap-4">
-                 <button (click)="deshacer()" class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm"><span class="material-symbols-outlined text-[18px]">undo</span> Deshacer</button>
-                 <button (click)="rehacer()" class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm"><span class="material-symbols-outlined text-[18px]">redo</span> Rehacer</button>
+                 <button (click)="deshacer()" class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm px-2 py-1"><span class="material-symbols-outlined text-[18px]">undo</span> Deshacer</button>
+                 <button (click)="rehacer()" class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm px-2 py-1"><span class="material-symbols-outlined text-[18px]">redo</span> Rehacer</button>
                </div>
                <div class="flex gap-md">
                  <button (click)="copiarComoImagen()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm">Copiar como Imagen</button>
@@ -187,7 +191,7 @@
     </div>
 
     <!-- GALERIA DE COMPONENTES -->
-    <div *ngIf="seccionActiva === 'componentes'" class="w-full max-w-[1400px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'componentes'" class="w-full max-w-[1400px] mx-auto animate-fade-in pb-xl">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Galería de Componentes</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Catálogo oficial de bloques de diseño (Design System). Componentes estáticos basados en lineamientos institucionales.</p>
@@ -197,11 +201,9 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">1. Seccionado de CTA (Llamados a la Acción)</h2>
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
-            <!-- CTA Video Original Prototype Data -->
             <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Llamado a la Acción: Video</h3>
-                 <button class="text-xs font-bold text-secondary border border-secondary px-2 py-1 rounded">Enviar a Sandbox</button>
                </div>
                <div class="bg-white text-black p-md border rounded shadow-sm">
                   <div class="dp-callout dp-callout-color-lg-tip card" style="border-color: #003087; border-radius: 5px;">
@@ -219,11 +221,9 @@
                </div>
             </div>
 
-            <!-- CTA Consigna Original Prototype Data -->
             <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Llamado a la Acción: Consigna</h3>
-                 <button class="text-xs font-bold text-secondary border border-secondary px-2 py-1 rounded">Enviar a Sandbox</button>
                </div>
                <div class="bg-white text-black p-md border rounded shadow-sm">
                   <div class="dp-callout card dp-callout-color-lg-info" style="border-radius: 5px;">
@@ -249,7 +249,6 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">2. Resaltados</h2>
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
-            <!-- Resaltado Importante -->
             <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Resaltado: Importante</h3>
@@ -265,7 +264,6 @@
                </div>
             </div>
             
-            <!-- Resaltado Profundizacion -->
             <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Para pensar / Saber más</h3>
@@ -287,7 +285,6 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">3. Elementos de Organización</h2>
          <div class="grid grid-cols-1 gap-lg">
-            <!-- Tabs Prototype -->
             <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Tarjetas Didácticas (Estrategias)</h3>
@@ -308,47 +305,100 @@
          </div>
        </section>
 
-       <!-- 4. Galeria de Chequeos de Comprension -->
+       <!-- 4. Galeria de Chequeos de Comprension (Data real) -->
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">4. Galería de Chequeos de Comprensión</h2>
          <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
-            <p class="text-sm italic text-outline mb-4">Integraciones interactivas (Placeholder visual).</p>
-            <div class="bg-white text-black p-md border rounded shadow-sm">
-               <div class="border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center p-10 flex-col">
-                 <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">quiz</span>
-                 <h3 class="font-bold text-gray-700">Contenido Interactivo H5P</h3>
-                 <p class="text-sm text-gray-500">El bloque de H5P (ej. Multiple Choice) se embeberá aquí durante la publicación.</p>
+            <p class="text-sm italic text-outline mb-4">Integraciones interactivas (Vista Previa Interactiva de Comprobación rápida H5P).</p>
+            <div class="bg-white text-black border border-outline-variant rounded-lg shadow-sm overflow-hidden">
+               <div class="bg-[#003761] p-lg text-white">
+                  <div class="flex items-center gap-3 mb-2">
+                     <span class="material-symbols-outlined">bolt</span>
+                     <h3 class="text-headline-sm font-headline-sm uppercase tracking-tight font-bold">Comprobación rápida</h3>
+                  </div>
+                  <p class="text-body-md font-medium">¿Cuál de los siguientes componentes es fundamental para un chequeo efectivo según la política institucional?</p>
+               </div>
+               <div class="p-lg space-y-md">
+                  <button class="w-full text-left p-md border border-outline-variant rounded hover:bg-gray-100 transition-colors flex justify-between items-center group mb-2">
+                     <span class="text-body-md">A.) Solo la pregunta y la respuesta correcta.</span>
+                     <span class="material-symbols-outlined text-outline group-hover:text-primary">radio_button_unchecked</span>
+                  </button>
+                  <button class="w-full text-left p-md border-2 border-[#006972] bg-[#006972]/10 rounded flex justify-between items-center group mb-2">
+                     <span class="text-body-md font-semibold text-[#006972]">B.) Pregunta, Feedback Positivo y Feedback de Corrección.</span>
+                     <span class="material-symbols-outlined text-[#006972]" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+                  </button>
+                  <div class="flex gap-md p-md bg-[#9ff0fb] text-[#004f56] rounded border-l-4 border-[#006972] mb-2">
+                     <span class="material-symbols-outlined">check</span>
+                     <div>
+                        <p class="font-bold">¡Gran trabajo! Respuesta correcta.</p>
+                        <p class="text-body-sm opacity-90">La política de tres partes asegura que el estudiante sea guiado incluso cuando comete un error.</p>
+                     </div>
+                  </div>
+                  <button class="w-full text-left p-md border border-outline-variant rounded hover:bg-gray-100 transition-colors flex justify-between items-center group">
+                     <span class="text-body-md">C.) Una lista de términos sin retroalimentación.</span>
+                     <span class="material-symbols-outlined text-outline group-hover:text-primary">radio_button_unchecked</span>
+                  </button>
                </div>
             </div>
          </div>
        </section>
 
-       <!-- 5 y 6. Pautas y Estandares -->
-       <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm grid md:grid-cols-2 gap-xl">
+       <!-- 5 y 6. Pautas y Estandares (Data real) -->
+       <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-xl">
+          <!-- Pautas -->
           <div>
             <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">5. Pautas y Referencias Institucionales</h2>
-            <ul class="list-disc ml-5 space-y-2 text-sm text-on-surface-variant dark:text-gray-300 font-mono bg-surface-container-high dark:bg-[#2d2d2d] p-4 rounded">
-              <li><code>H1</code>: Título del módulo</li>
-              <li><code>H2</code>: Título de la página (≤110 caracteres)</li>
-              <li><code>H3</code>: Subtítulo (sin numeración)</li>
-              <li><code>H4</code>: Sub-subtítulo (sin numeración)</li>
-              <li><code>Normal</code>: Cuerpo de texto</li>
-            </ul>
+            <div class="bg-white text-black border border-outline-variant p-lg rounded-lg hover:shadow-lg transition-shadow">
+               <h3 class="text-headline-sm font-bold text-secondary mb-4 flex items-center gap-2">
+                  <span class="material-symbols-outlined">format_list_numbered</span> Jerarquía de Estilos
+               </h3>
+               <ul class="space-y-sm text-body-sm list-none p-0 m-0">
+                  <li class="flex items-center gap-2"><code>H1</code> <span class="text-gray-600">Título del módulo</span></li>
+                  <li class="flex items-center gap-2"><code>H2</code> <span class="text-gray-600">Título de la página (≤110 caracteres)</span></li>
+                  <li class="flex items-center gap-2"><code>H3</code> <span class="text-gray-600">Subtítulo (sin numeración)</span></li>
+                  <li class="flex items-center gap-2"><code>H4</code> <span class="text-gray-600">Sub-subtítulo (sin numeración)</span></li>
+               </ul>
+            </div>
+            <div class="mt-4 bg-yellow-50 text-yellow-800 p-lg rounded-lg border border-yellow-200">
+               <h3 class="font-bold mb-2">Política de tres partes</h3>
+               <p class="text-sm"><strong>1. Pregunta:</strong> Clara y directa. <br><strong>2. Positivo:</strong> Confirma el acierto. <br><strong>3. Corrección:</strong> Señala el error y redirige.</p>
+            </div>
           </div>
+          
+          <!-- Estandares -->
           <div>
             <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">6. Estándares de Recursos Visuales</h2>
-            <ul class="list-disc ml-5 space-y-2 text-sm text-on-surface-variant dark:text-gray-300">
-              <li><strong>Tipografía Principal:</strong> Inter (Sans-serif) para asegurar excelente legibilidad en pantalla.</li>
-              <li><strong>Bordes:</strong> Redondeados de 4px para elementos UI de contenido interactivo.</li>
-              <li>No abusar de colores de error (rojo) salvo excepciones críticas y notificaciones obligatorias.</li>
-              <li><strong>Imágenes:</strong> Toda imagen debe tener el atributo <code>alt=""</code> para accesibilidad.</li>
-            </ul>
+            <div class="bg-white text-black p-lg rounded-lg border border-outline-variant shadow-sm space-y-4">
+               <div>
+                  <h4 class="font-bold border-b pb-1 mb-2">Reglas para Figuras</h4>
+                  <ul class="list-disc ml-5 space-y-1 text-sm text-gray-700">
+                     <li><strong>N° Figura:</strong> "X"</li>
+                     <li><strong>Título:</strong> Menor a 110 caracteres.</li>
+                     <li><strong>Texto alternativo (Alt):</strong> Descriptiva para accesibilidad.</li>
+                     <li><strong>Nota al pie:</strong> Fuente o link.</li>
+                  </ul>
+               </div>
+               <div>
+                  <h4 class="font-bold border-b pb-1 mb-2">Ejemplo de Tabla de Criterios</h4>
+                  <table class="w-full text-sm text-left border border-gray-300 rounded">
+                     <thead class="bg-[#1b1e31] text-white">
+                        <tr><th class="p-2 border-b">Criterio</th><th class="p-2 border-b">Ponderación</th></tr>
+                     </thead>
+                     <tbody class="text-gray-800">
+                        <tr class="bg-gray-50 border-b"><td class="p-2">Identificación de relaciones</td><td class="p-2">30 %</td></tr>
+                        <tr class="border-b"><td class="p-2">Argumentación conceptual</td><td class="p-2">30 %</td></tr>
+                        <tr class="bg-gray-50 border-b"><td class="p-2">Lenguaje técnico</td><td class="p-2">20 %</td></tr>
+                        <tr><td class="p-2">Presentación (APA)</td><td class="p-2">20 %</td></tr>
+                     </tbody>
+                  </table>
+               </div>
+            </div>
           </div>
        </section>
     </div>
 
     <!-- CONFIGURACION -->
-    <div *ngIf="seccionActiva === 'configuracion'" class="w-full max-w-[1200px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'configuracion'" class="w-full max-w-[1200px] mx-auto animate-fade-in pb-xl">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Configuración del Sistema</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Administre su perfil personal, preferencias de plataforma e información institucional.</p>
