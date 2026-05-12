@@ -40,7 +40,8 @@ export class DashboardComponent implements OnInit {
     this.recursoForm = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
       categoria: ['', Validators.required],
-      url: ['', [Validators.required, Validators.pattern('https?://.+')]]
+      url: [''],
+      html_content: ['']
     });
   }
 
@@ -112,26 +113,27 @@ export class DashboardComponent implements OnInit {
   }
 
   simularClickComponente(nombre: string) {
-    let htmlSnippet = '';
-    if (nombre === 'Tablas Comparativas') {
-      htmlSnippet = '<table class="table table-bordered"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Data 1</td><td>Data 2</td></tr></tbody></table>';
-    } else if (nombre === 'Carruseles H5P') {
-      htmlSnippet = '<div class="h5p-container"><h2>Carrusel H5P</h2><p>Contenido H5P aquí.</p></div>';
-    } else if (nombre === 'Listas Dinámicas') {
-      htmlSnippet = '<ul class="list-group"><li class="list-group-item">Elemento 1</li><li class="list-group-item">Elemento 2</li></ul>';
+    this.seccionActiva = 'sandbox';
+    let recurso = null;
+    
+    // Buscar un recurso que coincida por nombre o categoría
+    if (nombre === 'Tablas Comparativas' || nombre === 'Listas Dinámicas') {
+      recurso = this.recursos.find(r => r.categoria === 'ORGANIZADOR');
+    } else {
+      recurso = this.recursos.find(r => r.categoria === 'CTA');
     }
-
-    navigator.clipboard.writeText(htmlSnippet).then(() => {
-      alert(`¡Componente copiado! El código HTML básico de "${nombre}" está en tu portapapeles.`);
-    });
+    
+    if (recurso) {
+      this.recursoSeleccionado = recurso;
+    }
   }
 
   toggleModoOscuro() {
     this.modoOscuro = !this.modoOscuro;
     if (this.modoOscuro) {
-      document.documentElement.classList.add('dark');
+      document.documentElement.setAttribute('data-bs-theme', 'dark');
     } else {
-      document.documentElement.classList.remove('dark');
+      document.documentElement.setAttribute('data-bs-theme', 'light');
     }
   }
 }

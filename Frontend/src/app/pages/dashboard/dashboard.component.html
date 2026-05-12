@@ -73,14 +73,17 @@
         </div>
 
         <div class="flex flex-col gap-xs">
-          <label class="block text-label-md font-bold text-on-surface mb-xs">URL del Recurso</label>
+          <label class="block text-label-md font-bold text-on-surface mb-xs">URL del Recurso (Opcional)</label>
           <input type="url" formControlName="url" 
                  placeholder="ej: https://ucc.instructure.com/..."
-                 class="w-full px-md py-sm rounded-lg border border-outline bg-white text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-shadow"
-                 [class.border-error]="esCampoInvalido('url')"
-                 [class.focus:border-error]="esCampoInvalido('url')"
-                 [class.focus:ring-error]="esCampoInvalido('url')">
-          <span *ngIf="esCampoInvalido('url')" class="text-error text-label-sm">URL inválida.</span>
+                 class="w-full px-md py-sm rounded-lg border border-outline bg-white text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-shadow">
+        </div>
+
+        <div class="flex flex-col gap-xs">
+          <label class="block text-label-md font-bold text-on-surface mb-xs">Contenido HTML (Opcional)</label>
+          <textarea formControlName="html_content" rows="4"
+                    placeholder="<div class='dp-callout'>...</div>"
+                    class="w-full px-md py-sm rounded-lg border border-outline bg-white text-on-surface focus:border-primary focus:ring-1 focus:ring-primary transition-shadow font-mono text-sm"></textarea>
         </div>
 
         <button type="submit" [disabled]="recursoForm.invalid" class="bg-primary text-white font-bold py-2 rounded mt-sm hover:bg-primary-container hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
