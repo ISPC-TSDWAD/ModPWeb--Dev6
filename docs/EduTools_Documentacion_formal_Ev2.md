@@ -33,7 +33,7 @@ Para el desarrollo del ecosistema EduTools, se adoptó la metodología **Scrum**
 El cronograma de trabajo se estructuró en hitos alineados con las entregas académicas:
 *   **Sprint 0 (Evidencia de Aprendizaje 1):** Fase de cimientos. Se centró en la definición de la arquitectura sistémica, el modelado del DER (Diagrama Entidad-Relación) en MySQL y la implementación del Backend robusto mediante Django REST Framework.
 *   **Sprint 1 (Evidencia de Aprendizaje 2):** Fase de consolidación de interfaz. Desarrollo integral del Frontend en Angular 18, implementación del Sandbox de diseño, sistema de exportación multiformato e integración de la lógica de filtrado por asignatura.
-*   **Gestión de Versiones:** Se utilizó una estrategia de ramificación (Branching) para asegurar la integridad de la rama principal, trabajando los cambios de la Evidencia 2 en la rama `ev2/jonathanGuillen`.
+*   **Gestión de Versiones y Flujo de Trabajo (Gitflow):** Se implementó una política estricta de ramificación para garantizar la estabilidad del código. Cada integrante del equipo desarrolló sus funcionalidades en ramas individuales (ej. `ev2/jonathanGuillen`). Una vez validados los cambios, estos se integran en la rama de pre-producción `develop`. Finalmente, por razones de seguridad e integridad del software, únicamente el **Líder Técnico** posee los privilegios para realizar el merge final y la promoción de los cambios validados a la rama principal `main`.
 
 ---
 
