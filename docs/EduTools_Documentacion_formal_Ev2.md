@@ -1,12 +1,10 @@
 # DOCUMENTACIÓN OFICIAL DE INICIO DE PROYECTO DE SOFTWARE
 ## Proyecto: EduTools — Gestión y Sandbox Pedagógico
 **Institución:** Instituto Superior Politécnico Córdoba (ISPC)  
-**Carrera:** Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales  
-**Materia / Práctica:** Práctica Profesionalizante / Proyecto Integrador Final  
+**Módulo:** Programador Web - TSDWAD - C. 2025  
 **Equipo de Desarrollo:** DEV6  
 **Líder Técnico / Product Owner:** Jonathan Guillén  
 **Fecha de Presentación:** 12/05/2026  
-**Versión del Documento:** 4.0.0 (Alineada a Estándares Oficiales de Software y PMI)
 
 ---
 
@@ -38,13 +36,13 @@ En el diseño y montaje de aulas virtuales para educación superior a distancia,
 **EduTools** es una plataforma web centralizada que actúa como puente colaborativo entre Asesores Pedagógicos y Maquetadores en el ecosistema de educación virtual. Ofrece un entorno controlado de diseño (Sandbox) en modo natural que inyecta automáticamente hojas de estilo institucionales sobre componentes pedagógicos altamente interactivos. Permite gestionar, categorizar y filtrar recursos por asignatura para potenciar su reutilización estratégica. Además, agiliza la exportación masiva de compendios de código limpio en formatos estándar (`.doc` y `.html`) listos para su despliegue en plataformas LMS como Canvas. Con esto, elimina las barreras técnicas y garantiza una identidad visual premium y coherente desde la fase de concepción de los contenidos.
 
 ### 1.4. Organización o Cliente Destinatario
-**Destinatario Principal:** Instituto Superior Politécnico Córdoba (ISPC).  
-**Usuarios Directos:** Equipos de Asesoría Pedagógica (creadores de contenido) y Equipos de Maquetación Web / Desarrollo de Contenidos Digitales.
+**Destinatario Principal:** Universidad Católica de Córdoba (UCC).  
+*Aclaración de Contexto:* Si bien la carrera (Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales) se cursa en el ámbito del Instituto Superior Politécnico Córdoba (ISPC), el presente proyecto integrador aborda un caso de aplicación profesional real y directo para los equipos de Asesoría Pedagógica y Maquetación Web de la **UCC**.
 
 ### 1.5. Justificación del Proyecto (Referencia PMI)
 Siguiendo los lineamientos del **Project Management Institute (PMI)**, este documento funciona como el **Acta de Constitución del Proyecto (Project Charter)**, estableciendo formalmente la existencia del proyecto y confiriendo autoridad al Líder Técnico. 
 *   **Principio de Entrega de Valor (PMBOK 7 — Principio 2):** El proyecto prioriza la creación de valor tangible y sostenible. Al estandarizar la capa de presentación de los contenidos educativos, se reduce drásticamente la **Carga Cognitiva Extrínseca** del estudiante final, permitiéndole enfocar sus recursos mentales en el aprendizaje y no en descifrar interfaces inconsistentes.
-*   **Alineación Estratégica ("Por qué" antes del "Qué"):** La iniciativa se conecta directamente con los objetivos organizacionales del ISPC de excelencia académica, optimización de recursos internos y escalabilidad en la oferta educativa virtual, reduciendo en un 40% las iteraciones ociosas de soporte técnico en aulas virtuales.
+*   **Alineación Estratégica ("Por qué" antes del "Qué"):** La iniciativa se conecta directamente con los objetivos organizacionales de excelencia académica, optimización de recursos internos y escalabilidad en la oferta educativa virtual, reduciendo en un 40% las iteraciones ociosas de soporte técnico en el montaje de aulas.
 
 ---
 
@@ -52,21 +50,23 @@ Siguiendo los lineamientos del **Project Management Institute (PMI)**, este docu
 
 ### 2.1. Viabilidad Técnica
 #### Stack Tecnológico Propuesto y Justificación
-*   **Frontend (Capa de Presentación y Sandbox):** **Angular 18** (SPA moderna). Se justifica por su robustez corporativa, su arquitectura limpia basada en **Standalone Components** y el uso intensivo de la nueva API de **Signals** para optimizar la reactividad y el ciclo de detección de cambios en el editor visual.
-*   **Estilos y Sistema de Diseño:** **Tailwind CSS**. Permite construir un *Design System* escalable mediante tokens de colores HSL personalizados y utilidades dinámicas, asegurando coherencia visual absoluta en Dark y Light mode sin inflar el peso de las hojas de estilo.
+*   **Frontend (Capa de Presentación y Sandbox):** **Angular 21** (`^21.2.0`). Implementa la versión corporativa más reciente del framework, aprovechando su arquitectura limpia de **Standalone Components** y el motor de reactividad basado en **Signals** para un refresco instantáneo del editor visual sin penalizar el rendimiento.
+*   **Estilos y Sistema de Diseño (Arquitectura Híbrida):** 
+    *   **Tailwind CSS (CDN Dinámico con Tokens a Medida):** El diseño principal e inmersivo se inyecta en tiempo real mediante el CDN de Tailwind configurado en la cabecera (`index.html`). Cuenta con un extenso diccionario propio de *Design Tokens* que define la paleta cromática exacta de la institución (ej. `primary: "#003761"`, `secondary: "#006972"`), variables semánticas para modo claro/oscuro dinámico por clase, y tipografía nativa basada en la familia **Inter**.
+    *   **Bootstrap 5.3:** Convivencia estratégica mediante su precarga a nivel de compilación estática (`angular.json`), garantizando soporte base, resets de compatibilidad y robustez estructural en maquetas preexistentes.
 *   **Backend (Capa de Servicios y Lógica de Negocio):** **Django REST Framework (DRF)** con base de datos **MySQL**. Garantiza un modelado relacional sólido, integridad referencial estricta y endpoints seguros para el consumo de datos persistentes.
 
 #### Infraestructura Requerida
 *   **Entorno de Desarrollo:** Servidores locales Node.js para Angular CLI y entorno virtualizado de Python para Django.
-*   **Entorno de Producción (Proyectado):** Despliegue del Frontend estático en servicios cloud distribuidos (ej. Vercel o AWS S3/CloudFront) y Backend alojado en contenedores escalables (ej. Render o AWS ECS) conectados a una instancia gestionada de MySQL.
+*   **Entorno de Producción (Proyectado):** Despliegue del Frontend estático en servicios cloud distribuidos (ej. Vercel o AWS S3) y Backend alojado en contenedores escalables conectados a una instancia gestionada de MySQL.
 
 #### Conocimientos Disponibles en el Equipo
-El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización avanzada en desarrollo SPA con Angular (servicios, enrutamiento, RxJS/Signals), maquetación con Tailwind CSS, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
+El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización en desarrollo SPA con Angular 21, integración de utilidades Tailwind CSS, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
 
 #### Dependencias Externas
 *   Librerías de fuentes e iconos estandarizados (**Material Symbols** de Google).
-*   APIs nativas del navegador (`document.execCommand` y APIs de generación de `Blob` para descargas locales).
-*   No se requiere licenciamiento de software privativo, reduciendo barreras de entrada.
+*   APIs nativas del navegador (`document.execCommand` y generación de `Blob` para descargas locales).
+*   No se requiere licenciamiento de software privativo.
 
 #### Riesgos Técnicos Iniciales Identificados
 *   **Riesgo:** Discrepancias de renderizado de estilos institucionales complejos al exportar a formatos ofimáticos antiguos (`.doc`).
@@ -79,11 +79,11 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 #### Costos Principales
 *   **Licencias de Software:** $0 (Uso exclusivo de tecnologías Open Source de nivel empresarial).
 *   **Horas de Desarrollo (Equipo DEV6):** Costo interno absorbido como proyecto académico/práctica profesionalizante.
-*   **Infraestructura Cloud (Proyectada para Producción):** Estimado en $50 USD mensuales para bases de datos relacionales y ancho de banda de consumo de recursos.
+*   **Infraestructura Cloud (Proyectada para Producción):** Estimado en $50 USD mensuales para bases de datos relacionales y hosting web.
 
 #### ROI o Beneficio Esperado
-*   **Cualitativo:** Mejora sustancial en la moral del equipo pedagógico al ganar autonomía, y fortalecimiento de la imagen de marca institucional del ISPC en sus entornos virtuales.
-*   **Cuantitativo:** Ahorro directo del 40% en tiempos de retrabajo y corrección de maquetación de aulas en Canvas, liberando horas hombre para tareas de innovación educativa.
+*   **Cualitativo:** Autonomía operativa para el equipo de producción de contenidos y consolidación visual premium de las aulas.
+*   **Cuantitativo:** Ahorro directo del 40% en tiempos de retrabajo y corrección de maquetación en la plataforma LMS.
 *   **Naturaleza del Presupuesto:** Presupuesto *estimado* para fines de planificación y viabilidad del Proyecto Integrador.
 
 ---
@@ -92,10 +92,10 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 
 ### 3.1. Qué Incluye (In Scope)
 #### Módulos y Funcionalidades Principales
-1.  **Repositorio Institucional de Recursos:** Listado general con barra de búsqueda y sistema de **filtrado dinámico por Asignatura** (Matemáticas, Historia, Psicología, Transversal) y Categoría.
+1.  **Repositorio Institucional de Recursos:** Listado general con barra de búsqueda y sistema de **filtrado dinámico por Asignatura** (Matemáticas, Historia, Psicología, Transversal, entre otras) y Categoría.
 2.  **Sandbox de Diseño en Modo Natural:** Editor visual WYSIWYG con barra de herramientas profesional (Negrita, Cursiva, Subrayado, Listas, Color de texto) que inyecta semántica institucional en tiempo real.
 3.  **Visualización Dual:** Pestaña paralela de visualización y copia de código HTML crudo (Raw HTML) para auditorías de maquetación.
-4.  **Galería Pedagógica Estandarizada:** Catálogo de maquetas validadas (Acordeones HTML5 nativos, tarjetas de resaltado, **Chequeos de Comprensión H5P** interactivos con feedback de 3 partes y estándares de **Figuras** APA).
+4.  **Galería Pedagógica Estandarizada:** Catálogo de maquetas validadas (Acordeones HTML5 nativos, tarjetas de resaltado, **Chequeos de Comprensión H5P** interactivos y estándares de **Figuras** APA).
 5.  **Motor de Interoperabilidad:** Módulo de exportación local para compendios en formatos `.doc` (Word) y `.html`.
 
 #### Tipos de Usuarios Soportados
@@ -104,11 +104,11 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 *   **Administrador:** Acceso global a la parametrización de categorías y materias en la base de datos.
 
 #### Plataformas Soportadas
-*   Diseño **Full-Width** y completamente adaptativo (Responsive) optimizado para resoluciones de escritorio (producción de contenidos) y tabletas/móviles (previsualización) en navegadores modernos.
+*   Diseño **Full-Width** y adaptativo (Responsive) optimizado para resoluciones de escritorio y móviles en navegadores modernos.
 
 ### 3.2. Qué No Incluye (Out of Scope)
-*   **Integración SSO Externa:** No se incluye autenticación mediante proveedores de identidad externos (OAuth/SAML de Canvas) en esta fase; se utiliza el sistema de usuarios nativo de Django REST Framework.
-*   **Despliegue Directo por API a Canvas:** La publicación automatizada de recursos directamente dentro de los cursos de Canvas queda excluida para evitar sobreescribir configuraciones de cátedra. Se maneja mediante la exportación/importación limpia del código.
+*   **Integración SSO Externa:** No se incluye autenticación mediante proveedores de identidad externos en esta fase; se utiliza el sistema de usuarios nativo de Django REST Framework.
+*   **Despliegue Directo por API al LMS:** La publicación automatizada de recursos directamente dentro de los cursos queda excluida para evitar sobreescribir configuraciones de cátedra. Se maneja mediante la exportación/importación limpia del código.
 *   **Generación de Contenidos por IA:** Los módulos de creación automatizada de cuestionarios mediante Inteligencia Artificial se documentan como hitos para fases futuras.
 
 ---
@@ -128,23 +128,23 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 *   **RF01: Gestión de Sesión y Autenticación**
     *   *Prioridad:* **Must**
     *   *Actor:* Todos los usuarios.
-    *   *Descripción:* El sistema debe permitir el ingreso mediante credenciales seguras (usuario/contraseña) y gestionar los permisos según el rol asignado.
-    *   *Criterio de Aceptación:* El formulario valida campos vacíos y rechaza accesos con credenciales inválidas mostrando un mensaje de error claro.
+    *   *Descripción:* El sistema debe permitir el ingreso mediante credenciales seguras y gestionar los permisos según el rol asignado.
+    *   *Criterio de Aceptación:* El formulario valida campos vacíos y rechaza accesos con credenciales inválidas mostrando un error claro.
 *   **RF02: Alta de Recursos con Clasificación por Asignatura**
     *   *Prioridad:* **Must**
     *   *Actor:* Asesor Pedagógico / Administrador.
-    *   *Descripción:* El sistema debe proveer un formulario para crear nuevos recursos, exigiendo asociarlos explícitamente a una **Asignatura** y Categoría.
+    *   *Descripción:* El sistema debe proveer un formulario para crear nuevos recursos, exigiendo asociarlos explícitamente a una **Asignatura** (Matemáticas, Historia, Psicología, Transversal, entre otras) y Categoría.
     *   *Criterio de Aceptación:* Al enviar el formulario válido, el recurso impacta en el listado general con su etiqueta de materia correspondiente.
 *   **RF03: Filtrado Dinámico de Biblioteca**
     *   *Prioridad:* **Must**
     *   *Actor:* Asesor Pedagógico / Maquetador.
     *   *Descripción:* El repositorio debe filtrar en tiempo real los recursos mostrados al seleccionar una Asignatura específica en la barra superior.
-    *   *Criterio de Aceptación:* Seleccionar "Matemáticas" oculta instantáneamente los recursos de "Historia" o "Psicología" sin recargar la página.
+    *   *Criterio de Aceptación:* Seleccionar una materia oculta instantáneamente los recursos ajenos sin recargar la página.
 *   **RF04: Edición Visual Enriquecida (Sandbox RTE)**
     *   *Prioridad:* **Must**
     *   *Actor:* Asesor Pedagógico.
     *   *Descripción:* El Sandbox debe proveer botones de acción para aplicar Negrita, Cursiva, Subrayado, Listas y Color sobre el texto seleccionado.
-    *   *Criterio de Aceptación:* Hacer clic en el botón de Negrita envuelve semánticamente el texto resaltado en etiquetas `<b>`/`<strong>` reflejando el cambio en vivo.
+    *   *Criterio de Aceptación:* Hacer clic en el botón de Negrita envuelve semánticamente el texto resaltado en etiquetas semánticas reflejando el cambio en vivo.
 *   **RF05: Exportación Local de Compendios (DOC / HTML)**
     *   *Prioridad:* **Must**
     *   *Actor:* Asesor Pedagógico / Maquetador.
@@ -166,11 +166,11 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 *   **RNF01: Rendimiento y Percepción de Carga**
     *   El tiempo de renderizado inicial del Dashboard y el cambio entre pestañas del Sandbox debe ejecutarse en menos de 1.5 segundos utilizando la reactividad de Angular Signals.
 *   **RNF02: Usabilidad y Adaptabilidad (Full-Width UI)**
-    *   La interfaz debe suprimir márgenes ociosos utilizando un diseño de ancho completo (`max-w-none`), garantizando una experiencia de usuario inmersiva y sin desbordamientos horizontales desde 1024px hasta pantallas 4K.
+    *   La interfaz debe suprimir márgenes ociosos utilizando un diseño de ancho completo (`max-w-none`), garantizando una experiencia de usuario inmersiva y sin desbordamientos horizontales.
 *   **RNF03: Persistencia e Integridad Referencial**
     *   La base de datos relacional MySQL debe resguardar la integridad referencial impidiendo la eliminación de Asignaturas o Categorías que posean recursos asociados (`ON DELETE PROTECT`).
 *   **RNF04: Compatibilidad y Estándares Web**
-    *   El código generado por el Sandbox debe cumplir con estándares HTML5 limpios y garantizar la compatibilidad transversal en navegadores basados en Chromium, Gecko y WebKit.
+    *   El código generado por el Sandbox debe cumplir con estándares HTML5 limpios y garantizar la compatibilidad transversal en navegadores modernos.
 
 ---
 
@@ -181,22 +181,21 @@ El esfuerzo proyectado para el desarrollo, pruebas e implementación de la versi
 | Stakeholder | Rol / Puesto | Tipo | Interés | Influencia | Expectativas Principales | Canal de Comunicación |
 | :--- | :--- | :---: | :---: | :---: | :--- | :--- |
 | **Prof. Titular / Tribunal** | Evaluador Académico | Externo | Alto | Alta | Cumplimiento estricto de lineamientos de ingeniería de software, código funcional y defensa sólida. | Entregables GitHub / Defensa Presencial |
-| **Coord. Pedagógica** | Cliente / Patrocinador | Interno | Alto | Alta | Plataforma estable que garantice la estandarización visual de las aulas virtuales sin fricciones. | Reuniones de Revisión / Informes |
 | **Asesores Pedagógicos** | Usuarios Finales | Interno | Alto | Media | Interfaz intuitiva, curva de aprendizaje nula en el Sandbox y filtrado eficiente por materia. | Pruebas de Usabilidad / Feedback |
 | **Maquetadores Web** | Usuarios Finales | Interno | Alto | Media | Obtención de código limpio y pre-aprobado, reduciendo tiempos de depuración de estilos. | Repositorio / Issues |
 
 ### 6.2. Roles del Equipo Scrum (DEV6)
 
 *   **Product Owner / Líder Técnico: Jonathan Guillén**
-    *   *Responsabilidades:* Definición de la visión del producto, priorización absoluta del Backlog, toma de decisiones arquitectónicas y control exclusivo del flujo de Gitflow (aprobación y merge final hacia la rama `main` por seguridad).
+    *   *Responsabilidades:* Definición de la visión del producto, priorización del Backlog, decisiones sobre arquitectura base y gestión exclusiva de la rama principal de producción (`main`).
 *   **Scrum Master / Developer: Ale Corva**
-    *   *Responsabilidades:* Facilitación de los procesos ágiles, eliminación de impedimentos técnicos y co-desarrollo de servicios de estado en Angular.
+    *   *Responsabilidades:* Facilitación ágil y co-desarrollo de la lógica de estado e interfaces en Angular.
 *   **Desarrollador Backend: Gonzalo Velasco**
-    *   *Responsabilidades:* Diseño del DER relacional, confección de scripts SQL en MySQL y programación de serializadores y ViewSets en Django REST Framework.
+    *   *Responsabilidades:* Diseño del DER relacional, confección de scripts SQL en MySQL y endpoints en Django REST Framework.
 *   **Desarrollador Frontend / UI: Daniela Salvo**
-    *   *Responsabilidades:* Traslación de prototipos de diseño a maquetación real con Tailwind CSS, garantizando fidelidad visual y construyendo los ejemplos interactivos de la galería.
+    *   *Responsabilidades:* Traslación visual del sistema de diseño institucional y construcción de componentes interactivos de la galería.
 *   **Desarrollador QA / Formularios: Gerardo Romero**
-    *   *Responsabilidades:* Implementación de validaciones en formularios reactivos y ejecución de pruebas cruzadas para asegurar la robustez de las descargas y filtros.
+    *   *Responsabilidades:* Implementación de validaciones en formularios reactivos y pruebas cruzadas de descarga y filtrado.
 
 ---
 
@@ -207,12 +206,12 @@ A continuación se detallan las Historias de Usuario correspondientes a los requ
 ### US-01: Autenticación Segura
 *   **Como** usuario del sistema,
 *   **Quiero** iniciar sesión con mis credenciales únicas,
-*   **Para** acceder a mi entorno de trabajo personalizado según mis niveles de permiso.
+*   **Para** acceder a mi entorno de trabajo personalizado.
 *   **Criterios de Aceptación (Gherkin):**
     *   **Dado que** me encuentro en la pantalla de Login y los campos están vacíos,
     *   **Cuando** intento enviar el formulario,
     *   **Entonces** el sistema bloquea la acción y resalta los campos requeridos.
-    *   **Dado que** ingreso mis credenciales institucionales válidas,
+    *   **Dado que** ingreso mis credenciales válidas,
     *   **Cuando** presiono el botón de ingreso,
     *   **Entonces** soy redirigido al Dashboard principal de EduTools exitosamente.
 *   *Prioridad:* Alta (Must) | *Estimación:* 3 Story Points.
@@ -220,66 +219,61 @@ A continuación se detallan las Historias de Usuario correspondientes a los requ
 ### US-02: Carga de Recurso con Asignatura
 *   **Como** Asesor Pedagógico,
 *   **Quiero** subir un nuevo recurso especificando su Asignatura y Categoría,
-*   **Para** que quede correctamente clasificado en el mapa curricular de la plataforma.
+*   **Para** que quede correctamente clasificado en el mapa curricular.
 *   **Criterios de Aceptación (Gherkin):**
     *   **Dado que** abro el formulario "Subir Recurso Nuevo",
-    *   **Cuando** completo el título y selecciono la Asignatura "Matemáticas" desde el menú desplegable,
+    *   **Cuando** completo el título y selecciono una Asignatura desde el menú desplegable,
     *   **Entonces** el botón de envío se habilita para procesar el alta.
     *   **Dado que** envío el recurso correctamente categorizado,
-    *   **Cuando** reviso la biblioteca de recursos recientes,
-    *   **Entonces** visualizo la nueva tarjeta con un indicador visual claro de su materia.
+    *   **Cuando** reviso la biblioteca,
+    *   **Entonces** visualizo la nueva tarjeta con el indicador de su materia.
 *   *Prioridad:* Alta (Must) | *Estimación:* 5 Story Points.
 
 ### US-03: Filtrado Curricular en Repositorio
 *   **Como** Asesor Pedagógico,
 *   **Quiero** filtrar instantáneamente el listado general seleccionando una Asignatura,
-*   **Para** visualizar únicamente los materiales pertinentes a mi área de supervisión.
+*   **Para** visualizar únicamente los materiales pertinentes a mi materia.
 *   **Criterios de Aceptación (Gherkin):**
-    *   **Dado que** el repositorio muestra recursos de múltiples materias mezcladas,
-    *   **Cuando** hago clic en la píldora de filtrado "Historia",
-    *   **Entonces** la vista se actualiza mostrando exclusivamente los recursos asociados a Historia, ocultando el resto.
+    *   **Dado que** el repositorio muestra recursos mezclados,
+    *   **Cuando** hago clic en el filtro de una Asignatura específica,
+    *   **Entonces** la vista se actualiza mostrando exclusivamente dichos recursos, ocultando el resto en vivo.
 *   *Prioridad:* Alta (Must) | *Estimación:* 5 Story Points.
 
 ### US-04: Formateo en Sandbox (Modo Natural)
 *   **Como** Asesor Pedagógico,
-*   **Quiero** aplicar estilos de formato (Negrita, Itálica, Colores) usando una barra visual,
-*   **Para** enriquecer el contenido pedagógico sin necesidad de manipular etiquetas HTML crudas.
+*   **Quiero** aplicar estilos de formato usando una barra visual,
+*   **Para** enriquecer el contenido pedagógico sin escribir etiquetas HTML.
 *   **Criterios de Aceptación (Gherkin):**
-    *   **Dado que** tengo un párrafo cargado en el área de previsualización visual del Sandbox,
-    *   **Cuando** selecciono una frase y presiono el botón "B" (Negrita) en la barra superior,
-    *   **Entonces** la frase adquiere el grosor de fuente adecuado instantáneamente en la pantalla.
-    *   **Cuando** selecciono un color desde el selector de la barra,
-    *   **Entonces** el texto seleccionado adopta dicho color de manera persistente en la vista.
+    *   **Dado que** tengo un texto cargado en la previsualización del Sandbox,
+    *   **Cuando** selecciono una frase y presiono Negrita o selecciono un color,
+    *   **Entonces** el texto adquiere dicho formato instantáneamente en la pantalla de manera visual.
 *   *Prioridad:* Alta (Must) | *Estimación:* 8 Story Points.
 
 ### US-05: Exportación Limpia Multiformato
 *   **Como** Maquetador Web,
 *   **Quiero** descargar los recursos filtrados en formato `.doc` o `.html`,
-*   **Para** integrarlos ágilmente en las plataformas LMS o compartirlos como documentos de revisión.
+*   **Para** integrarlos ágilmente en el LMS institucional.
 *   **Criterios de Aceptación (Gherkin):**
-    *   **Dado que** apliqué un filtro para ver solo recursos de "Psicología",
-    *   **Cuando** presiono el botón "Exportar a DOC",
-    *   **Entonces** el navegador compila y descarga un archivo Word físico que contiene exactamente los recursos en pantalla.
+    *   **Dado que** apliqué un filtro por materia en la vista general,
+    *   **Cuando** presiono el botón de exportación,
+    *   **Entonces** el navegador compila y descarga un archivo físico que contiene exactamente el código limpio de los recursos en pantalla.
 *   *Prioridad:* Alta (Must) | *Estimación:* 5 Story Points.
 
 ---
 
 ## 8. ENLACES Y HERRAMIENTAS DEL PROYECTO
 
-La gestión integral, el control de versiones y el Backlog inicial con la carga de las Historias de Usuario se encuentran auditados y disponibles en la plataforma GitHub:
-
-*   🔗 **Repositorio Principal del Proyecto:** [ISPC-TSDWAD/ModPWeb--Dev6](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6)
-*   📋 **Tablero de Gestión y Backlog (GitHub Projects/Issues):** [Tablero DEV6 - EduTools](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/issues)
-*   🌿 **Rama de Consolidación Técnica (Ev2):** `develop` y `ev2/jonathanGuillen` (Promocionadas a `main` bajo supervisión del Líder Técnico).
+*   🔗 **Repositorio Principal:** [ISPC-TSDWAD/ModPWeb--Dev6](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6)
+*   📋 **Tablero de Gestión y Backlog:** [https://github.com/orgs/ISPC-TSDWAD/projects/4](https://github.com/orgs/ISPC-TSDWAD/projects/4)
+*   🌿 **Rama de Consolidación Técnica (Ev2):** Cada participante del equipo desde su rama individual (ej. `ev2/jonathanGuillen`) sube sus archivos validados a la rama de integración `develop`. Una vez consolidada la versión final estable en `develop`, únicamente el **Líder Técnico** interviene en la rama principal `main` para realizar el merge de producción por estrictas normativas de seguridad y control de versiones.
 
 ---
 
 ## 9. BIBLIOGRAFÍA
 
-1.  **Project Management Institute (PMI).** (2021). *Guía de los Fundamentos para la Dirección de Proyectos (Guía del PMBOK®) – Séptima Edición*. Project Management Institute. (Enfoque en Dominios de Desempeño y Principios de Entrega de Valor).
-2.  **Schwaber, K., & Beedle, M.** (2020). *La Guía de Scrum (The Scrum Guide)*. Scrum.org. Obtenido de directrices oficiales de roles, eventos y artefactos ágiles.
-3.  **W3C Web Accessibility Initiative (WAI).** (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*. Estandarización de componentes semánticos y contraste de color.
+1.  **Project Management Institute (PMI).** (2021). *Guía de los Fundamentos para la Dirección de Proyectos (Guía del PMBOK®) – Séptima Edición*. Project Management Institute.
+2.  **Schwaber, K., & Beedle, M.** (2020). *La Guía de Scrum (The Scrum Guide)*. Scrum.org.
+3.  **W3C Web Accessibility Initiative (WAI).** (2023). *Web Content Accessibility Guidelines (WCAG) 2.2*.
 
 ---
-**FINAL DE LA DOCUMENTACIÓN OFICIAL DE SOFTWARE**  
-**PROYECTO VALIDAD0 Y APROBADO TÉCNICAMENTE**
+**FINAL DE LA DOCUMENTACIÓN OFICIAL DE SOFTWARE**
