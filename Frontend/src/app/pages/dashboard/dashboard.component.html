@@ -11,19 +11,39 @@
       </div>
     </div>
     <nav class="flex-1 overflow-y-auto">
-      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/login">
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" 
+           [class.bg-primary-container]="seccionActiva === 'componentes'"
+           [class.text-on-primary-container]="seccionActiva === 'componentes'"
+           [class.border-l-4]="seccionActiva === 'componentes'"
+           [class.border-primary]="seccionActiva === 'componentes'"
+           (click)="setSeccion('componentes')">
         <span class="material-symbols-outlined">library_books</span>
         <span class="text-label-md font-label-md">Componentes</span>
       </div>
-      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/home">
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" 
+           [class.bg-primary-container]="seccionActiva === 'sandbox'"
+           [class.text-on-primary-container]="seccionActiva === 'sandbox'"
+           [class.border-l-4]="seccionActiva === 'sandbox'"
+           [class.border-primary]="seccionActiva === 'sandbox'"
+           (click)="setSeccion('sandbox')">
         <span class="material-symbols-outlined">science</span>
         <span class="text-label-md font-label-md">Sandbox</span>
       </div>
-      <div class="flex items-center gap-4 px-4 py-3 bg-primary-container text-on-primary-container border-l-4 border-primary scale-[0.99] transition-transform cursor-pointer" routerLink="/dashboard">
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" 
+           [class.bg-primary-container]="seccionActiva === 'recursos'"
+           [class.text-on-primary-container]="seccionActiva === 'recursos'"
+           [class.border-l-4]="seccionActiva === 'recursos'"
+           [class.border-primary]="seccionActiva === 'recursos'"
+           (click)="setSeccion('recursos')">
         <span class="material-symbols-outlined">folder_open</span>
         <span class="text-label-md font-label-md">Panel de Recursos</span>
       </div>
-      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" routerLink="/about">
+      <div class="flex items-center gap-4 px-4 py-3 text-on-surface-variant hover:bg-surface-container-highest transition-all cursor-pointer" 
+           [class.bg-primary-container]="seccionActiva === 'configuracion'"
+           [class.text-on-primary-container]="seccionActiva === 'configuracion'"
+           [class.border-l-4]="seccionActiva === 'configuracion'"
+           [class.border-primary]="seccionActiva === 'configuracion'"
+           (click)="setSeccion('configuracion')">
         <span class="material-symbols-outlined">settings</span>
         <span class="text-label-md font-label-md">Configuración</span>
       </div>
@@ -71,7 +91,9 @@
 
   <!-- Main Content Area -->
   <div class="flex-1 lg:ml-[400px] p-xl">
-    <div class="max-w-[1200px] mx-auto w-full">
+    
+    <!-- SECCION RECURSOS -->
+    <div class="max-w-[1200px] mx-auto w-full" *ngIf="seccionActiva === 'recursos'">
       <!-- Hero Section -->
       <section class="mb-xl rounded-xl overflow-hidden bg-white border border-outline-variant">
         <div class="h-48 relative">
@@ -271,5 +293,87 @@
         <p class="text-body-sm text-on-surface-variant">© 2024 EduTools - Repositorio de Estándares Visuales para Entornos Virtuales de Aprendizaje</p>
       </footer>
     </div>
+
+    <!-- SECCION COMPONENTES -->
+    <div class="max-w-[1200px] mx-auto w-full" *ngIf="seccionActiva === 'componentes'">
+      <div class="bg-white border border-outline-variant rounded-xl p-xl mb-xl">
+        <div class="flex items-center gap-sm mb-lg">
+          <span class="material-symbols-outlined text-primary text-[32px]">library_books</span>
+          <h2 class="text-headline-lg font-bold text-on-surface">Biblioteca de Componentes</h2>
+        </div>
+        <p class="text-body-lg text-on-surface-variant mb-xl">
+          Explorá los componentes modulares base que podés usar para armar tus páginas pedagógicas en Canvas LMS o Moodle.
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-primary mb-2 text-[32px]">table</span>
+            <h4 class="font-bold text-on-surface mb-1">Tablas Comparativas</h4>
+            <p class="text-body-sm text-on-surface-variant">Plantillas de tablas responsivas para listar información.</p>
+          </div>
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-primary mb-2 text-[32px]">imagesmode</span>
+            <h4 class="font-bold text-on-surface mb-1">Carruseles H5P</h4>
+            <p class="text-body-sm text-on-surface-variant">Galerías interactivas y presentaciones de imágenes.</p>
+          </div>
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+            <span class="material-symbols-outlined text-primary mb-2 text-[32px]">list_alt</span>
+            <h4 class="font-bold text-on-surface mb-1">Listas Dinámicas</h4>
+            <p class="text-body-sm text-on-surface-variant">Acordeones anidados y listas con íconos personalizados.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCION SANDBOX -->
+    <div class="max-w-[1200px] mx-auto w-full" *ngIf="seccionActiva === 'sandbox'">
+      <div class="bg-white border border-outline-variant rounded-xl p-xl mb-xl">
+        <div class="flex items-center gap-sm mb-lg">
+          <span class="material-symbols-outlined text-secondary text-[32px]">science</span>
+          <h2 class="text-headline-lg font-bold text-on-surface">Sandbox de Diseño</h2>
+        </div>
+        <p class="text-body-lg text-on-surface-variant mb-xl">
+          El área de pruebas (Sandbox) está en desarrollo para la próxima versión. Aquí podrás arrastrar y soltar componentes, editar el texto en tiempo real y exportar el HTML resultante.
+        </p>
+        <div class="bg-secondary-container text-on-secondary-container p-xl rounded-lg text-center border-2 border-dashed border-secondary/50">
+          <span class="material-symbols-outlined text-[48px] mb-2">construction</span>
+          <h3 class="text-headline-sm font-bold mb-2">Próximamente...</h3>
+          <p class="max-w-md mx-auto">Estamos trabajando en un editor visual WYSIWYG completo que valide el HTML para cumplir con los estándares LTI de Canvas.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCION CONFIGURACION -->
+    <div class="max-w-[1200px] mx-auto w-full" *ngIf="seccionActiva === 'configuracion'">
+      <div class="bg-white border border-outline-variant rounded-xl p-xl mb-xl">
+        <div class="flex items-center gap-sm mb-lg">
+          <span class="material-symbols-outlined text-on-surface-variant text-[32px]">settings</span>
+          <h2 class="text-headline-lg font-bold text-on-surface">Configuración de Sistema</h2>
+        </div>
+        <p class="text-body-lg text-on-surface-variant mb-xl">
+          Ajustes generales del entorno de pruebas para la Evidencia 2.
+        </p>
+        
+        <div class="space-y-md max-w-2xl">
+          <div class="flex items-center justify-between p-md border border-outline rounded">
+            <div>
+              <h4 class="font-bold text-on-surface">Modo Oscuro Experimental</h4>
+              <p class="text-body-sm text-on-surface-variant">Activa los tokens de colores oscuros (Dark Mode).</p>
+            </div>
+            <div class="w-12 h-6 bg-surface-container-highest rounded-full relative cursor-not-allowed opacity-50">
+              <div class="w-4 h-4 bg-outline absolute left-1 top-1 rounded-full"></div>
+            </div>
+          </div>
+          <div class="flex items-center justify-between p-md border border-outline rounded">
+            <div>
+              <h4 class="font-bold text-on-surface">Prefijo de Clases Institucional</h4>
+              <p class="text-body-sm text-on-surface-variant">Evita colisiones CSS al exportar (ej. ispc-card-...).</p>
+            </div>
+            <input type="text" value="ispc-" class="border border-outline rounded px-2 py-1 text-sm bg-surface-container w-24 text-center cursor-not-allowed" disabled>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </div>

@@ -17,6 +17,11 @@ export class DashboardComponent {
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
+  seccionActiva: string = 'recursos';
+
+  setSeccion(seccion: string) {
+    this.seccionActiva = seccion;
+  }
 
   constructor() {
     this.recursoForm = this.fb.group({
