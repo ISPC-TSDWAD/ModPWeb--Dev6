@@ -10,7 +10,10 @@ import { TestData } from '../../models/api-response.model';
   standalone: true,
   imports: [CommonModule, ReactiveFormsModule, RouterLink],
   templateUrl: './home.component.html',
-  styleUrl: './home.component.css'
+  styleUrl: './home.component.css',
+  host: {
+    'class': 'w-full flex flex-grow'
+  }
 })
 export class HomeComponent implements OnInit {
   private apiService = inject(ApiService);

@@ -79,6 +79,10 @@ python manage.py runserver
 # API disponible en: http://127.0.0.1:8000/api/
 ```
 
+**Credenciales de prueba (Superusuario Django):**
+- **Usuario:** `admin` o **Correo:** `admin@edutools.edu.ar`
+- **Contraseña:** `Admin1234!`
+
 ### Frontend (Angular)
 
 ```bash
