@@ -28,24 +28,7 @@
   <!-- Modificado para que ocupe el ancho sin margin sobrante -->
   <main class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full">
 
-    <!-- Unified Topbar Profile -->
-    <div class="absolute top-4 right-6 z-50">
-      <div class="relative">
-        <button (click)="menuPerfilAbierto = !menuPerfilAbierto" class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold hover:ring-2 hover:ring-primary transition-all shadow-md">
-          <img *ngIf="fotoInstitucional" [src]="fotoInstitucional" class="w-full h-full object-cover rounded-full">
-          <span *ngIf="!fotoInstitucional">AA</span>
-        </button>
-        <!-- Dropdown Menu -->
-        <div *ngIf="menuPerfilAbierto" class="absolute right-0 mt-2 w-48 bg-surface-container-lowest dark:bg-surface-container border border-outline-variant dark:border-outline rounded-lg shadow-lg overflow-hidden animate-fade-in z-50">
-           <a (click)="setSeccion('configuracion'); menuPerfilAbierto = false" class="block px-4 py-3 text-sm font-bold hover:bg-surface-container-low cursor-pointer dark:hover:bg-surface-container-high flex items-center gap-2 border-b border-outline-variant dark:border-outline">
-             <span class="material-symbols-outlined text-[18px]">settings</span> Configuración
-           </a>
-           <a (click)="cerrarSesion()" class="block px-4 py-3 text-sm font-bold text-error hover:bg-error-container cursor-pointer flex items-center gap-2">
-             <span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
-           </a>
-        </div>
-      </div>
-    </div>
+    <!-- Content Start -->
 
     <!-- REPOSITORIO -->
     <div *ngIf="seccionActiva === 'recursos'" class="w-full max-w-[1400px] mx-auto animate-fade-in flex flex-col">
@@ -344,21 +327,21 @@
                  <h3 class="font-bold text-sm text-on-surface dark:text-white">Acordeón de Contenidos Expandible</h3>
                </div>
                <div class="bg-white text-black p-md border rounded shadow-sm">
-                  <div class="dp-panels-wrapper dp-accordion-default border border-[#b2e5ed] rounded overflow-hidden">
-                    <div class="dp-panel-group border-b border-[#b2e5ed]">
-                      <h3 class="dp-panel-heading bg-[#e0f7fa] m-0 p-3 text-[#006972] font-bold cursor-pointer hover:bg-[#b2e5ed] transition flex justify-between items-center">
+                  <div class="dp-panels-wrapper dp-accordion-default border border-[#b2e5ed] rounded overflow-hidden space-y-1">
+                    <details class="dp-panel-group border-b border-[#b2e5ed] group">
+                      <summary class="dp-panel-heading bg-[#e0f7fa] m-0 p-3 text-[#006972] font-bold cursor-pointer hover:bg-[#b2e5ed] transition flex justify-between items-center list-none outline-none">
                         <strong>Título Nivel 1</strong>
-                        <span class="material-symbols-outlined text-sm">expand_more</span>
-                      </h3>
-                      <div class="dp-panel-content p-4 bg-white"><p class="m-0 text-sm">Texto descriptivo que se revela al expandir el acordeón. Ideal para dosificar lectura.</p></div>
-                    </div>
-                    <div class="dp-panel-group">
-                      <h3 class="dp-panel-heading bg-gray-50 m-0 p-3 text-gray-700 font-bold cursor-pointer hover:bg-gray-100 transition flex justify-between items-center">
+                        <span class="material-symbols-outlined text-sm group-open:rotate-180 transition-transform">expand_more</span>
+                      </summary>
+                      <div class="dp-panel-content p-4 bg-white border-t border-[#b2e5ed]"><p class="m-0 text-sm">Texto descriptivo que se revela al expandir el acordeón. Ideal para dosificar lectura.</p></div>
+                    </details>
+                    <details class="dp-panel-group group">
+                      <summary class="dp-panel-heading bg-gray-50 m-0 p-3 text-gray-700 font-bold cursor-pointer hover:bg-gray-100 transition flex justify-between items-center list-none outline-none">
                         <strong>Título Nivel 2</strong>
-                        <span class="material-symbols-outlined text-sm">expand_less</span>
-                      </h3>
-                      <div class="dp-panel-content p-4 bg-white hidden"><p class="m-0 text-sm">Contenido oculto.</p></div>
-                    </div>
+                        <span class="material-symbols-outlined text-sm group-open:rotate-180 transition-transform">expand_more</span>
+                      </summary>
+                      <div class="dp-panel-content p-4 bg-white border-t border-gray-200"><p class="m-0 text-sm">Contenido oculto del segundo bloque.</p></div>
+                    </details>
                   </div>
                </div>
             </div>

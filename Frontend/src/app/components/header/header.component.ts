@@ -10,6 +10,7 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent {
   private router = inject(Router);
+  menuPerfilAbierto = false;
 
   get isLoggedIn(): boolean {
     return localStorage.getItem('isLoggedIn') === 'true';
@@ -17,6 +18,7 @@ export class HeaderComponent {
 
   logout() {
     localStorage.removeItem('isLoggedIn');
+    this.menuPerfilAbierto = false;
     this.router.navigate(['/login']);
   }
 }
