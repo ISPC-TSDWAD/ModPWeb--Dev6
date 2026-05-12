@@ -21,10 +21,25 @@
       <a (click)="setSeccion('componentes')" [class.bg-secondary-container]="seccionActiva === 'componentes'" [class.border-l-4]="seccionActiva === 'componentes'" [class.border-secondary]="seccionActiva === 'componentes'" class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white">
         <span class="material-symbols-outlined">view_module</span> Componentes
       </a>
-      <a (click)="setSeccion('configuracion')" [class.bg-secondary-container]="seccionActiva === 'configuracion'" [class.border-l-4]="seccionActiva === 'configuracion'" [class.border-secondary]="seccionActiva === 'configuracion'" class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white">
-        <span class="material-symbols-outlined">settings</span> Configuración
-      </a>
     </nav>
+    <div class="mt-auto border-t border-outline-variant dark:border-outline p-md flex flex-col gap-1">
+      <div class="flex items-center gap-sm mb-2 px-2">
+        <div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold overflow-hidden">
+          <img *ngIf="fotoInstitucional" [src]="fotoInstitucional" class="w-full h-full object-cover">
+          <span *ngIf="!fotoInstitucional">AA</span>
+        </div>
+        <div>
+          <p class="font-bold text-sm">Academic Admin</p>
+          <p class="text-xs text-outline">Institucional</p>
+        </div>
+      </div>
+      <a (click)="setSeccion('configuracion')" [class.bg-secondary-container]="seccionActiva === 'configuracion'" class="flex items-center gap-sm px-lg py-2 hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white rounded text-sm">
+        <span class="material-symbols-outlined text-[18px]">settings</span> Configuración
+      </a>
+      <a class="flex items-center gap-sm px-lg py-2 hover:bg-error-container hover:text-error transition-all cursor-pointer font-bold rounded text-sm text-outline">
+        <span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
+      </a>
+    </div>
   </aside>
 
   <!-- Main Content Area -->
@@ -182,7 +197,7 @@
                </div>
                <div class="flex gap-md">
                  <button (click)="copiarComoImagen()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm">Copiar como Imagen</button>
-                 <button (click)="descargarTxtHtml()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Descargar txt/html</button>
+                 <button (click)="descargarTxtHtml()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Descargar TXT</button>
                  <button (click)="copiarHTML()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">code</span> Copiar HTML</button>
                  <button (click)="guardar()" class="px-6 py-2 bg-primary text-white font-bold rounded hover:opacity-90 flex items-center gap-2 shadow-sm text-sm transition-opacity"><span class="material-symbols-outlined text-[16px]">save</span> Guardar</button>
                </div>
@@ -496,7 +511,7 @@
                         <span class="material-symbols-outlined text-white">upload</span>
                      </div>
                   </label>
-                  <span class="font-bold text-sm block mt-2">Logo Institucional</span>
+                  <span class="font-bold text-sm block mt-2">Logo Institucional / Perfil</span>
                   
                   <div class="text-left mt-4">
                      <label class="text-sm font-bold text-on-surface-variant dark:text-outline block mb-1">Identificador (ID)</label>
@@ -505,27 +520,6 @@
                </div>
             </div>
 
-            <div class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm">
-               <div class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline">
-                 <h3 class="font-bold text-primary dark:text-primary-fixed">Seguridad</h3>
-               </div>
-               <div class="p-lg space-y-md">
-                  <div class="p-md bg-surface-container-low dark:bg-[#121212] rounded border border-outline-variant dark:border-outline flex gap-3">
-                     <span class="material-symbols-outlined text-secondary dark:text-secondary-fixed-dim">verified_user</span>
-                     <div>
-                       <h5 class="font-bold text-sm">Doble Factor (2FA)</h5>
-                       <p class="text-xs text-on-surface-variant dark:text-outline mb-2 mt-1">Capa extra de protección.</p>
-                       <span class="bg-error-container text-on-error-container text-xs px-2 py-1 rounded font-bold">Desactivado</span>
-                     </div>
-                  </div>
-                  <button (click)="cambiarContrasena()" class="w-full bg-secondary text-white font-bold py-2 rounded flex items-center justify-center gap-2 hover:opacity-90 shadow-sm transition-opacity">
-                    <span class="material-symbols-outlined text-sm">lock_reset</span> Cambiar Contraseña
-                  </button>
-                  <button class="w-full border border-outline-variant dark:border-outline text-on-surface dark:text-white font-bold py-2 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">
-                    Sesiones Activas
-                  </button>
-               </div>
-            </div>
          </div>
        </div>
     </div>

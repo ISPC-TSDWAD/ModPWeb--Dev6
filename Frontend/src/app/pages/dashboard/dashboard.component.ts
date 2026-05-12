@@ -187,11 +187,11 @@ export class DashboardComponent implements OnInit {
 
   descargarTxtHtml() {
     if (this.recursoSeleccionado && this.recursoSeleccionado.htmlEditado) {
-      const blob = new Blob([this.recursoSeleccionado.htmlEditado], { type: 'text/html' });
+      const blob = new Blob([this.recursoSeleccionado.htmlEditado], { type: 'text/plain' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = `recurso_${this.recursoSeleccionado.id}.html`;
+      a.download = `recurso_${this.recursoSeleccionado.id}.txt`;
       a.click();
       window.URL.revokeObjectURL(url);
     } else {
