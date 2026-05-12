@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
@@ -9,4 +10,10 @@ import { Component } from '@angular/core';
   }
 })
 export class LoginComponent {
+  private router = inject(Router);
+
+  login() {
+    localStorage.setItem('isLoggedIn', 'true');
+    this.router.navigate(['/home']);
+  }
 }

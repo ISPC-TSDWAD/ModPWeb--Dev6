@@ -28,6 +28,45 @@
         <span class="text-label-md font-label-md">Configuración</span>
       </div>
     </nav>
+
+    <!-- Subir Recurso Form -->
+    <div class="p-lg border-t border-outline-variant mt-auto">
+      <h3 class="text-label-lg font-bold text-on-surface mb-md">Subir Nuevo Recurso</h3>
+      <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-sm">
+        
+        <div class="flex flex-col gap-xs">
+          <label class="text-label-sm font-bold text-on-surface-variant">Título</label>
+          <input type="text" formControlName="titulo" class="border border-outline rounded p-2 text-body-sm" placeholder="Mínimo 5 caracteres">
+          <span *ngIf="esCampoInvalido('titulo')" class="text-error text-label-sm">Título requerido (5-50 chars).</span>
+        </div>
+
+        <div class="flex flex-col gap-xs">
+          <label class="text-label-sm font-bold text-on-surface-variant">Categoría</label>
+          <select formControlName="categoria" class="border border-outline rounded p-2 text-body-sm bg-white">
+            <option value="" disabled>Seleccionar...</option>
+            <option value="ESTILOS">Estilos Generales</option>
+            <option value="COMPONENTES">Componentes</option>
+            <option value="EXAMEN">Exámenes</option>
+            <option value="H5P">Interactivos H5P</option>
+          </select>
+          <span *ngIf="esCampoInvalido('categoria')" class="text-error text-label-sm">Categoría requerida.</span>
+        </div>
+
+        <div class="flex flex-col gap-xs">
+          <label class="text-label-sm font-bold text-on-surface-variant">URL del Recurso</label>
+          <input type="url" formControlName="url" class="border border-outline rounded p-2 text-body-sm" placeholder="https://...">
+          <span *ngIf="esCampoInvalido('url')" class="text-error text-label-sm">URL inválida.</span>
+        </div>
+
+        <button type="submit" [disabled]="recursoForm.invalid" class="bg-primary text-white font-bold py-2 rounded mt-sm hover:bg-primary-container hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed">
+          Guardar Recurso
+        </button>
+
+        <div *ngIf="mensajeExito" class="bg-secondary-container text-on-secondary-container p-2 rounded text-label-sm text-center mt-xs">
+          ¡Recurso guardado con éxito!
+        </div>
+      </form>
+    </div>
   </aside>
 
   <!-- Main Content Area -->

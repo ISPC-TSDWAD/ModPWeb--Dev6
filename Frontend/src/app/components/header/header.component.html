@@ -11,6 +11,12 @@
         routerLink="/about">Quiénes Somos</a>
       <a class="text-label-lg font-label-lg text-on-surface-variant hover:text-primary transition-colors"
         routerLink="/dashboard">Dashboard</a>
+        
+      <!-- Login / Logout -->
+      <div class="ml-4 pl-4 border-l border-outline-variant">
+        <a *ngIf="!isLoggedIn" routerLink="/login" class="text-label-lg font-bold text-primary hover:underline cursor-pointer">Iniciar Sesión</a>
+        <a *ngIf="isLoggedIn" (click)="logout()" class="text-label-lg font-bold text-error hover:underline cursor-pointer">Cerrar Sesión</a>
+      </div>
     </nav>
   </div>
 </header>
