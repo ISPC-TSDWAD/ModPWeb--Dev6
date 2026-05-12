@@ -58,6 +58,7 @@ export class DashboardComponent implements OnInit {
     this.recursoForm = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
       categoria: ['', Validators.required],
+      asignatura: ['Todas', Validators.required],
       url: [''],
       html_content: ['']
     });
@@ -124,6 +125,14 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  formatText(command: string, value: string | undefined = undefined) {
+    document.execCommand(command, false, value);
+    const el = document.getElementById('rich-editor');
+    if (el && this.recursoSeleccionado) {
+      this.recursoSeleccionado.htmlEditado = el.innerHTML;
+    }
+  }
+
   copiarHTML(): void {
     if (!this.recursoSeleccionado) return;
     const htmlParaCopiar = this.recursoSeleccionado.htmlEditado || this.recursoSeleccionado.html;
@@ -173,7 +182,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  exportarDoc() { alert('Exportando a DOC para ' + this.filtroMateria); }
+  exportarDoc() {
+    const html = this.getRecursosFiltrados().map(r => r.htmlEditado || r.html).join('<br><hr><br>');
+    const blob = new Blob(['<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:w="urn:schemas-microsoft-com:office:word" xmlns="http://www.w3.org/TR/REC-html40"><head><meta charset="utf-8"></head><body>' + html + '</body></html>'], { type: 'application/msword' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `recursos_${this.filtroMateria}.doc`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
+  }
+
   guardar() {
     if (this.recursoSeleccionado) {
       this.apiService.actualizarRecurso(this.recursoSeleccionado.id, this.recursoSeleccionado.htmlEditado).subscribe(() => {
@@ -187,26 +208,19 @@ export class DashboardComponent implements OnInit {
 
   menuPerfilAbierto = false;
 
-  descargarTxtHtml() {
-    const contenido = this.recursoSeleccionado?.htmlEditado || this.recursoSeleccionado?.html;
-    if (this.recursoSeleccionado && contenido) {
-      const blob = new Blob([contenido], { type: 'text/plain' });
-      const url = window.URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url;
-      a.download = `recurso_${this.recursoSeleccionado.id || 'export'}.txt`;
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      window.URL.revokeObjectURL(url);
-    } else {
-      alert('Seleccione un recurso para descargar.');
-    }
+  descargarHtml() {
+    const html = this.getRecursosFiltrados().map(r => r.htmlEditado || r.html).join('\n<hr>\n');
+    const blob = new Blob(['<!DOCTYPE html>\n<html>\n<head>\n<meta charset="utf-8">\n</head>\n<body>\n' + html + '\n</body>\n</html>'], { type: 'text/html;charset=utf-8' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `recursos_${this.filtroMateria}.html`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    window.URL.revokeObjectURL(url);
   }
 
-  descargarHtml() {
-    alert('Descargando compendio HTML de todos los recursos en ' + this.filtroMateria);
-  }
   copiarComoImagen() { alert('Copiando previsualización como imagen al portapapeles...'); }
   deshacer() { alert('Deshacer acción (Mock)'); }
   rehacer() { alert('Rehacer acción (Mock)'); }
@@ -218,7 +232,7 @@ export class DashboardComponent implements OnInit {
 
   getRecursosFiltrados() {
     if (this.filtroMateria === 'Todas') return this.recursos;
-    return this.recursos; 
+    return this.recursos.filter(r => r.asignatura === this.filtroMateria); 
   }
 
   getRecursosPorCategoria(catStr: string) {

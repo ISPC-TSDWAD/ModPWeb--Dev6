@@ -22,7 +22,7 @@
           </button>
           
           <div *ngIf="menuPerfilAbierto" class="absolute right-0 mt-2 w-48 bg-white dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg shadow-lg overflow-hidden animate-fade-in z-50">
-             <a routerLink="/dashboard" (click)="menuPerfilAbierto = false" class="block px-4 py-3 text-sm font-bold hover:bg-gray-100 cursor-pointer dark:hover:bg-[#2d2d2d] flex items-center gap-2 border-b border-outline-variant dark:border-outline text-black dark:text-white">
+             <a routerLink="/dashboard" [queryParams]="{ seccion: 'configuracion' }" (click)="menuPerfilAbierto = false" class="block px-4 py-3 text-sm font-bold hover:bg-gray-100 cursor-pointer dark:hover:bg-[#2d2d2d] flex items-center gap-2 border-b border-outline-variant dark:border-outline text-black dark:text-white">
                <span class="material-symbols-outlined text-[18px]">settings</span> Configuración
              </a>
              <a (click)="logout()" class="block px-4 py-3 text-sm font-bold text-red-600 hover:bg-red-50 cursor-pointer flex items-center gap-2">

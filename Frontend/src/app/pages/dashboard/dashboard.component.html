@@ -31,7 +31,7 @@
     <!-- Content Start -->
 
     <!-- REPOSITORIO -->
-    <div *ngIf="seccionActiva === 'recursos'" class="w-full max-w-[1400px] mx-auto animate-fade-in flex flex-col">
+    <div *ngIf="seccionActiva === 'recursos'" class="w-full max-w-none mx-auto animate-fade-in flex flex-col">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Repositorio de Recursos</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Gestione e integre los recursos y plantillas institucionales.</p>
@@ -40,7 +40,7 @@
        <!-- SUBIR RECURSO -->
        <div class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl p-lg mb-xl shadow-sm">
          <h3 class="font-bold text-headline-sm mb-md text-primary dark:text-primary-fixed">Subir Recurso Nuevo</h3>
-         <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+         <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg">
            <div class="flex flex-col gap-xs">
               <label class="font-label-md">Título del Recurso</label>
               <input type="text" formControlName="titulo" class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded">
@@ -55,10 +55,19 @@
               </select>
            </div>
            <div class="flex flex-col gap-xs">
+              <label class="font-label-md">Asignatura</label>
+              <select formControlName="asignatura" class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded">
+                 <option value="Todas">Transversal (Todas)</option>
+                 <option value="Matematicas">Matemáticas Avanzadas</option>
+                 <option value="Historia">Historia Contemporánea</option>
+                 <option value="Psicologia">Psicología Social</option>
+              </select>
+           </div>
+           <div class="flex flex-col gap-xs lg:col-span-2">
               <label class="font-label-md">Contenido HTML</label>
               <textarea formControlName="html_content" rows="3" class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded font-mono text-sm"></textarea>
            </div>
-           <div class="flex items-end">
+           <div class="flex items-end lg:col-span-1">
               <button type="submit" [disabled]="recursoForm.invalid" class="bg-primary text-white w-full py-2 rounded hover:opacity-90 disabled:opacity-50 font-bold shadow-sm">Guardar Nuevo Recurso</button>
            </div>
          </form>
@@ -111,7 +120,7 @@
     </div>
 
     <!-- SANDBOX -->
-    <div *ngIf="seccionActiva === 'sandbox'" class="w-full max-w-[1400px] mx-auto flex flex-col h-[calc(100vh-80px)] animate-fade-in">
+    <div *ngIf="seccionActiva === 'sandbox'" class="w-full max-w-none mx-auto flex flex-col h-[calc(100vh-80px)] animate-fade-in">
        <header class="mb-md">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Sandbox de Diseño</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Entorno estructurado para editar y previsualizar componentes HTML.</p>
@@ -166,7 +175,15 @@
                </div>
                <!-- Visual Preview / Rich Text Editor Mode -->
                <div *ngIf="modoEditor === 'visual'" class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in">
-                  <div class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary" 
+                  <!-- Toolbar de Formato Básico -->
+                  <div class="flex gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm">
+                    <button (click)="formatText('bold')" class="px-3 py-1 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Negrita">B</button>
+                    <button (click)="formatText('italic')" class="px-3 py-1 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Cursiva">I</button>
+                    <button (click)="formatText('underline')" class="px-3 py-1 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Subrayado">U</button>
+                    <button (click)="formatText('insertUnorderedList')" class="px-3 py-1 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center" title="Lista"><span class="material-symbols-outlined text-[16px]">format_list_bulleted</span></button>
+                    <input type="color" (change)="formatText('foreColor', $any($event.target).value)" class="w-8 h-8 ml-2 border-none cursor-pointer rounded" title="Color de Texto">
+                  </div>
+                  <div id="rich-editor" class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary" 
                        contenteditable="true" 
                        (input)="onVisualEdit($event)"
                        [innerHTML]="recursoSeleccionado?.htmlEditado">
@@ -181,9 +198,8 @@
                </div>
                <div class="flex gap-md">
                  <button (click)="copiarComoImagen()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm">Copiar como Imagen</button>
-                 <button (click)="descargarTxtHtml()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">download</span> Descargar TXT</button>
                  <button (click)="copiarHTML()" class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"><span class="material-symbols-outlined text-[16px]">code</span> Copiar HTML</button>
-                 <button (click)="guardar()" class="px-6 py-2 bg-primary text-white font-bold rounded hover:opacity-90 flex items-center gap-2 shadow-sm text-sm transition-opacity"><span class="material-symbols-outlined text-[16px]">save</span> Guardar</button>
+                 <button (click)="guardar()" class="px-6 py-2 bg-primary text-white font-bold rounded hover:opacity-90 flex items-center gap-2 shadow-sm text-sm transition-opacity" title="Aplica los cambios en el listado de Repositorio (Memoria RAM)"><span class="material-symbols-outlined text-[16px]">save</span> Guardar</button>
                </div>
             </div>
          </div>
@@ -191,7 +207,7 @@
     </div>
 
     <!-- GALERIA DE COMPONENTES -->
-    <div *ngIf="seccionActiva === 'componentes'" class="w-full max-w-[1400px] mx-auto animate-fade-in pb-xl">
+    <div *ngIf="seccionActiva === 'componentes'" class="w-full max-w-none mx-auto animate-fade-in pb-xl">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Galería de Componentes</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Catálogo oficial de bloques de diseño (Design System). Componentes estáticos basados en lineamientos institucionales.</p>
@@ -409,39 +425,51 @@
           </div>
           
           <!-- Estandares -->
-          <div>
-            <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">6. Estándares de Recursos Visuales</h2>
-            <div class="bg-white text-black p-lg rounded-lg border border-outline-variant shadow-sm space-y-4">
-               <div>
-                  <h4 class="font-bold border-b pb-1 mb-2">Reglas para Figuras</h4>
-                  <ul class="list-disc ml-5 space-y-1 text-sm text-gray-700">
-                     <li><strong>N° Figura:</strong> "X"</li>
-                     <li><strong>Título:</strong> Menor a 110 caracteres.</li>
-                     <li><strong>Texto alternativo (Alt):</strong> Descriptiva para accesibilidad.</li>
-                     <li><strong>Nota al pie:</strong> Fuente o link.</li>
-                  </ul>
+          <div class="space-y-xl">
+             <div>
+               <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">6. Estándares de Recursos Visuales</h2>
+               <div class="bg-white text-black p-lg rounded-lg border border-outline-variant shadow-sm space-y-4">
+                  <div>
+                     <h4 class="font-bold border-b pb-1 mb-2">Reglas para Figuras</h4>
+                     <ul class="list-disc ml-5 space-y-1 text-sm text-gray-700">
+                        <li><strong>N° Figura:</strong> "X"</li>
+                        <li><strong>Título:</strong> Menor a 110 caracteres.</li>
+                        <li><strong>Texto alternativo (Alt):</strong> Descriptiva para accesibilidad.</li>
+                        <li><strong>Nota al pie:</strong> Fuente o link.</li>
+                     </ul>
+                  </div>
+                  <div>
+                     <h4 class="font-bold border-b pb-1 mb-2">Ejemplo de Tabla de Criterios</h4>
+                     <table class="w-full text-sm text-left border border-gray-300 rounded">
+                        <thead class="bg-[#1b1e31] text-white">
+                           <tr><th class="p-2 border-b">Criterio</th><th class="p-2 border-b">Ponderación</th></tr>
+                        </thead>
+                        <tbody class="text-gray-800">
+                           <tr class="bg-gray-50 border-b"><td class="p-2">Identificación de relaciones</td><td class="p-2">30 %</td></tr>
+                           <tr class="border-b"><td class="p-2">Argumentación conceptual</td><td class="p-2">30 %</td></tr>
+                           <tr class="bg-gray-50 border-b"><td class="p-2">Lenguaje técnico</td><td class="p-2">20 %</td></tr>
+                           <tr><td class="p-2">Presentación (APA)</td><td class="p-2">20 %</td></tr>
+                        </tbody>
+                     </table>
+                  </div>
                </div>
-               <div>
-                  <h4 class="font-bold border-b pb-1 mb-2">Ejemplo de Tabla de Criterios</h4>
-                  <table class="w-full text-sm text-left border border-gray-300 rounded">
-                     <thead class="bg-[#1b1e31] text-white">
-                        <tr><th class="p-2 border-b">Criterio</th><th class="p-2 border-b">Ponderación</th></tr>
-                     </thead>
-                     <tbody class="text-gray-800">
-                        <tr class="bg-gray-50 border-b"><td class="p-2">Identificación de relaciones</td><td class="p-2">30 %</td></tr>
-                        <tr class="border-b"><td class="p-2">Argumentación conceptual</td><td class="p-2">30 %</td></tr>
-                        <tr class="bg-gray-50 border-b"><td class="p-2">Lenguaje técnico</td><td class="p-2">20 %</td></tr>
-                        <tr><td class="p-2">Presentación (APA)</td><td class="p-2">20 %</td></tr>
-                     </tbody>
-                  </table>
+             </div>
+             <div>
+               <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">Ejemplo visual (Figura)</h2>
+               <div class="bg-white text-black p-md rounded-lg border border-outline-variant shadow-sm flex flex-col items-center text-center">
+                  <div class="w-full bg-gray-100 border rounded flex items-center justify-center p-8 mb-2">
+                     <span class="material-symbols-outlined text-6xl text-gray-400">image</span>
+                  </div>
+                  <p class="font-bold text-sm text-[#003087]">Figura 1. Representación visual de datos</p>
+                  <p class="text-xs text-gray-500 mt-1">Fuente: Elaboración propia en base a directrices institucionales.</p>
                </div>
-            </div>
+             </div>
           </div>
        </section>
     </div>
 
     <!-- CONFIGURACION -->
-    <div *ngIf="seccionActiva === 'configuracion'" class="w-full max-w-[1200px] mx-auto animate-fade-in pb-xl">
+    <div *ngIf="seccionActiva === 'configuracion'" class="w-full max-w-none mx-auto animate-fade-in pb-xl">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Configuración del Sistema</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Administre su perfil personal, preferencias de plataforma e información institucional.</p>
