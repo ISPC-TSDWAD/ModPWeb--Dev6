@@ -17,7 +17,7 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Video', 
         categoria: 'CTA', 
         url: '',
-        imagen: 'assets/images/edu_card_cta.png',
+        imagen: '/assets/images/edu_card_cta.png',
         icono: 'play_circle',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
@@ -37,7 +37,7 @@ export class ApiService {
         titulo: 'Acordeón de Contenidos', 
         categoria: 'ORGANIZADOR', 
         url: '',
-        imagen: 'assets/images/edu_card_organizer.png',
+        imagen: '/assets/images/edu_card_organizer.png',
         icono: 'view_day',
         html: `<div class="dp-panels-wrapper dp-accordion-default dp-panel-color-dp-secondary dp-panel-active-color-dp-primary">
   <div class="dp-panel-group">
@@ -55,7 +55,7 @@ export class ApiService {
         titulo: 'Resaltado: Importante', 
         categoria: 'RESALTADO', 
         url: '',
-        imagen: 'assets/images/edu_card_highlight.png',
+        imagen: '/assets/images/edu_card_highlight.png',
         icono: 'warning',
         html: `<div class="dp-callout dp-callout-placeholder card dp-callout-position-default dp-callout-type-info dp-callout-color-danger">
   <div class="dp-callout-side-emphasis">
@@ -74,7 +74,7 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Lectura', 
         categoria: 'CTA', 
         url: '',
-        imagen: 'assets/images/edu_card_cta.png',
+        imagen: '/assets/images/edu_card_cta.png',
         icono: 'menu_book',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
@@ -94,7 +94,7 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Podcast', 
         categoria: 'CTA', 
         url: '',
-        imagen: 'assets/images/edu_card_cta.png',
+        imagen: '/assets/images/edu_card_cta.png',
         icono: 'podcasts',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
@@ -114,7 +114,7 @@ export class ApiService {
         titulo: 'Llamado a la Acción: Consigna', 
         categoria: 'CTA', 
         url: '',
-        imagen: 'assets/images/edu_card_cta.png',
+        imagen: '/assets/images/edu_card_cta.png',
         icono: 'assignment',
         html: `<div class="dp-callout card dp-callout-position-default dp-callout-type-title-bar dp-callout-color-lg-info" style="border-radius: 5px;">
   <div class="card-body">
@@ -136,7 +136,7 @@ export class ApiService {
         titulo: 'Profundización', 
         categoria: 'RESALTADO', 
         url: '',
-        imagen: 'assets/images/edu_card_highlight.png',
+        imagen: '/assets/images/edu_card_highlight.png',
         icono: 'lightbulb',
         html: `<div class="dp-callout dp-callout-placeholder card dp-callout-position-default dp-callout-type-info dp-callout-color-lg-warning">
   <div class="dp-callout-side-emphasis">
@@ -155,7 +155,7 @@ export class ApiService {
         titulo: 'Tabs Horizontales', 
         categoria: 'ORGANIZADOR', 
         url: '',
-        imagen: 'assets/images/edu_card_organizer.png',
+        imagen: '/assets/images/edu_card_organizer.png',
         icono: 'tab',
         html: `<div class="dp-panels-wrapper dp-tabs dp-panel-color-dp-secondary dp-panel-active-color-dp-primary">
   <div class="dp-panel-group">
@@ -173,7 +173,7 @@ export class ApiService {
         titulo: 'Resaltado Simple', 
         categoria: 'RESALTADO', 
         url: '',
-        imagen: 'assets/images/edu_card_highlight.png',
+        imagen: '/assets/images/edu_card_highlight.png',
         icono: 'info',
         html: `<div class="dp-callout dp-callout-color-lg-tip card dp-callout-position-default dp-callout-type-title-bar" style="border-color: #003087; border-radius: 5px;">
   <div class="card-body">
@@ -194,9 +194,9 @@ export class ApiService {
       setTimeout(() => {
         const newId = this.mockData.length > 0 ? Math.max(...this.mockData.map(d => d.id)) + 1 : 1;
         
-        let imgPath = 'assets/images/edu_card_cta.png';
-        if (resourceData.categoria === 'ORGANIZADOR') imgPath = 'assets/images/edu_card_organizer.png';
-        if (resourceData.categoria === 'RESALTADO') imgPath = 'assets/images/edu_card_highlight.png';
+        let imgPath = '/assets/images/edu_card_cta.png';
+        if (resourceData.categoria === 'ORGANIZADOR') imgPath = '/assets/images/edu_card_organizer.png';
+        if (resourceData.categoria === 'RESALTADO') imgPath = '/assets/images/edu_card_highlight.png';
 
         const newResource = {
           id: newId,
@@ -222,6 +222,19 @@ export class ApiService {
         const idx = this.mockData.findIndex(r => r.id === id);
         if (idx !== -1) {
           this.mockData.splice(idx, 1);
+        }
+        observer.next({ success: true });
+        observer.complete();
+      }, 300);
+    });
+  }
+
+  actualizarRecurso(id: number, nuevoHtml: string): Observable<any> {
+    return new Observable(observer => {
+      setTimeout(() => {
+        const idx = this.mockData.findIndex(r => r.id === id);
+        if (idx !== -1) {
+          this.mockData[idx].html = nuevoHtml;
         }
         observer.next({ success: true });
         observer.complete();

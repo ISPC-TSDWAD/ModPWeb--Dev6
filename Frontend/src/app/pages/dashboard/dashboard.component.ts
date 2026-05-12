@@ -174,8 +174,34 @@ export class DashboardComponent implements OnInit {
   }
 
   exportarDoc() { alert('Exportando a DOC para ' + this.filtroMateria); }
-  descargarHtml() { alert('Descargando HTML de ' + this.filtroMateria); }
-  guardar() { alert('Cambios guardados en el Sandbox'); }
+  guardar() {
+    if (this.recursoSeleccionado) {
+      this.apiService.actualizarRecurso(this.recursoSeleccionado.id, this.recursoSeleccionado.htmlEditado).subscribe(() => {
+        alert(`¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`);
+        this.cargarRecursos();
+      });
+    } else {
+      alert('Seleccione un recurso para guardar.');
+    }
+  }
+
+  descargarTxtHtml() {
+    if (this.recursoSeleccionado && this.recursoSeleccionado.htmlEditado) {
+      const blob = new Blob([this.recursoSeleccionado.htmlEditado], { type: 'text/html' });
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `recurso_${this.recursoSeleccionado.id}.html`;
+      a.click();
+      window.URL.revokeObjectURL(url);
+    } else {
+      alert('No hay contenido HTML para descargar.');
+    }
+  }
+
+  descargarHtml() {
+    alert('Descargando compendio HTML de todos los recursos en ' + this.filtroMateria);
+  }
   copiarComoImagen() { alert('Copiando previsualización como imagen al portapapeles...'); }
   deshacer() { alert('Deshacer acción (Mock)'); }
   rehacer() { alert('Rehacer acción (Mock)'); }
