@@ -185,9 +185,12 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  menuPerfilAbierto = false;
+
   descargarTxtHtml() {
-    if (this.recursoSeleccionado && this.recursoSeleccionado.htmlEditado) {
-      const blob = new Blob([this.recursoSeleccionado.htmlEditado], { type: 'text/plain' });
+    const contenido = this.recursoSeleccionado?.htmlEditado || this.recursoSeleccionado?.html;
+    if (this.recursoSeleccionado && contenido) {
+      const blob = new Blob([contenido], { type: 'text/plain;charset=utf-8' });
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
@@ -195,7 +198,7 @@ export class DashboardComponent implements OnInit {
       a.click();
       window.URL.revokeObjectURL(url);
     } else {
-      alert('No hay contenido HTML para descargar.');
+      alert('Seleccione un recurso para descargar.');
     }
   }
 
@@ -205,6 +208,11 @@ export class DashboardComponent implements OnInit {
   copiarComoImagen() { alert('Copiando previsualización como imagen al portapapeles...'); }
   deshacer() { alert('Deshacer acción (Mock)'); }
   rehacer() { alert('Rehacer acción (Mock)'); }
+
+  cerrarSesion() {
+    alert('Cerrando sesión...');
+    this.menuPerfilAbierto = false;
+  }
 
   getRecursosFiltrados() {
     if (this.filtroMateria === 'Todas') return this.recursos;

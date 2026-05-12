@@ -22,29 +22,30 @@
         <span class="material-symbols-outlined">view_module</span> Componentes
       </a>
     </nav>
-    <div class="mt-auto border-t border-outline-variant dark:border-outline p-md flex flex-col gap-1">
-      <div class="flex items-center gap-sm mb-2 px-2">
-        <div class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold overflow-hidden">
-          <img *ngIf="fotoInstitucional" [src]="fotoInstitucional" class="w-full h-full object-cover">
-          <span *ngIf="!fotoInstitucional">AA</span>
-        </div>
-        <div>
-          <p class="font-bold text-sm">Academic Admin</p>
-          <p class="text-xs text-outline">Institucional</p>
-        </div>
-      </div>
-      <a (click)="setSeccion('configuracion')" [class.bg-secondary-container]="seccionActiva === 'configuracion'" class="flex items-center gap-sm px-lg py-2 hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white rounded text-sm">
-        <span class="material-symbols-outlined text-[18px]">settings</span> Configuración
-      </a>
-      <a class="flex items-center gap-sm px-lg py-2 hover:bg-error-container hover:text-error transition-all cursor-pointer font-bold rounded text-sm text-outline">
-        <span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
-      </a>
-    </div>
   </aside>
 
   <!-- Main Content Area -->
   <!-- Modificado para que ocupe el ancho sin margin sobrante -->
   <main class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full">
+
+    <!-- Unified Topbar Profile -->
+    <div class="absolute top-4 right-6 z-50">
+      <div class="relative">
+        <button (click)="menuPerfilAbierto = !menuPerfilAbierto" class="w-10 h-10 rounded-full bg-secondary text-white flex items-center justify-center font-bold hover:ring-2 hover:ring-primary transition-all shadow-md">
+          <img *ngIf="fotoInstitucional" [src]="fotoInstitucional" class="w-full h-full object-cover rounded-full">
+          <span *ngIf="!fotoInstitucional">AA</span>
+        </button>
+        <!-- Dropdown Menu -->
+        <div *ngIf="menuPerfilAbierto" class="absolute right-0 mt-2 w-48 bg-surface-container-lowest dark:bg-surface-container border border-outline-variant dark:border-outline rounded-lg shadow-lg overflow-hidden animate-fade-in z-50">
+           <a (click)="setSeccion('configuracion'); menuPerfilAbierto = false" class="block px-4 py-3 text-sm font-bold hover:bg-surface-container-low cursor-pointer dark:hover:bg-surface-container-high flex items-center gap-2 border-b border-outline-variant dark:border-outline">
+             <span class="material-symbols-outlined text-[18px]">settings</span> Configuración
+           </a>
+           <a (click)="cerrarSesion()" class="block px-4 py-3 text-sm font-bold text-error hover:bg-error-container cursor-pointer flex items-center gap-2">
+             <span class="material-symbols-outlined text-[18px]">logout</span> Cerrar Sesión
+           </a>
+        </div>
+      </div>
+    </div>
 
     <!-- REPOSITORIO -->
     <div *ngIf="seccionActiva === 'recursos'" class="w-full max-w-[1400px] mx-auto animate-fade-in flex flex-col">
@@ -332,6 +333,31 @@
                       <div class="absolute w-full h-full bg-[#003087] text-white rounded flex justify-center items-center text-center p-4 [transform:rotateY(180deg)] [backface-visibility:hidden]">
                         <p class="text-sm m-0">Definen el comportamiento que se tendrá en cada mercado para sostener ventajas.</p>
                       </div>
+                    </div>
+                  </div>
+               </div>
+            </div>
+
+            <!-- Acordeon Component -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212] mt-4">
+               <div class="flex justify-between items-start mb-4">
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Acordeón de Contenidos Expandible</h3>
+               </div>
+               <div class="bg-white text-black p-md border rounded shadow-sm">
+                  <div class="dp-panels-wrapper dp-accordion-default border border-[#b2e5ed] rounded overflow-hidden">
+                    <div class="dp-panel-group border-b border-[#b2e5ed]">
+                      <h3 class="dp-panel-heading bg-[#e0f7fa] m-0 p-3 text-[#006972] font-bold cursor-pointer hover:bg-[#b2e5ed] transition flex justify-between items-center">
+                        <strong>Título Nivel 1</strong>
+                        <span class="material-symbols-outlined text-sm">expand_more</span>
+                      </h3>
+                      <div class="dp-panel-content p-4 bg-white"><p class="m-0 text-sm">Texto descriptivo que se revela al expandir el acordeón. Ideal para dosificar lectura.</p></div>
+                    </div>
+                    <div class="dp-panel-group">
+                      <h3 class="dp-panel-heading bg-gray-50 m-0 p-3 text-gray-700 font-bold cursor-pointer hover:bg-gray-100 transition flex justify-between items-center">
+                        <strong>Título Nivel 2</strong>
+                        <span class="material-symbols-outlined text-sm">expand_less</span>
+                      </h3>
+                      <div class="dp-panel-content p-4 bg-white hidden"><p class="m-0 text-sm">Contenido oculto.</p></div>
                     </div>
                   </div>
                </div>
