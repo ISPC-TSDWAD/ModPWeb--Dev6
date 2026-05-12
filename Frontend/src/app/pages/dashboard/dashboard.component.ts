@@ -20,13 +20,18 @@ export class DashboardComponent implements OnInit {
   mensajeExito: boolean = false;
   seccionActiva: string = 'recursos';
 
-  // Recursos del Sandbox
   recursos: any[] = [];
   cargando: boolean = true;
   recursoSeleccionado: any = null;
 
-  // Estado Configuración
   modoOscuro: boolean = false;
+  filtroMateria: string = 'Todas';
+
+  // Configuración de elemento en Sandbox
+  configElemento = {
+    color: '#003087',
+    mostrarIcono: true
+  };
 
   setSeccion(seccion: string) {
     this.seccionActiva = seccion;
@@ -34,6 +39,14 @@ export class DashboardComponent implements OnInit {
 
   seleccionarRecurso(recurso: any) {
     this.recursoSeleccionado = recurso;
+    if(!this.recursoSeleccionado.htmlEditado) {
+       this.recursoSeleccionado.htmlEditado = this.recursoSeleccionado.html;
+    }
+  }
+
+  enviarASandbox(recurso: any) {
+    this.seleccionarRecurso(recurso);
+    this.seccionActiva = 'sandbox';
   }
 
   constructor() {
@@ -63,7 +76,7 @@ export class DashboardComponent implements OnInit {
         this.recursos = data;
         this.cargando = false;
         if (this.recursos.length > 0) {
-          this.recursoSeleccionado = this.recursos[0];
+          this.seleccionarRecurso(this.recursos[0]);
         }
       },
       error: (err) => {
@@ -93,16 +106,14 @@ export class DashboardComponent implements OnInit {
   }
 
   onHtmlChange(event: Event) {
-    const element = event.target as HTMLElement;
+    const element = event.target as HTMLTextAreaElement;
     if (this.recursoSeleccionado) {
-      this.recursoSeleccionado.htmlEditado = element.innerHTML;
+      this.recursoSeleccionado.htmlEditado = element.value;
     }
   }
 
   copiarHTML(): void {
     if (!this.recursoSeleccionado) return;
-    
-    // Si quisieran prefijos en un futuro se puede hacer un replace, pero por ahora se copia tal cual
     const htmlParaCopiar = this.recursoSeleccionado.htmlEditado || this.recursoSeleccionado.html;
     
     navigator.clipboard.writeText(htmlParaCopiar).then(() => {
@@ -116,7 +127,6 @@ export class DashboardComponent implements OnInit {
     this.seccionActiva = 'sandbox';
     let recurso = null;
     
-    // Buscar un recurso que coincida por nombre o categoría
     if (nombre === 'Tablas Comparativas' || nombre === 'Listas Dinámicas') {
       recurso = this.recursos.find(r => r.categoria === 'ORGANIZADOR');
     } else {
@@ -124,16 +134,35 @@ export class DashboardComponent implements OnInit {
     }
     
     if (recurso) {
-      this.recursoSeleccionado = recurso;
+      this.seleccionarRecurso(recurso);
     }
   }
 
   toggleModoOscuro() {
     this.modoOscuro = !this.modoOscuro;
     if (this.modoOscuro) {
+      document.documentElement.classList.add('dark');
       document.documentElement.setAttribute('data-bs-theme', 'dark');
     } else {
+      document.documentElement.classList.remove('dark');
       document.documentElement.setAttribute('data-bs-theme', 'light');
     }
+  }
+
+  exportarDoc() { alert('Exportando a DOC para ' + this.filtroMateria); }
+  descargarHtml() { alert('Descargando HTML de ' + this.filtroMateria); }
+  guardar() { alert('Cambios guardados en el Sandbox'); }
+  copiarComoImagen() { alert('Copiando previsualización como imagen al portapapeles...'); }
+  deshacer() { alert('Deshacer acción (Mock)'); }
+  rehacer() { alert('Rehacer acción (Mock)'); }
+
+  getRecursosFiltrados() {
+    // Implementación simple de filtro mock
+    if (this.filtroMateria === 'Todas') return this.recursos;
+    return this.recursos; // En la vida real filtraría por r.asignatura
+  }
+
+  getRecursosPorCategoria(catStr: string) {
+    return this.recursos.filter(r => r.categoria === catStr);
   }
 }
