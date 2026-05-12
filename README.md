@@ -40,6 +40,8 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 *   **Sprint 0 (Evidencia 1):** Bases de datos y API inicial.
 *   **Sprint 1 (Evidencia 2):** Sandbox, exportación y consolidación de UI.
+*   **Tablero de Gestión:** [Acceso Directo al Proyecto](https://github.com/orgs/ISPC-TSDWAD/projects/4/views/1)
+
 
 ---
 
@@ -149,9 +151,19 @@ ModPWeb--Dev6/
 
 ## 📸 Evidencias de Funcionamiento
 
-### Conexión Exitosa con el Backend
-![Backend API](docs/capturas/Test%20conection%20-%20backend.png)
+### 📌 Evidencia 1 (Sprint 0): Bases de Datos y API
+Validación de la arquitectura base, endpoints RESTful y persistencia en MySQL.
 
-### Integración Frontend y Consola
-![Frontend Console](docs/capturas/Test%20conection%20-%20frontend.png)
+| Conexión API REST (Backend) | Base de Datos (MySQL) |
+| :---: | :---: |
+| <img src="docs/capturas/Test%20conection%20-%20backend.png" alt="Backend API" width="400"/> | <img src="docs/capturas/Test%20conection%20-%20bd.png" alt="Base de Datos" width="400"/> |
+
+### 📌 Evidencia 2 (Sprint 1): Sandbox y Consumo de API
+Integración del Frontend en Angular consumiendo los endpoints de Django y renderizado de componentes.
+
+<div align="center">
+  <img src="docs/capturas/Test%20conection%20-%20frontend.png" alt="Frontend Console" width="800"/>
+  <br/>
+  <i>Renderizado del Dashboard en Angular y consumo de datos</i>
+</div>
 
