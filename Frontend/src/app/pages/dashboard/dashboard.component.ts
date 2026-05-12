@@ -91,11 +91,18 @@ export class DashboardComponent implements OnInit {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
+  onHtmlChange(event: Event) {
+    const element = event.target as HTMLElement;
+    if (this.recursoSeleccionado) {
+      this.recursoSeleccionado.htmlEditado = element.innerHTML;
+    }
+  }
+
   copiarHTML(): void {
-    if (!this.recursoSeleccionado || !this.recursoSeleccionado.html) return;
+    if (!this.recursoSeleccionado) return;
     
     // Si quisieran prefijos en un futuro se puede hacer un replace, pero por ahora se copia tal cual
-    const htmlParaCopiar = this.recursoSeleccionado.html;
+    const htmlParaCopiar = this.recursoSeleccionado.htmlEditado || this.recursoSeleccionado.html;
     
     navigator.clipboard.writeText(htmlParaCopiar).then(() => {
       alert(`¡Listo! El código HTML de "${this.recursoSeleccionado.titulo}" se ha copiado al portapapeles.`);
@@ -105,10 +112,26 @@ export class DashboardComponent implements OnInit {
   }
 
   simularClickComponente(nombre: string) {
-    alert(`Has hecho clic en el componente "${nombre}".`);
+    let htmlSnippet = '';
+    if (nombre === 'Tablas Comparativas') {
+      htmlSnippet = '<table class="table table-bordered"><thead><tr><th>Header 1</th><th>Header 2</th></tr></thead><tbody><tr><td>Data 1</td><td>Data 2</td></tr></tbody></table>';
+    } else if (nombre === 'Carruseles H5P') {
+      htmlSnippet = '<div class="h5p-container"><h2>Carrusel H5P</h2><p>Contenido H5P aquí.</p></div>';
+    } else if (nombre === 'Listas Dinámicas') {
+      htmlSnippet = '<ul class="list-group"><li class="list-group-item">Elemento 1</li><li class="list-group-item">Elemento 2</li></ul>';
+    }
+
+    navigator.clipboard.writeText(htmlSnippet).then(() => {
+      alert(`¡Componente copiado! El código HTML básico de "${nombre}" está en tu portapapeles.`);
+    });
   }
 
   toggleModoOscuro() {
     this.modoOscuro = !this.modoOscuro;
+    if (this.modoOscuro) {
+      document.documentElement.classList.add('dark');
+    } else {
+      document.documentElement.classList.remove('dark');
+    }
   }
 }
