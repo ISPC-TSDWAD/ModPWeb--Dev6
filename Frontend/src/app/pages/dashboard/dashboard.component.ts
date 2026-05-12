@@ -1,7 +1,7 @@
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../services/api.service';
 
 @Component({
@@ -11,9 +11,10 @@ import { ApiService } from '../../services/api.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css'
 })
-export class DashboardComponent {
+export class DashboardComponent implements OnInit {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
+  private route = inject(ActivatedRoute);
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
@@ -22,13 +23,17 @@ export class DashboardComponent {
   // Recursos del Sandbox
   recursos: any[] = [];
   cargando: boolean = true;
+  recursoSeleccionado: any = null;
 
   // Estado Configuración
   modoOscuro: boolean = false;
-  prefijoClases: string = 'UCC-';
 
   setSeccion(seccion: string) {
     this.seccionActiva = seccion;
+  }
+
+  seleccionarRecurso(recurso: any) {
+    this.recursoSeleccionado = recurso;
   }
 
   constructor() {
@@ -41,6 +46,13 @@ export class DashboardComponent {
 
   ngOnInit(): void {
     this.cargarRecursos();
+
+    // Escuchar parámetros de URL para abrir la sección correcta
+    this.route.queryParams.subscribe(params => {
+      if (params['seccion']) {
+        this.seccionActiva = params['seccion'];
+      }
+    });
   }
 
   cargarRecursos(): void {
@@ -49,6 +61,9 @@ export class DashboardComponent {
       next: (data) => {
         this.recursos = data;
         this.cargando = false;
+        if (this.recursos.length > 0) {
+          this.recursoSeleccionado = this.recursos[0];
+        }
       },
       error: (err) => {
         console.error('Error al cargar recursos:', err);
@@ -76,18 +91,21 @@ export class DashboardComponent {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 
-  copiarHTML(recurso: any): void {
-    const htmlGenerado = `<!-- EduTools: ${recurso.titulo} -->\n<div class="${this.prefijoClases}plantilla ${this.prefijoClases}${recurso.categoria?.toLowerCase()}">\n  <h2>${recurso.titulo}</h2>\n  <p>Contenido oficial para Canvas LMS.</p>\n</div>`;
+  copiarHTML(): void {
+    if (!this.recursoSeleccionado || !this.recursoSeleccionado.html) return;
     
-    navigator.clipboard.writeText(htmlGenerado).then(() => {
-      alert(`¡Listo! El código HTML de "${recurso.titulo}" se ha copiado al portapapeles.`);
+    // Si quisieran prefijos en un futuro se puede hacer un replace, pero por ahora se copia tal cual
+    const htmlParaCopiar = this.recursoSeleccionado.html;
+    
+    navigator.clipboard.writeText(htmlParaCopiar).then(() => {
+      alert(`¡Listo! El código HTML de "${this.recursoSeleccionado.titulo}" se ha copiado al portapapeles.`);
     }).catch(err => {
       console.error('Error al copiar al portapapeles: ', err);
     });
   }
 
   simularClickComponente(nombre: string) {
-    alert(`Has hecho clic en el componente "${nombre}".\nEl código se copiaría al portapapeles con el prefijo ${this.prefijoClases}`);
+    alert(`Has hecho clic en el componente "${nombre}".`);
   }
 
   toggleModoOscuro() {
