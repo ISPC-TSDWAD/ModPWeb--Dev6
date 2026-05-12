@@ -306,17 +306,17 @@
         </p>
         
         <div class="grid grid-cols-1 md:grid-cols-3 gap-lg">
-          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer" (click)="simularClickComponente('Tablas Comparativas')">
             <span class="material-symbols-outlined text-primary mb-2 text-[32px]">table</span>
             <h4 class="font-bold text-on-surface mb-1">Tablas Comparativas</h4>
             <p class="text-body-sm text-on-surface-variant">Plantillas de tablas responsivas para listar información.</p>
           </div>
-          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer" (click)="simularClickComponente('Carruseles H5P')">
             <span class="material-symbols-outlined text-primary mb-2 text-[32px]">imagesmode</span>
             <h4 class="font-bold text-on-surface mb-1">Carruseles H5P</h4>
             <p class="text-body-sm text-on-surface-variant">Galerías interactivas y presentaciones de imágenes.</p>
           </div>
-          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer">
+          <div class="border border-outline p-md rounded bg-surface-container-lowest flex flex-col items-center text-center hover:border-primary transition-colors cursor-pointer" (click)="simularClickComponente('Listas Dinámicas')">
             <span class="material-symbols-outlined text-primary mb-2 text-[32px]">list_alt</span>
             <h4 class="font-bold text-on-surface mb-1">Listas Dinámicas</h4>
             <p class="text-body-sm text-on-surface-variant">Acordeones anidados y listas con íconos personalizados.</p>
@@ -333,12 +333,43 @@
           <h2 class="text-headline-lg font-bold text-on-surface">Sandbox de Diseño</h2>
         </div>
         <p class="text-body-lg text-on-surface-variant mb-xl">
-          El área de pruebas (Sandbox) está en desarrollo para la próxima versión. Aquí podrás arrastrar y soltar componentes, editar el texto en tiempo real y exportar el HTML resultante.
+          Seleccioná un recurso creado y copiá su código HTML. Este es tu entorno de validación antes de llevarlo a producción.
         </p>
-        <div class="bg-secondary-container text-on-secondary-container p-xl rounded-lg text-center border-2 border-dashed border-secondary/50">
-          <span class="material-symbols-outlined text-[48px] mb-2">construction</span>
-          <h3 class="text-headline-sm font-bold mb-2">Próximamente...</h3>
-          <p class="max-w-md mx-auto">Estamos trabajando en un editor visual WYSIWYG completo que valide el HTML para cumplir con los estándares LTI de Canvas.</p>
+
+        <!-- Galería de Recursos Dinámica -->
+        <div class="row g-4">
+          <div class="col-12 text-center py-xl" *ngIf="cargando">
+            <div class="spinner-border text-primary" role="status">
+              <span class="visually-hidden">Cargando...</span>
+            </div>
+          </div>
+
+          <div class="col-md-6 col-lg-4" *ngFor="let recurso of recursos">
+            <div class="card h-100 shadow-sm border border-outline-variant hover:shadow-md transition-shadow bg-white">
+              <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
+                <span class="inline-block bg-secondary-container text-on-secondary-container text-label-sm font-bold px-2 py-1 rounded mb-3">{{ recurso.categoria }}</span>
+                <h5 class="text-headline-sm font-bold text-on-surface">{{ recurso.titulo }}</h5>
+              </div>
+              <div class="card-body">
+                <p class="text-body-sm text-on-surface-variant mb-4">Recurso inyectable generado para Sandbox.</p>
+                <a [href]="recurso.url" target="_blank" class="text-primary font-bold text-label-md flex items-center gap-1 hover:underline">
+                  Ver Recurso <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+                </a>
+              </div>
+              <div class="card-footer bg-transparent border-t border-outline-variant p-4">
+                <button class="w-full flex items-center justify-center gap-2 text-primary border border-outline py-2 rounded-lg hover:bg-surface-container-low transition-colors text-label-md font-bold" (click)="copiarHTML(recurso)">
+                  <span class="material-symbols-outlined text-[18px]">code_blocks</span> Copiar HTML
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12" *ngIf="!cargando && recursos.length === 0">
+            <div class="p-lg bg-surface-container text-center rounded-lg border border-outline-variant text-on-surface-variant">
+              <span class="material-symbols-outlined text-[48px] mb-2 opacity-50">inbox</span>
+              <p>No hay recursos disponibles en el Sandbox aún.</p>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -360,16 +391,19 @@
               <h4 class="font-bold text-on-surface">Modo Oscuro Experimental</h4>
               <p class="text-body-sm text-on-surface-variant">Activa los tokens de colores oscuros (Dark Mode).</p>
             </div>
-            <div class="w-12 h-6 bg-surface-container-highest rounded-full relative cursor-not-allowed opacity-50">
-              <div class="w-4 h-4 bg-outline absolute left-1 top-1 rounded-full"></div>
+            <div class="w-12 h-6 rounded-full relative cursor-pointer transition-colors" 
+                 [ngClass]="modoOscuro ? 'bg-primary' : 'bg-surface-container-highest'"
+                 (click)="toggleModoOscuro()">
+              <div class="w-4 h-4 bg-white absolute top-1 rounded-full transition-transform"
+                   [ngClass]="modoOscuro ? 'left-7' : 'left-1 bg-outline'"></div>
             </div>
           </div>
           <div class="flex items-center justify-between p-md border border-outline rounded">
             <div>
               <h4 class="font-bold text-on-surface">Prefijo de Clases Institucional</h4>
-              <p class="text-body-sm text-on-surface-variant">Evita colisiones CSS al exportar (ej. ispc-card-...).</p>
+              <p class="text-body-sm text-on-surface-variant">Evita colisiones CSS al exportar (ej. UCC-card-...).</p>
             </div>
-            <input type="text" value="ispc-" class="border border-outline rounded px-2 py-1 text-sm bg-surface-container w-24 text-center cursor-not-allowed" disabled>
+            <input type="text" [(ngModel)]="prefijoClases" class="border border-outline rounded px-2 py-1 text-sm bg-white focus:border-primary focus:ring-1 focus:ring-primary w-24 text-center">
           </div>
         </div>
       </div>

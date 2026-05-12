@@ -113,52 +113,6 @@
     </div>
   </section>
 
-  <!-- Galería de Recursos (funcionalidad original) -->
-  <section class="bg-surface-container-low border-t border-outline-variant">
-    <div class="max-w-[1200px] mx-auto px-xl py-16">
-      <div class="flex items-center gap-sm mb-lg">
-        <span class="material-symbols-outlined text-primary">photo_library</span>
-        <h2 class="text-headline-lg font-bold text-on-surface">Recursos Disponibles</h2>
-      </div>
-      <p class="text-body-md text-on-surface-variant mb-xl">
-        Seleccioná un recurso y copiá su código HTML directamente al portapapeles.
-      </p>
 
-      <div class="row g-4">
-        <div class="col-12 text-center py-xl" *ngIf="cargando">
-          <div class="spinner-border text-primary" role="status">
-            <span class="visually-hidden">Cargando...</span>
-          </div>
-        </div>
-
-        <div class="col-md-6 col-lg-4" *ngFor="let recurso of recursos">
-          <div class="card h-100 shadow-sm border border-outline-variant hover:shadow-md transition-shadow bg-white">
-            <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
-              <span class="inline-block bg-secondary-container text-on-secondary-container text-label-sm font-bold px-2 py-1 rounded mb-3">{{ recurso.categoria }}</span>
-              <h5 class="text-headline-sm font-bold text-on-surface">{{ recurso.titulo }}</h5>
-            </div>
-            <div class="card-body">
-              <p class="text-body-sm text-on-surface-variant mb-4">Este recurso está disponible para inyección rápida en Canvas LMS.</p>
-              <a [href]="recurso.url" target="_blank" class="text-primary font-bold text-label-md flex items-center gap-1 hover:underline">
-                Ver Recurso <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
-              </a>
-            </div>
-            <div class="card-footer bg-transparent border-t border-outline-variant p-4">
-              <button class="w-full flex items-center justify-center gap-2 text-primary border border-outline py-2 rounded-lg hover:bg-surface-container-low transition-colors text-label-md font-bold" (click)="copiarHTML(recurso)">
-                <span class="material-symbols-outlined text-[18px]">code_blocks</span> Copiar HTML
-              </button>
-            </div>
-          </div>
-        </div>
-
-        <div class="col-12" *ngIf="!cargando && recursos.length === 0">
-          <div class="p-lg bg-surface-container text-center rounded-lg border border-outline-variant text-on-surface-variant">
-            <span class="material-symbols-outlined text-[48px] mb-2 opacity-50">inbox</span>
-            <p>No hay recursos disponibles aún.</p>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
 
 </div>
