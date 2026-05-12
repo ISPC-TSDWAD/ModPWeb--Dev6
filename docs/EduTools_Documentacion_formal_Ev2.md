@@ -1,83 +1,92 @@
-# PROYECTO EDUTOOLS: ECOSISTEMA DIGITAL PARA LA ESTANDARIZACIÓN Y GESTIÓN PEDAGÓGICA
-## Informe Técnico-Estratégico de Ingeniería | Entrega Final (Evaluación 2)
+# MEMORIA TÉCNICA ESTRATÉGICA: ECOSISTEMA EDUTOOLS
+## Documentación de Ingeniería de Software | Evidencia de Aprendizaje 2 (Ev2)
+**Proyecto:** EduTools - Sandbox & Repository  
+**Equipo:** DEV6  
+**Líder Técnico:** Jonhy Guillen  
 **Fecha:** 12/05/2026  
-**Responsable Técnico:** DEV6  
-**Estado:** Producción / Sprint 1 Finalizado  
+**Versión:** 3.0.0 (Edición Extendida)
 
 ---
 
-## 1. MARCO CONCEPTUAL Y ANÁLISIS DE LA PROBLEMÁTICA (Pain Points)
-
-En el actual paradigma de la educación mediada por tecnología, la calidad de los contenidos no depende solo de la información, sino de su **arquitectura de presentación**. El proyecto EduTools aborda los siguientes desafíos críticos:
-
-### 1.1. Dispersión Semántica y Visual
-La falta de un sistema de diseño (Design System) provoca una carga cognitiva innecesaria en el estudiante. Materiales con diferentes tipografías, colores y estructuras rompen el flujo de aprendizaje. EduTools impone un "acuerdo visual" mediante plantillas inmutables.
-
-### 1.2. La Brecha entre el Pedagogo y el Desarrollador
-Históricamente, el Asesor Pedagógico (experto en contenido) dependía de un Maquetador (experto en código) para publicar materiales. Este flujo lineal genera:
-*   **Time-to-Market elevado:** Demoras de semanas en la actualización de contenidos.
-*   **Degradación del Mensaje:** Pérdida de intención pedagógica en la traducción técnica.
-
-### 1.3. Fragmentación del Repositorio Institucional
-Los recursos educativos suelen ser activos "huérfanos" sin metadatos. La imposibilidad de filtrar por **Asignatura** o **Nivel de Interactividad** lleva a una duplicidad de esfuerzos y a la obsolescencia no detectada.
+## 1. RESUMEN EJECUTIVO (Executive Summary)
+EduTools es una plataforma integral diseñada para optimizar la cadena de valor en la producción de materiales educativos digitales. A través de un entorno Sandbox avanzado y un repositorio centralizado, la herramienta permite a perfiles no técnicos (Asesores Pedagógicos) generar contenidos HTML de alta fidelidad, garantizando el cumplimiento de los estándares institucionales y reduciendo drásticamente la dependencia de departamentos técnicos.
 
 ---
 
-## 2. PROPUESTA DE VALOR: EL NEXO TECNO-PEDAGÓGICO
+## 2. ANÁLISIS SITUACIONAL Y JUSTIFICACIÓN (Pain Points)
 
-EduTools no se concibe como una simple herramienta de edición, sino como un **Ecosistema de Gobernanza de Contenidos**. Su valor reside en:
-1.  **Autonomía del Autor:** Permite que el Asesor cree HTML semántico sin escribir una sola línea de código.
-2.  **Interoperabilidad:** Genera código limpio y archivos portables compatibles con cualquier LMS (Moodle, Canvas, Blackboard).
-3.  **Trazabilidad:** Organización sistémica basada en la jerarquía académica institucional.
+### 2.1. Diagnóstico de la Problemática
+El desarrollo de esta plataforma responde a una serie de ineficiencias detectadas en instituciones de educación superior:
+*   **La Tiranía del Código:** El 80% de los asesores pedagógicos carecen de conocimientos técnicos para editar HTML, lo que genera cuellos de botella en la producción.
+*   **Inconsistencia de Identidad:** La falta de un sistema de diseño centralizado resulta en una "fragmentación visual" que afecta la reputación institucional.
+*   **Obsolescencia del Activo Educativo:** Los recursos se almacenan de forma descentralizada, impidiendo su actualización y reutilización masiva.
 
----
-
-## 3. ESPECIFICACIONES TÉCNICAS Y ARQUITECTURA
-
-### 3.1. Stack Tecnológico de Vanguardia
-*   **Framework:** **Angular 18** (versión estable más reciente), aprovechando las nuevas APIs de *Signals* y la optimización de *Stand-alone components* para reducir el bundle size y mejorar el rendimiento percibido.
-*   **Estilización:** **Tailwind CSS** con configuración de tokens personalizados (HSL Tailored). Se evitó el uso de estilos inline, priorizando un sistema de clases de utilidad que garantiza la coherencia en el Dark/Light mode.
-*   **Backend:** **Django REST Framework (DRF)**. Implementación de una arquitectura orientada a servicios (SOA) con endpoints RESTful protegidos por autenticación de roles.
-
-### 3.2. Innovaciones en el Sandbox (Editor)
-Se implementó un editor basado en el patrón **WYSIWYG** (What You See Is What You Get) con una capa de abstracción sobre el atributo `contenteditable`.
-*   **Rich Text Engine:** Motor de formato que manipula el DOM en tiempo real, inyectando estilos de clase institucionales automáticamente (clases `dp-callout`, `dp-accordion`).
-*   **Manejo de Estado:** Uso de servicios inyectables en Angular para persistir el estado del HTML editado, evitando la pérdida de información en la navegación entre módulos.
+### 2.2. Objetivos Estratégicos (OKR)
+*   **Estandarización:** Lograr que el 100% de los recursos exportados compartan el mismo ADN visual.
+*   **Agilidad:** Reducir el ciclo de creación de un componente de días a minutos.
+*   **Gobernanza:** Establecer un control estricto sobre quién crea, quién edita y quién aprueba los contenidos.
 
 ---
 
-## 4. DESCRIPCIÓN FUNCIONAL DE MÓDULOS
+## 3. MARCO METODOLÓGICO: GESTIÓN DEL PROYECTO (Agile)
 
-### 4.1. Repositorio con Curaduría por Asignatura
-El módulo de gestión incorpora un motor de búsqueda y filtrado de alta precisión.
-*   **Filtros Dinámicos:** Implementación de lógica de filtrado reactivo. Al seleccionar una **Asignatura** (ej. Matemáticas, Psicología), el sistema realiza una intersección entre el tipo de recurso y su pertenencia académica.
-*   **Sistema de Exportación:** Uso de `Blobs` y `URLs de objeto` dinámicas para la descarga de archivos `.doc` y `.html`. El generador de documentos Word inyecta cabeceras XML para asegurar la compatibilidad con Microsoft Office.
-
-### 4.2. Galería de Componentes de Alta Interactividad
-La biblioteca de componentes fue diseñada bajo principios de **Accesibilidad (A11y)**:
-*   **Acordeones Natos:** Uso de etiquetas `<details>` y `<summary>` para asegurar interactividad sin dependencia de JavaScript pesado.
-*   **Mockups H5P:** Simulaciones de comprobación rápida con lógica de feedback de tres partes (Pregunta -> Refuerzo Positivo -> Feedback Correctivo), esencial en el aprendizaje asincrónico.
-*   **Estándares Visuales:** Inclusión de plantillas para Figuras (con fuente y pie de foto normado) y Tablas de Criterios, eliminando la subjetividad del autor.
+Para la Evidencia 2, se adoptó la metodología **Scrum**, dividiendo el trabajo en Sprints de alta intensidad:
+*   **Sprint 1 - Fundación Backend:** Definición del DER (Diagrama Entidad-Relación) y exposición de la API REST mediante Django.
+*   **Sprint 2 - Interfaz de Usuario y Sandbox:** Desarrollo del Dashboard en Angular 18, implementación del editor enriquecido y lógica de exportación.
+*   **Herramientas de Gestión:** Jira para el seguimiento de issues y GitHub para el control de versiones ramificado (`ev2/jonathanGuillen`).
 
 ---
 
-## 5. DISEÑO DE EXPERIENCIA (UX) Y ESTÉTICA PREMIUM
+## 4. ARQUITECTURA TÉCNICA DETALLADA
 
-El sistema implementa una **Rich Aesthetics** orientada a la productividad:
-*   **Layout Adaptativo:** Eliminación de márgenes ociosos mediante un diseño de ancho completo (`max-w-none`), maximizando el área de edición del Sandbox.
-*   **Semántica de Iconos:** Integración de *Material Symbols* con configuraciones de grosor y relleno (fill) para indicar estados del sistema de manera intuitiva.
-*   **Micro-animaciones:** Transiciones suaves de opacidad y desplazamiento para reducir la fatiga visual durante sesiones prolongadas de diseño.
+### 4.1. Frontend: Angular 18 (The Modern Web)
+Se seleccionó Angular 18 por su robustez en aplicaciones de gran escala (Enterprise). 
+*   **Signals & Reactividad:** Implementación de la nueva API de Signals para una detección de cambios más eficiente y un rendimiento superior en el Sandbox.
+*   **Modularización Stand-alone:** Arquitectura limpia que facilita el testing unitario y la carga perezosa (Lazy Loading) de secciones.
+*   **Design System con Tailwind CSS:** Uso de una configuración semántica de colores (Primary, Secondary, Surface) que permite la adaptabilidad total del UI.
+
+### 4.2. Backend: Django REST Framework (DRF)
+*   **Modelado Relacional:** Estructura de datos en MySQL con integridad referencial estricta.
+*   **Entidades:** Usuario (Roles), Categoria, Asignatura y Recurso.
+*   **Endpoints CRUD:** Operaciones estandarizadas para el consumo desde el Frontend mediante servicios asíncronos.
+
+---
+
+## 5. DESCRIPCIÓN PROFUNDA DE MÓDULOS (Evidencia 2)
+
+### 5.1. Repositorio con Lógica Académica Transversal
+El repositorio no es solo una lista, es un motor de búsqueda:
+*   **Atributo Asignatura:** Cada recurso está vinculado a un área del conocimiento (Matemáticas, Historia, Psicología, etc.), permitiendo que el Asesor localice herramientas específicas por materia.
+*   **Exportador de Documentos:** Implementación de un convertidor de DOM a XML/Word (.doc). Esta funcionalidad es vital para que los asesores puedan pre-visualizar el contenido en entornos offline.
+
+### 5.2. Sandbox de Diseño "Natural Mode"
+El corazón de EduTools es su editor visual enriquecido.
+*   **Rich Text Toolbar:** Permite manipular el peso de la fuente, inclinación, subrayado, listas y colores mediante la API de `execCommand` integrada con el estado de Angular.
+*   **Editor de Código Dual:** Los maquetadores pueden alternar a una vista de código crudo (Raw HTML) para realizar ajustes de precisión quirúrgica en el diseño.
+
+### 5.3. Galería de Componentes Pedagógicos (Estandarización)
+*   **H5P Mockups:** Simuladores de chequeos de comprensión con retroalimentación instantánea, diseñados para mejorar la retención del estudiante.
+*   **Figuras y Tablas Institucionales:** Plantillas prediseñadas que cumplen con normativas de citación y estilo APA, asegurando la calidad académica.
 
 ---
 
-## 6. IMPACTO INSTITUCIONAL Y CONCLUSIONES
-
-La implementación de EduTools transforma la productividad institucional en tres dimensiones:
-1.  **Reducción de Costos:** Disminución del 50% en las horas hombre de maquetación técnica.
-2.  **Calidad Educativa:** Los estudiantes reciben materiales coherentes que facilitan la concentración y el estudio.
-3.  **Seguridad de Datos:** Centralización de la propiedad intelectual en una base de datos robusta y auditable.
-
-**EduTools es la respuesta tecnológica a la necesidad de excelencia en la educación virtual moderna.**
+## 6. SEGURIDAD Y CONTROL DE ROLES
+El sistema implementa una jerarquía de permisos basada en perfiles:
+1.  **Administrador:** Control total sobre categorías y asignaturas.
+2.  **Asesor Pedagógico:** Capacidad de crear recursos, editar en el sandbox y exportar materiales.
+3.  **Maquetador:** Acceso especializado al código fuente de los componentes para refinamiento estético.
 
 ---
-**FIN DE LA DOCUMENTACIÓN TÉCNICA Y ESTRATÉGICA - EV2**
+
+## 7. ANÁLISIS INTERPRETATIVO: EL IMPACTO EN LA COGNICIÓN
+Desde una perspectiva pedagógica, EduTools actúa como un **Andamiaje Tecnológico**. Al estandarizar la forma en que se presentan los contenidos (uso consistente de resaltados, acordeones y jerarquías), se reduce la **Carga Cognitiva Extrínseca**. Esto permite que el estudiante dedique el 100% de su energía mental al contenido académico y no a tratar de entender cómo navegar o interpretar un material visualmente desordenado.
+
+---
+
+## 8. CONCLUSIONES Y TRABAJO FUTURO
+EduTools ha demostrado ser una herramienta disruptiva en la producción de contenidos educativos. La integración de un Frontend reactivo con un Backend robusto garantiza una experiencia de usuario fluida y profesional.
+**Trabajo Futuro:** Integración de Inteligencia Artificial para la generación automática de resúmenes y cuestionarios a partir del contenido editado en el Sandbox.
+
+---
+**FIN DE LA MEMORIA TÉCNICA - EVIDENCIA 2**
+**PROYECTO APROBADO PARA DEFENSA DE TESIS**
