@@ -17,11 +17,11 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 | Integrante | Rol | Responsabilidad |
 |-----------|-----|----------------|
-| Jonathan Guillén | PM / BA / Dev Full Stack | Liderazgo técnico, Product Discovery, gestión del repositorio |
-| Ale Corva | Developer | Arquitectura Angular, routing, servicios y vistas |
-| Gonzalo Velasco | Developer | Modelado de datos (DER), endpoints CRUD y script SQL |
-| Daniela Salvo | Developer | Vistas frontend, Sandbox y documentación |
-| Gerardo Romero | Developer | Componentes compartidos, formularios y vista About |
+| Jonathan Guillén | Líder Técnico / Dev Full Stack | Gestión del repositorio, Flujo Gitflow (Main/Develop), Arquitectura Base |
+| Ale Corva | Developer | Desarrollo de servicios Angular, Lógica de Sandbox |
+| Gonzalo Velasco | Developer | Modelado de datos (DER), Backend y Endpoints REST |
+| Daniela Salvo | Developer | Maquetación de vistas, Componentes pedagógicos |
+| Gerardo Romero | Developer | Integración de formularios y validaciones reactivas |
 
 ---
 
@@ -29,14 +29,32 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 | Capa | Tecnología |
 |------|-----------|
-| Frontend | Angular **21.x** (Signals + Standalone Components) |
-| Backend | Django **6.0.4** + Django REST Framework |
+| Frontend | **Angular 18** (Signals + Stand-alone Components) |
+| Backend | Django REST Framework |
 | Base de datos | MySQL |
-| Estilos | Bootstrap **5.3** |
+| Estilos | **Tailwind CSS** (Design System Institucional) |
 
 ---
 
-## 5. Especificación de Requerimientos (Sprint 1 — refinados)
+## 5. Gestión del Proyecto y Metodología (GitHub Projects)
+Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
+*   **Sprint 0 (Evidencia 1):** Bases de datos y API inicial.
+*   **Sprint 1 (Evidencia 2):** Sandbox, exportación y consolidación de UI.
+
+---
+
+## 6. Documentación Oficial y Técnica (Evidencia 2)
+
+| Documento | Descripción | Enlace Directo |
+|-----------|-------------|----------------|
+| 📘 **Documentación Formal** | Memoria técnica y estratégica (Ev2). | [Ver Documento](docs/EduTools_Documentacion_formal_Ev2.md) |
+| 📐 **DER Institucional** | Diagrama Entidad-Relación. | [Ver Diagrama](docs/der.md) |
+| 🗄️ **Script SQL** | Código DDL MySQL. | [Ver Script](docs/sql/script_database.sql) |
+| 📚 **Wiki del Proyecto** | Base de conocimientos. | [Ir a la Wiki](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki) |
+
+---
+
+## 7. Especificación de Requerimientos (Sprint 1)
 
 ### Requerimientos Funcionales (RF)
 * **RF1:** El sistema debe permitir a los usuarios iniciar sesión mediante un formulario con credenciales, validando los campos antes del envío.
