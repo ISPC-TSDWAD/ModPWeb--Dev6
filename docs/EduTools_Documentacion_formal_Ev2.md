@@ -2,9 +2,7 @@
 ## Documentación de Ingeniería de Software | Evidencia de Aprendizaje 2 (Ev2)
 **Proyecto:** EduTools - Sandbox & Repository  
 **Equipo:** DEV6  
-**Líder Técnico:** Jonhy Guillen  
 **Fecha:** 12/05/2026  
-**Versión:** 3.0.0 (Edición Extendida)
 
 ---
 
@@ -28,12 +26,14 @@ El desarrollo de esta plataforma responde a una serie de ineficiencias detectada
 
 ---
 
-## 3. MARCO METODOLÓGICO: GESTIÓN DEL PROYECTO (Agile)
+## 3. MARCO METODOLÓGICO: GESTIÓN DEL PROYECTO (Agile Scrum)
 
-Para la Evidencia 2, se adoptó la metodología **Scrum**, dividiendo el trabajo en Sprints de alta intensidad:
-*   **Sprint 1 - Fundación Backend:** Definición del DER (Diagrama Entidad-Relación) y exposición de la API REST mediante Django.
-*   **Sprint 2 - Interfaz de Usuario y Sandbox:** Desarrollo del Dashboard en Angular 18, implementación del editor enriquecido y lógica de exportación.
-*   **Herramientas de Gestión:** Jira para el seguimiento de issues y GitHub para el control de versiones ramificado (`ev2/jonathanGuillen`).
+Para el desarrollo del ecosistema EduTools, se adoptó la metodología **Scrum**, gestionada íntegramente mediante **GitHub Projects**. Esta elección permitió una integración fluida entre el código fuente, el seguimiento de issues y la automatización de flujos de trabajo.
+
+El cronograma de trabajo se estructuró en hitos alineados con las entregas académicas:
+*   **Sprint 0 (Evidencia de Aprendizaje 1):** Fase de cimientos. Se centró en la definición de la arquitectura sistémica, el modelado del DER (Diagrama Entidad-Relación) en MySQL y la implementación del Backend robusto mediante Django REST Framework.
+*   **Sprint 1 (Evidencia de Aprendizaje 2):** Fase de consolidación de interfaz. Desarrollo integral del Frontend en Angular 18, implementación del Sandbox de diseño, sistema de exportación multiformato e integración de la lógica de filtrado por asignatura.
+*   **Gestión de Versiones:** Se utilizó una estrategia de ramificación (Branching) para asegurar la integridad de la rama principal, trabajando los cambios de la Evidencia 2 en la rama `ev2/jonathanGuillen`.
 
 ---
 
