@@ -1,89 +1,138 @@
-<div class="flex w-full min-h-[calc(100vh-64px)] bg-surface">
-  <!-- NavigationDrawer as Form Container -->
-  <aside class="flex flex-col w-[400px] h-[calc(100vh-64px)] fixed left-0 top-16 z-40 bg-surface-container border-r border-outline-variant hidden lg:flex overflow-y-auto p-lg">
-    <div class="mb-xl">
-      <div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container mb-md">
-        <span class="material-symbols-outlined">add_circle</span>
+<div class="w-full min-h-[calc(100vh-64px)] bg-surface">
+
+  <!-- Hero Section -->
+  <section class="relative bg-primary overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+      <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+      <div class="absolute bottom-0 right-0 w-80 h-80 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
+    </div>
+    <div class="relative max-w-[1200px] mx-auto px-xl py-20 flex flex-col items-center text-center gap-lg">
+      <div class="flex items-center gap-sm">
+        <span class="material-symbols-outlined text-white text-[48px]">school</span>
+        <h1 class="text-display-lg text-white font-bold">EduTools</h1>
       </div>
-      <h2 class="text-headline-md font-bold text-primary">Subir Nuevo Recurso</h2>
-      <p class="text-body-sm text-on-surface-variant">Carga de nuevos recursos y plantillas para maquetación.</p>
+      <p class="text-title-lg text-white/80 max-w-2xl">
+        La plataforma institucional para centralizar, estandarizar y distribuir recursos pedagógicos 
+        para entornos de educación a distancia.
+      </p>
+      <div class="flex gap-md flex-wrap justify-center mt-sm">
+        <a routerLink="/dashboard"
+          class="bg-white text-primary font-bold px-8 py-3 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">folder_open</span>
+          Ir al Panel
+        </a>
+        <a routerLink="/about"
+          class="border border-white/60 text-white font-bold px-8 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2">
+          <span class="material-symbols-outlined text-[20px]">groups</span>
+          Quiénes Somos
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Descripcion -->
+  <section class="max-w-[1200px] mx-auto px-xl py-16">
+    <div class="text-center mb-12">
+      <h2 class="text-headline-lg font-bold text-on-surface mb-sm">¿Qué podés hacer en EduTools?</h2>
+      <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">
+        Accedé a cada módulo del sistema desde acá. Todo el contenido institucional organizado en un solo lugar.
+      </p>
     </div>
 
-    <div *ngIf="mensajeExito" class="alert alert-success mb-4 p-3 bg-secondary-container text-on-secondary-container rounded-lg border border-secondary text-body-sm font-medium">
-      ¡Recurso guardado correctamente!
+    <!-- Cards de acceso -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-lg">
+
+      <!-- Panel de Recursos -->
+      <a routerLink="/dashboard"
+        class="group bg-white border border-outline-variant rounded-xl p-lg hover:shadow-lg hover:border-primary transition-all cursor-pointer flex gap-md items-start">
+        <div class="w-12 h-12 rounded-xl bg-primary-container flex items-center justify-center flex-shrink-0 group-hover:bg-primary transition-colors">
+          <span class="material-symbols-outlined text-primary group-hover:text-white transition-colors">folder_open</span>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-bold text-on-surface mb-xs group-hover:text-primary transition-colors">Panel de Recursos</h3>
+          <p class="text-body-sm text-on-surface-variant">
+            Explorá la Galería de Estándares Institucionales: CTAs, resaltados, acordeones y elementos de organización aprobados para Canvas LMS.
+          </p>
+          <span class="text-primary text-label-md font-bold flex items-center gap-1 mt-sm">
+            Acceder <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Sandbox -->
+      <a routerLink="/dashboard"
+        class="group bg-white border border-outline-variant rounded-xl p-lg hover:shadow-lg hover:border-secondary transition-all cursor-pointer flex gap-md items-start">
+        <div class="w-12 h-12 rounded-xl bg-secondary-container flex items-center justify-center flex-shrink-0 group-hover:bg-secondary transition-colors">
+          <span class="material-symbols-outlined text-secondary group-hover:text-white transition-colors">science</span>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-bold text-on-surface mb-xs group-hover:text-secondary transition-colors">Sandbox</h3>
+          <p class="text-body-sm text-on-surface-variant">
+            Experimentá con componentes pedagógicos en un entorno seguro. Probá, modificá y copiá código HTML listo para usar.
+          </p>
+          <span class="text-secondary text-label-md font-bold flex items-center gap-1 mt-sm">
+            Acceder <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Componentes -->
+      <a routerLink="/dashboard"
+        class="group bg-white border border-outline-variant rounded-xl p-lg hover:shadow-lg hover:border-tertiary transition-all cursor-pointer flex gap-md items-start">
+        <div class="w-12 h-12 rounded-xl bg-tertiary-container flex items-center justify-center flex-shrink-0 group-hover:bg-tertiary transition-colors">
+          <span class="material-symbols-outlined text-tertiary group-hover:text-white transition-colors">library_books</span>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-bold text-on-surface mb-xs group-hover:text-tertiary transition-colors">Componentes</h3>
+          <p class="text-body-sm text-on-surface-variant">
+            Revisá la biblioteca de plantillas y fragmentos de código disponibles para inyección rápida en tus aulas virtuales.
+          </p>
+          <span class="text-tertiary text-label-md font-bold flex items-center gap-1 mt-sm">
+            Acceder <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </span>
+        </div>
+      </a>
+
+      <!-- Configuracion -->
+      <a routerLink="/dashboard"
+        class="group bg-white border border-outline-variant rounded-xl p-lg hover:shadow-lg hover:border-outline transition-all cursor-pointer flex gap-md items-start">
+        <div class="w-12 h-12 rounded-xl bg-surface-container-high flex items-center justify-center flex-shrink-0 group-hover:bg-on-surface transition-colors">
+          <span class="material-symbols-outlined text-on-surface-variant group-hover:text-white transition-colors">settings</span>
+        </div>
+        <div>
+          <h3 class="text-headline-sm font-bold text-on-surface mb-xs">Configuración</h3>
+          <p class="text-body-sm text-on-surface-variant">
+            Administrá las preferencias del sistema, gestioná usuarios y revisá los parámetros institucionales del entorno.
+          </p>
+          <span class="text-on-surface-variant text-label-md font-bold flex items-center gap-1 mt-sm">
+            Acceder <span class="material-symbols-outlined text-[16px]">arrow_forward</span>
+          </span>
+        </div>
+      </a>
+
     </div>
+  </section>
 
-    <form [formGroup]="recursoForm" (ngSubmit)="onSubmit()" class="space-y-md flex-1">
-      <div class="space-y-xs">
-        <label for="titulo" class="text-label-lg font-bold text-on-surface">Título del Recurso *</label>
-        <input type="text" id="titulo" class="w-full px-3 py-2 border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-body-md bg-white" formControlName="titulo"
-            [ngClass]="{'border-error': esCampoInvalido('titulo')}"
-            placeholder="Ej: Plantilla Examen Canvas">
-        <div class="text-error text-label-sm mt-1" *ngIf="recursoForm.get('titulo')?.errors?.['required'] && esCampoInvalido('titulo')">
-            El título es obligatorio.
-        </div>
-        <div class="text-error text-label-sm mt-1" *ngIf="recursoForm.get('titulo')?.errors?.['minlength'] && esCampoInvalido('titulo')">
-            El título debe tener al menos 5 caracteres.
-        </div>
-        <div class="text-error text-label-sm mt-1" *ngIf="recursoForm.get('titulo')?.errors?.['maxlength'] && esCampoInvalido('titulo')">
-            El título no puede exceder los 50 caracteres.
-        </div>
+  <!-- Galería de Recursos (funcionalidad original) -->
+  <section class="bg-surface-container-low border-t border-outline-variant">
+    <div class="max-w-[1200px] mx-auto px-xl py-16">
+      <div class="flex items-center gap-sm mb-lg">
+        <span class="material-symbols-outlined text-primary">photo_library</span>
+        <h2 class="text-headline-lg font-bold text-on-surface">Recursos Disponibles</h2>
       </div>
-      
-      <div class="space-y-xs">
-        <label for="categoria" class="text-label-lg font-bold text-on-surface">Categoría *</label>
-        <select id="categoria" class="w-full px-3 py-2 border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-body-md bg-white" formControlName="categoria"
-            [ngClass]="{'border-error': esCampoInvalido('categoria')}">
-            <option value="">Seleccione una categoría...</option>
-            <option value="H5P">Elemento H5P</option>
-            <option value="LTI">Herramienta LTI externa</option>
-            <option value="EXAMEN">Plantilla de Examen</option>
-            <option value="ESTILOS">Fragmento de Estilos CSS</option>
-        </select>
-        <div class="text-error text-label-sm mt-1" *ngIf="esCampoInvalido('categoria')">
-            Debe seleccionar una categoría.
-        </div>
-      </div>
-
-      <div class="space-y-xs">
-        <label for="url" class="text-label-lg font-bold text-on-surface">Enlace / URL de origen *</label>
-        <input type="url" id="url" class="w-full px-3 py-2 border border-outline rounded-lg focus:ring-2 focus:ring-primary focus:border-primary text-body-md bg-white" formControlName="url"
-            [ngClass]="{'border-error': esCampoInvalido('url')}" placeholder="https://...">
-        <div class="text-error text-label-sm mt-1" *ngIf="recursoForm.get('url')?.errors?.['required'] && esCampoInvalido('url')">
-            El enlace es obligatorio.
-        </div>
-        <div class="text-error text-label-sm mt-1" *ngIf="recursoForm.get('url')?.errors?.['pattern'] && esCampoInvalido('url')">
-            El enlace debe ser una URL válida (ej. https://...).
-        </div>
-      </div>
-
-      <div class="pt-4">
-        <button type="submit" class="w-full bg-primary-container text-on-primary-container font-label-lg py-3 rounded-lg hover:bg-primary transition-colors disabled:opacity-50 flex items-center justify-center gap-2" [disabled]="recursoForm.invalid">
-            <span class="material-symbols-outlined text-[20px]">save</span> Guardar Recurso
-        </button>
-      </div>
-    </form>
-  </aside>
-
-  <!-- Main Content Area: Gallery -->
-  <div class="flex-1 lg:ml-[400px] p-xl">
-    <div class="max-w-[1200px] mx-auto w-full">
-      <div class="text-center mb-xl">
-        <h1 class="text-display-lg fw-bold text-primary mb-sm">Galería de Recursos</h1>
-        <p class="text-body-lg text-on-surface-variant max-w-2xl mx-auto">Selecciona el fragmento o plantilla que necesitas maquetar y cópialo directamente al Sandbox.</p>
-      </div>
+      <p class="text-body-md text-on-surface-variant mb-xl">
+        Seleccioná un recurso y copiá su código HTML directamente al portapapeles.
+      </p>
 
       <div class="row g-4">
-        <!-- Indicador de carga -->
         <div class="col-12 text-center py-xl" *ngIf="cargando">
           <div class="spinner-border text-primary" role="status">
             <span class="visually-hidden">Cargando...</span>
           </div>
         </div>
 
-        <!-- Data Binding de los recursos simulados -->
         <div class="col-md-6 col-lg-4" *ngFor="let recurso of recursos">
-          <div class="card h-100 shadow-sm border border-outline-variant hover:shadow-md transition-shadow bg-surface-container-lowest">
+          <div class="card h-100 shadow-sm border border-outline-variant hover:shadow-md transition-shadow bg-white">
             <div class="card-header bg-transparent border-bottom-0 pt-4 pb-0">
               <span class="inline-block bg-secondary-container text-on-secondary-container text-label-sm font-bold px-2 py-1 rounded mb-3">{{ recurso.categoria }}</span>
               <h5 class="text-headline-sm font-bold text-on-surface">{{ recurso.titulo }}</h5>
@@ -105,10 +154,11 @@
         <div class="col-12" *ngIf="!cargando && recursos.length === 0">
           <div class="p-lg bg-surface-container text-center rounded-lg border border-outline-variant text-on-surface-variant">
             <span class="material-symbols-outlined text-[48px] mb-2 opacity-50">inbox</span>
-            <p>No hay recursos disponibles. Sube uno desde el menú lateral.</p>
+            <p>No hay recursos disponibles aún.</p>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </section>
+
 </div>
