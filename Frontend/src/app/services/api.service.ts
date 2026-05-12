@@ -11,27 +11,7 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  getTestData(): Observable<TestData> {
-    return this.http.get<TestData>(`${this.baseUrl}test/`);
-  }
-
-  // Método simulado para el envío del formulario del Asesor
-  createResource(resourceData: any): Observable<any> {
-    // Aquí normalmente haríamos un POST al backend:
-    // return this.http.post(`${this.baseUrl}recursos/`, resourceData);
-    
-    // Para cumplir el criterio de aceptación y probar el Data Binding sin un endpoint real configurado aún:
-    return new Observable(observer => {
-      console.log('ApiService: Enviando recurso simulado...', resourceData);
-      setTimeout(() => {
-        observer.next({ success: true, data: resourceData });
-        observer.complete();
-      }, 1000);
-    });
-  }
-  // Método simulado para obtener los recursos (cumpliendo con obtener datos del servicio)
-  getRecursosMock(): Observable<any[]> {
-    const mockData = [
+  private mockData = [
       { 
         id: 1, 
         titulo: 'Llamado a la Acción: Video', 
@@ -183,8 +163,37 @@ export class ApiService {
   </div>
 </div>`
       }
-    ];
-    // Usamos 'of' para retornar sincrónicamente y evitar problemas de SSR o Zone.js con setTimeout
-    return of(mockData);
+  ];
+
+  getTestData(): Observable<TestData> {
+    return this.http.get<TestData>(`${this.baseUrl}test/`);
+  }
+
+  // Método simulado para el envío del formulario del Asesor
+  createResource(resourceData: any): Observable<any> {
+    return new Observable(observer => {
+      console.log('ApiService: Enviando recurso simulado...', resourceData);
+      setTimeout(() => {
+        const newId = this.mockData.length > 0 ? Math.max(...this.mockData.map(d => d.id)) + 1 : 1;
+        const newResource = {
+          id: newId,
+          titulo: resourceData.titulo,
+          categoria: resourceData.categoria,
+          html: resourceData.html_content || '<div class="p-md bg-surface text-center font-bold">Nuevo Componente Vacío</div>',
+          url: resourceData.url || '',
+          icono: 'new_releases'
+        };
+        // Insertamos al principio de la lista
+        this.mockData.unshift(newResource);
+
+        observer.next({ success: true, data: newResource });
+        observer.complete();
+      }, 500);
+    });
+  }
+
+  // Método simulado para obtener los recursos
+  getRecursosMock(): Observable<any[]> {
+    return of(this.mockData);
   }
 }

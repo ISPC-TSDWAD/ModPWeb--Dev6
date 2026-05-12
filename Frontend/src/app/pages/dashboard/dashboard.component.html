@@ -28,10 +28,10 @@
   </aside>
 
   <!-- Main Content Area -->
-  <main class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative">
+  <main class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full">
 
     <!-- REPOSITORIO -->
-    <div *ngIf="seccionActiva === 'recursos'" class="max-w-[1200px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'recursos'" class="w-full flex-1 max-w-[1400px] mx-auto animate-fade-in">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Repositorio de Recursos</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Gestione e integre los recursos y plantillas institucionales.</p>
@@ -89,7 +89,7 @@
 
        <!-- LISTADO RECURSOS -->
        <div *ngIf="cargando" class="text-center py-xl font-bold text-outline">Cargando recursos...</div>
-       <div *ngIf="!cargando" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-lg">
+       <div *ngIf="!cargando" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg">
          <div *ngFor="let recurso of getRecursosFiltrados()" class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden flex flex-col group hover:shadow-md transition-shadow">
             <div class="h-32 bg-surface-container dark:bg-[#2d2d2d] flex items-center justify-center relative">
                <span class="material-symbols-outlined text-5xl text-outline opacity-50 group-hover:scale-110 transition-transform">{{recurso.icono || 'extension'}}</span>
@@ -108,7 +108,7 @@
     </div>
 
     <!-- SANDBOX -->
-    <div *ngIf="seccionActiva === 'sandbox'" class="flex flex-col h-full animate-fade-in max-w-[1440px] mx-auto">
+    <div *ngIf="seccionActiva === 'sandbox'" class="w-full flex flex-col h-full animate-fade-in max-w-[1600px] mx-auto">
        <header class="mb-md">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Sandbox de Diseño</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Entorno estructurado para editar y previsualizar componentes HTML.</p>
@@ -148,23 +148,25 @@
             </div>
          </div>
 
-         <!-- Right Col: Editor + Preview -->
+         <!-- Right Col: Editor (Visual/HTML) -->
          <div class="flex-1 flex flex-col bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden shadow-sm">
+            <!-- Tabs -->
+            <div class="flex border-b border-outline-variant dark:border-outline bg-surface-container-low dark:bg-[#121212]">
+              <button (click)="modoEditor = 'visual'" [class.border-b-2]="modoEditor === 'visual'" [class.border-primary]="modoEditor === 'visual'" [class.text-primary]="modoEditor === 'visual'" class="px-lg py-sm font-bold text-sm transition-colors hover:bg-surface-container dark:hover:bg-[#2d2d2d]">Editor Visual (Rich Text)</button>
+              <button (click)="modoEditor = 'html'" [class.border-b-2]="modoEditor === 'html'" [class.border-primary]="modoEditor === 'html'" [class.text-primary]="modoEditor === 'html'" class="px-lg py-sm font-bold text-sm transition-colors hover:bg-surface-container dark:hover:bg-[#2d2d2d]">Código HTML Interno</button>
+            </div>
+            
             <div class="flex flex-1 overflow-hidden">
-               <!-- HTML Editor -->
-               <div class="flex-1 flex flex-col border-r border-outline-variant dark:border-outline">
-                  <div class="bg-surface-container-highest dark:bg-[#2d2d2d] p-2 flex justify-between items-center border-b border-outline-variant dark:border-outline">
-                    <span class="text-xs font-bold font-mono text-outline">EDITOR_HTML</span>
-                  </div>
+               <!-- HTML Editor Mode -->
+               <div *ngIf="modoEditor === 'html'" class="flex-1 flex flex-col animate-fade-in">
                   <textarea class="flex-1 bg-[#1e1e1e] text-[#d4d4d4] p-md font-mono text-sm resize-none focus:outline-none" (input)="onHtmlChange($event)" [value]="recursoSeleccionado?.htmlEditado" spellcheck="false"></textarea>
                </div>
-               <!-- Visual Preview -->
-               <div class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212]">
-                  <div class="bg-surface-container-highest dark:bg-[#2d2d2d] p-2 flex justify-between items-center border-b border-outline-variant dark:border-outline">
-                    <span class="text-xs font-bold font-mono text-outline">INSTITUTIONAL_PREVIEW</span>
-                  </div>
-                  <div class="flex-1 p-xl overflow-y-auto">
-                     <div class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[200px]" [innerHTML]="recursoSeleccionado?.htmlEditado"></div>
+               <!-- Visual Preview / Rich Text Editor Mode -->
+               <div *ngIf="modoEditor === 'visual'" class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in">
+                  <div class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary" 
+                       contenteditable="true" 
+                       (input)="onVisualEdit($event)"
+                       [innerHTML]="recursoSeleccionado?.htmlEditado">
                   </div>
                </div>
             </div>
@@ -185,22 +187,60 @@
     </div>
 
     <!-- GALERIA DE COMPONENTES -->
-    <div *ngIf="seccionActiva === 'componentes'" class="max-w-[1200px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'componentes'" class="w-full max-w-[1400px] mx-auto animate-fade-in">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Galería de Componentes</h1>
-         <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Catálogo oficial de bloques de diseño (Design System).</p>
+         <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Catálogo oficial de bloques de diseño (Design System). Componentes estáticos basados en lineamientos institucionales.</p>
        </header>
 
        <!-- 1. Seccionado de CTA -->
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">1. Seccionado de CTA (Llamados a la Acción)</h2>
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
-            <div *ngFor="let cta of getRecursosPorCategoria('CTA')" class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
+            <!-- CTA Video Original Prototype Data -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
-                 <h3 class="font-bold text-sm text-on-surface dark:text-white">{{cta.titulo}}</h3>
-                 <button (click)="enviarASandbox(cta)" class="text-xs font-bold text-secondary dark:text-secondary-fixed-dim border border-secondary dark:border-secondary-fixed-dim px-2 py-1 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">Enviar a Sandbox</button>
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Llamado a la Acción: Video</h3>
+                 <button class="text-xs font-bold text-secondary border border-secondary px-2 py-1 rounded">Enviar a Sandbox</button>
                </div>
-               <div class="bg-white text-black p-md border border-outline-variant rounded shadow-sm" [innerHTML]="cta.html"></div>
+               <div class="bg-white text-black p-md border rounded shadow-sm">
+                  <div class="dp-callout dp-callout-color-lg-tip card" style="border-color: #003087; border-radius: 5px;">
+                    <div class="card-body">
+                      <p class="card-title" style="text-align: left; background-color: #003087; color: #ffffff; padding: 5px;">
+                        <span style="font-size: 10pt;">
+                          <em><strong><span class="material-symbols-outlined" style="vertical-align: middle;">play_circle</span></strong></em>
+                          <strong>Video </strong>
+                        </span>
+                      </p>
+                      <p>Introducción o invitación al video</p>
+                      <p class="card-text"><span style="color: #236fa1; font-weight: bold;">Ver video (LINK del video)</span></p>
+                    </div>
+                  </div>
+               </div>
+            </div>
+
+            <!-- CTA Consigna Original Prototype Data -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
+               <div class="flex justify-between items-start mb-4">
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Llamado a la Acción: Consigna</h3>
+                 <button class="text-xs font-bold text-secondary border border-secondary px-2 py-1 rounded">Enviar a Sandbox</button>
+               </div>
+               <div class="bg-white text-black p-md border rounded shadow-sm">
+                  <div class="dp-callout card dp-callout-color-lg-info" style="border-radius: 5px;">
+                    <div class="card-body">
+                      <p class="card-title" style="text-align: left;">
+                        <span style="font-size: 10pt;">
+                          <strong style="border-color: #003087;">
+                            <span class="material-symbols-outlined" style="vertical-align: middle; color: #003087;">assignment</span>
+                            Actividad: NOMBRE DE ACTIVIDAD
+                          </strong>
+                        </span>
+                      </p>
+                      <p class="card-text"><span>Introducción o invitación a la actividad</span></p>
+                      <p class="card-text"><span style="color: #236fa1; font-weight: bold;">Acceso a la consigna</span></p>
+                    </div>
+                  </div>
+               </div>
             </div>
          </div>
        </section>
@@ -209,12 +249,36 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">2. Resaltados</h2>
          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
-            <div *ngFor="let res of getRecursosPorCategoria('RESALTADO')" class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
+            <!-- Resaltado Importante -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
-                 <h3 class="font-bold text-sm text-on-surface dark:text-white">{{res.titulo}}</h3>
-                 <button (click)="enviarASandbox(res)" class="text-xs font-bold text-secondary dark:text-secondary-fixed-dim border border-secondary dark:border-secondary-fixed-dim px-2 py-1 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">Enviar a Sandbox</button>
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Resaltado: Importante</h3>
                </div>
-               <div class="bg-white text-black p-md border border-outline-variant rounded shadow-sm" [innerHTML]="res.html"></div>
+               <div class="bg-white text-black p-md border rounded shadow-sm">
+                  <div class="dp-callout dp-callout-placeholder card dp-callout-color-danger border-l-4 border-red-600 pl-4 py-2">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="material-symbols-outlined text-red-600" style="font-size: 24px;">warning</span>
+                      <h3 class="card-title m-0 text-red-600 font-bold">Atención / Importante</h3>
+                    </div>
+                    <p class="card-text"><i><span>TEXTO A RESALTAR - PRESTAR MÁXIMA ATENCIÓN A LAS FECHAS.</span></i></p>
+                  </div>
+               </div>
+            </div>
+            
+            <!-- Resaltado Profundizacion -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
+               <div class="flex justify-between items-start mb-4">
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Para pensar / Saber más</h3>
+               </div>
+               <div class="bg-white text-black p-md border rounded shadow-sm">
+                  <div class="dp-callout dp-callout-placeholder card dp-callout-color-lg-warning border-l-4 border-yellow-500 pl-4 py-2 bg-yellow-50">
+                    <div class="flex items-center gap-2 mb-2">
+                      <span class="material-symbols-outlined text-yellow-600" style="font-size: 24px;">lightbulb</span>
+                      <h3 class="card-title m-0 text-yellow-700 font-bold">Para pensar / Para saber más</h3>
+                    </div>
+                    <p class="card-text"><i><span>¿Qué sucedería si aplicamos las normativas de IT1 en el prototipo actual?</span></i></p>
+                  </div>
+               </div>
             </div>
          </div>
        </section>
@@ -223,12 +287,23 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">3. Elementos de Organización</h2>
          <div class="grid grid-cols-1 gap-lg">
-            <div *ngFor="let org of getRecursosPorCategoria('ORGANIZADOR')" class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
+            <!-- Tabs Prototype -->
+            <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
                <div class="flex justify-between items-start mb-4">
-                 <h3 class="font-bold text-sm text-on-surface dark:text-white">{{org.titulo}}</h3>
-                 <button (click)="enviarASandbox(org)" class="text-xs font-bold text-secondary dark:text-secondary-fixed-dim border border-secondary dark:border-secondary-fixed-dim px-2 py-1 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">Enviar a Sandbox</button>
+                 <h3 class="font-bold text-sm text-on-surface dark:text-white">Tarjetas Didácticas (Estrategias)</h3>
                </div>
-               <div class="bg-white text-black p-md border border-outline-variant rounded shadow-sm" [innerHTML]="org.html"></div>
+               <div class="bg-white text-black p-md border rounded shadow-sm flex flex-wrap gap-4 justify-center">
+                  <div class="card border border-outline shadow-sm flex flex-col justify-center items-center text-center p-4 w-[280px]">
+                    <span class="font-bold">Estrategias corporativas</span>
+                    <hr class="my-2 w-full border-outline">
+                    <p class="text-sm">Definen en qué negocios participa la organización y cómo se gestiona la cartera.</p>
+                  </div>
+                  <div class="card border border-outline shadow-sm flex flex-col justify-center items-center text-center p-4 w-[280px]">
+                    <span class="font-bold">Estrategias de negocio o competitivas</span>
+                    <hr class="my-2 w-full border-outline">
+                    <p class="text-sm">Definen el comportamiento que se tendrá en cada mercado para sostener las ventajas.</p>
+                  </div>
+               </div>
             </div>
          </div>
        </section>
@@ -237,13 +312,13 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm">
          <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">4. Galería de Chequeos de Comprensión</h2>
          <div class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]">
-            <p class="text-sm italic text-outline mb-4">Ejemplos de encuestas rápidas, multiple choice formativos e integraciones H5P.</p>
-            <div *ngFor="let h5p of getRecursosPorCategoria('H5P')" class="mb-6">
-              <div class="flex justify-between items-start mb-2">
-                 <h3 class="font-bold text-sm text-on-surface dark:text-white">{{h5p.titulo}}</h3>
-                 <button (click)="enviarASandbox(h5p)" class="text-xs font-bold text-secondary dark:text-secondary-fixed-dim border border-secondary dark:border-secondary-fixed-dim px-2 py-1 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">Enviar a Sandbox</button>
-              </div>
-              <div class="bg-white text-black p-md border border-outline-variant rounded shadow-sm" [innerHTML]="h5p.html"></div>
+            <p class="text-sm italic text-outline mb-4">Integraciones interactivas (Placeholder visual).</p>
+            <div class="bg-white text-black p-md border rounded shadow-sm">
+               <div class="border-2 border-dashed border-gray-300 bg-gray-50 flex items-center justify-center p-10 flex-col">
+                 <span class="material-symbols-outlined text-4xl text-gray-400 mb-2">quiz</span>
+                 <h3 class="font-bold text-gray-700">Contenido Interactivo H5P</h3>
+                 <p class="text-sm text-gray-500">El bloque de H5P (ej. Multiple Choice) se embeberá aquí durante la publicación.</p>
+               </div>
             </div>
          </div>
        </section>
@@ -252,11 +327,12 @@
        <section class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm grid md:grid-cols-2 gap-xl">
           <div>
             <h2 class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed">5. Pautas y Referencias Institucionales</h2>
-            <ul class="list-disc ml-5 space-y-2 text-sm text-on-surface-variant dark:text-gray-300">
-              <li>Uso obligatorio de paleta institucional (Gamas de azul, teal y gris).</li>
-              <li>Alineación y legibilidad estándar de acuerdo a la normativa WCAG 2.1 AA.</li>
-              <li>Toda imagen debe contener su respectiva etiqueta ALT descriptiva.</li>
-              <li>Jerarquía de encabezados respetando el orden lógico H1, H2, H3.</li>
+            <ul class="list-disc ml-5 space-y-2 text-sm text-on-surface-variant dark:text-gray-300 font-mono bg-surface-container-high dark:bg-[#2d2d2d] p-4 rounded">
+              <li><code>H1</code>: Título del módulo</li>
+              <li><code>H2</code>: Título de la página (≤110 caracteres)</li>
+              <li><code>H3</code>: Subtítulo (sin numeración)</li>
+              <li><code>H4</code>: Sub-subtítulo (sin numeración)</li>
+              <li><code>Normal</code>: Cuerpo de texto</li>
             </ul>
           </div>
           <div>
@@ -265,14 +341,14 @@
               <li><strong>Tipografía Principal:</strong> Inter (Sans-serif) para asegurar excelente legibilidad en pantalla.</li>
               <li><strong>Bordes:</strong> Redondeados de 4px para elementos UI de contenido interactivo.</li>
               <li>No abusar de colores de error (rojo) salvo excepciones críticas y notificaciones obligatorias.</li>
-              <li>Las animaciones deben ser sutiles y respetar la preferencia de "reduced motion" del SO.</li>
+              <li><strong>Imágenes:</strong> Toda imagen debe tener el atributo <code>alt=""</code> para accesibilidad.</li>
             </ul>
           </div>
        </section>
     </div>
 
     <!-- CONFIGURACION -->
-    <div *ngIf="seccionActiva === 'configuracion'" class="max-w-[1200px] mx-auto animate-fade-in">
+    <div *ngIf="seccionActiva === 'configuracion'" class="w-full max-w-[1200px] mx-auto animate-fade-in">
        <header class="mb-xl">
          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">Configuración del Sistema</h1>
          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">Administre su perfil personal, preferencias de plataforma e información institucional.</p>
@@ -314,7 +390,7 @@
                  <h3 class="font-bold text-primary dark:text-primary-fixed">Preferencias de Plataforma</h3>
                </div>
                <div class="p-lg space-y-lg">
-                 <div class="flex items-center justify-between border-b border-outline-variant dark:border-outline pb-4">
+                 <div class="flex items-center justify-between">
                    <div>
                      <h4 class="font-bold text-lg">Idioma de Visualización</h4>
                      <p class="text-sm text-on-surface-variant dark:text-outline">Seleccione el idioma predeterminado para la interfaz.</p>
@@ -323,20 +399,6 @@
                      <option>Español (ES)</option>
                      <option>English (US)</option>
                    </select>
-                 </div>
-                 <div class="flex items-center justify-between">
-                   <div>
-                     <h4 class="font-bold text-lg">Tema del Sistema</h4>
-                     <p class="text-sm text-on-surface-variant dark:text-outline">Elija entre un aspecto claro u oscuro.</p>
-                   </div>
-                   <div class="flex gap-2">
-                     <button (click)="toggleModoOscuro()" [class.border-secondary]="!modoOscuro" [class.border-2]="!modoOscuro" [class.border]="modoOscuro" class="border-outline-variant p-2 rounded flex items-center gap-2 font-bold" [ngClass]="!modoOscuro ? 'bg-surface-container-highest dark:bg-[#2d2d2d] text-secondary' : 'bg-surface hover:bg-surface-container dark:bg-[#1e1e1e]'">
-                       <span class="material-symbols-outlined text-sm">light_mode</span> Claro
-                     </button>
-                     <button (click)="toggleModoOscuro()" [class.border-secondary]="modoOscuro" [class.border-2]="modoOscuro" [class.border]="!modoOscuro" class="border-outline-variant p-2 rounded flex items-center gap-2 font-bold" [ngClass]="modoOscuro ? 'bg-surface-container-highest dark:bg-[#2d2d2d] text-secondary dark:text-secondary-fixed-dim' : 'bg-surface hover:bg-surface-container dark:bg-[#1e1e1e]'">
-                       <span class="material-symbols-outlined text-sm">dark_mode</span> Oscuro
-                     </button>
-                   </div>
                  </div>
                </div>
                <div class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-end border-t border-outline-variant dark:border-outline">
@@ -353,10 +415,19 @@
                  <h3 class="font-bold text-primary dark:text-primary-fixed">Gestión de Institución</h3>
                </div>
                <div class="p-lg space-y-md text-center">
-                  <div class="w-24 h-24 border-2 border-dashed border-outline-variant dark:border-outline mx-auto flex items-center justify-center rounded cursor-pointer hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors relative group">
-                     <span class="material-symbols-outlined text-4xl text-outline opacity-50 group-hover:opacity-100">business</span>
-                  </div>
-                  <span class="font-bold text-sm block">Logo Institucional</span>
+                  <!-- File Input Overlay -->
+                  <label class="block w-24 h-24 border-2 border-dashed border-outline-variant dark:border-outline mx-auto rounded cursor-pointer hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors relative group overflow-hidden">
+                     <input type="file" (change)="onImageUpload($event)" accept="image/*" class="hidden">
+                     <img *ngIf="fotoInstitucional" [src]="fotoInstitucional" class="w-full h-full object-cover">
+                     <div *ngIf="!fotoInstitucional" class="w-full h-full flex flex-col items-center justify-center">
+                       <span class="material-symbols-outlined text-4xl text-outline opacity-50 group-hover:opacity-100">business</span>
+                     </div>
+                     <!-- Hover Edit Icon -->
+                     <div class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                        <span class="material-symbols-outlined text-white">upload</span>
+                     </div>
+                  </label>
+                  <span class="font-bold text-sm block mt-2">Logo Institucional</span>
                   
                   <div class="text-left mt-4">
                      <label class="text-sm font-bold text-on-surface-variant dark:text-outline block mb-1">Identificador (ID)</label>
@@ -378,7 +449,7 @@
                        <span class="bg-error-container text-on-error-container text-xs px-2 py-1 rounded font-bold">Desactivado</span>
                      </div>
                   </div>
-                  <button class="w-full bg-secondary text-white font-bold py-2 rounded flex items-center justify-center gap-2 hover:opacity-90 shadow-sm transition-opacity">
+                  <button (click)="cambiarContrasena()" class="w-full bg-secondary text-white font-bold py-2 rounded flex items-center justify-center gap-2 hover:opacity-90 shadow-sm transition-opacity">
                     <span class="material-symbols-outlined text-sm">lock_reset</span> Cambiar Contraseña
                   </button>
                   <button class="w-full border border-outline-variant dark:border-outline text-on-surface dark:text-white font-bold py-2 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors">

@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit {
   cargando: boolean = true;
   recursoSeleccionado: any = null;
 
-  modoOscuro: boolean = false;
   filtroMateria: string = 'Todas';
 
   // Configuración de elemento en Sandbox
@@ -32,6 +31,12 @@ export class DashboardComponent implements OnInit {
     color: '#003087',
     mostrarIcono: true
   };
+  
+  // Tab state in Sandbox
+  modoEditor: 'visual' | 'html' = 'visual';
+
+  // Configuración Institucional Mock
+  fotoInstitucional: string | ArrayBuffer | null = null;
 
   setSeccion(seccion: string) {
     this.seccionActiva = seccion;
@@ -112,6 +117,13 @@ export class DashboardComponent implements OnInit {
     }
   }
 
+  onVisualEdit(event: Event) {
+    const element = event.target as HTMLElement;
+    if (this.recursoSeleccionado) {
+      this.recursoSeleccionado.htmlEditado = element.innerHTML;
+    }
+  }
+
   copiarHTML(): void {
     if (!this.recursoSeleccionado) return;
     const htmlParaCopiar = this.recursoSeleccionado.htmlEditado || this.recursoSeleccionado.html;
@@ -138,15 +150,19 @@ export class DashboardComponent implements OnInit {
     }
   }
 
-  toggleModoOscuro() {
-    this.modoOscuro = !this.modoOscuro;
-    if (this.modoOscuro) {
-      document.documentElement.classList.add('dark');
-      document.documentElement.setAttribute('data-bs-theme', 'dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-      document.documentElement.setAttribute('data-bs-theme', 'light');
+  onImageUpload(event: any) {
+    const file = event.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        this.fotoInstitucional = e.target?.result as string;
+      };
+      reader.readAsDataURL(file);
     }
+  }
+
+  cambiarContrasena() {
+    alert('Se ha enviado un correo con instrucciones para restablecer su contraseña.');
   }
 
   exportarDoc() { alert('Exportando a DOC para ' + this.filtroMateria); }
@@ -157,9 +173,8 @@ export class DashboardComponent implements OnInit {
   rehacer() { alert('Rehacer acción (Mock)'); }
 
   getRecursosFiltrados() {
-    // Implementación simple de filtro mock
     if (this.filtroMateria === 'Todas') return this.recursos;
-    return this.recursos; // En la vida real filtraría por r.asignatura
+    return this.recursos; 
   }
 
   getRecursosPorCategoria(catStr: string) {
