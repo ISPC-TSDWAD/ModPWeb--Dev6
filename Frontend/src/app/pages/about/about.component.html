@@ -1,7 +1,7 @@
 <main class="container py-5" style="max-width: 1200px;">
   <!-- Hero Section -->
   <section class="hero-section">
-    <img alt="Sobre EduTools" class="hero-bg" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobFNCReoHTjvXFQZZ0Q-rZ7A6ZDf9gDjoZin-3oSAq-2B9-PDMKh2NngTrm7Sols5mv00uRDMCYDut2etOrsXf90KjrbJDVDQFsXgAtqPXjE-hnhGX8VacoB4OdJXBvhkuf5t1RIvBTxAIuvBWO_VxUpVP6ROREXv24LryAylVzqErkTM_7IHEfTjzyrnVCr39f3Syb3U8IrJPCB9r812nbVLoTS2UxwTuvvKDIWEUWf18xb8mQ-udqK4LfxDbQkxW1ZFZTUOL2g"/>
+    <img alt="Imagen decorativa del equipo pedagógico trabajando en colaboración" class="hero-bg" role="presentation" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAobFNCReoHTjvXFQZZ0Q-rZ7A6ZDf9gDjoZin-3oSAq-2B9-PDMKh2NngTrm7Sols5mv00uRDMCYDut2etOrsXf90KjrbJDVDQFsXgAtqPXjE-hnhGX8VacoB4OdJXBvhkuf5t1RIvBTxAIuvBWO_VxUpVP6ROREXv24LryAylVzqErkTM_7IHEfTjzyrnVCr39f3Syb3U8IrJPCB9r812nbVLoTS2UxwTuvvKDIWEUWf18xb8mQ-udqK4LfxDbQkxW1ZFZTUOL2g"/>
     <div class="hero-content">
       <h2 class="hero-title">{{ hero.title }}</h2>
       <p class="hero-text">{{ hero.text }}</p>
@@ -13,7 +13,7 @@
     <div class="col-md-6">
       <div class="mission-vision-card">
         <div class="card-header-custom">
-          <span class="material-symbols-outlined">{{ mision.icon }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">{{ mision.icon }}</span>
           <h3>{{ mision.title }}</h3>
         </div>
         <div class="card-body-custom">
@@ -24,7 +24,7 @@
     <div class="col-md-6">
       <div class="mission-vision-card">
         <div class="card-header-custom">
-          <span class="material-symbols-outlined">{{ vision.icon }}</span>
+          <span class="material-symbols-outlined" aria-hidden="true">{{ vision.icon }}</span>
           <h3>{{ vision.title }}</h3>
         </div>
         <div class="card-body-custom">
@@ -42,7 +42,7 @@
         <div class="col-sm-6 col-lg-3">
           <div class="value-card">
             <div class="icon-container">
-              <span class="material-symbols-outlined">{{ valor.icon }}</span>
+              <span class="material-symbols-outlined" aria-hidden="true">{{ valor.icon }}</span>
             </div>
             <h4>{{ valor.title }}</h4>
             <p>{{ valor.text }}</p>
@@ -53,64 +53,75 @@
   </section>
 
   <!-- Our Team Section -->
-  <section class="mb-5">
-    <h3 class="section-title">Nuestro Equipo</h3>
+  <section class="mb-5" aria-labelledby="equipo-titulo">
+    <h3 class="section-title" id="equipo-titulo">Nuestro Equipo</h3>
     <div class="row">
       <div class="col-12">
         <div class="team-card">
+          <!-- TEAM HEADER: fondo teal #006972, todo el texto en blanco -->
           <div class="team-header">
-            <span class="material-symbols-outlined">data_object</span>
-            <div class="space-y-xl">
-              <div class="flex flex-col gap-sm">
-                <h3 class="text-headline-sm font-bold text-on-surface">Equipo Dev6</h3>
-                <p class="text-body-md text-on-surface-variant">Conformado por profesionales del ISPC, combinando habilidades de desarrollo frontend, backend, UX y gestión ágil para lograr una plataforma robusta y escalable.</p>
+            <span class="material-symbols-outlined" aria-hidden="true" style="color:white; margin-right:0.75rem; font-size:1.5rem;">data_object</span>
+            <div style="display:flex; flex-direction:column; gap:1rem; width:100%;">
+              <div>
+                <h3 style="color:#ffffff; font-weight:700; font-size:1.1rem; margin:0 0 0.25rem 0;">Equipo Dev6</h3>
+                <p style="color:rgba(255,255,255,0.85); font-size:0.9rem; margin:0; line-height:1.5;">
+                  Conformado por profesionales del ISPC, combinando habilidades de desarrollo frontend, backend, UX y gestión ágil para lograr una plataforma robusta y escalable.
+                </p>
               </div>
-              <div class="grid grid-cols-1 md:grid-cols-2 gap-md">
-                <div class="flex items-center gap-md bg-surface-container-lowest p-md rounded-lg border border-outline-variant">
-                  <div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-label-lg">JG</div>
+              <!-- Tarjetas de miembros: fondo blanco sobre el teal, texto oscuro -->
+              <div style="display:grid; grid-template-columns: repeat(auto-fill, minmax(220px,1fr)); gap:0.75rem;">
+
+                <div style="display:flex; align-items:center; gap:0.75rem; background:#ffffff; padding:0.75rem; border-radius:0.5rem; border:1px solid #c2c7d0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#d4e4f7; color:#003761; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">JG</div>
                   <div>
-                    <p class="font-bold text-on-surface">Jonathan Guillen</p>
-                    <p class="text-body-sm text-on-surface-variant">Product Owner / Scrum Master</p>
+                    <p style="font-weight:700; color:#191c1d; margin:0; font-size:0.9rem;">Jonathan Guillen</p>
+                    <p style="color:#42474f; font-size:0.8rem; margin:0;">Product Owner / Scrum Master</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-md bg-surface-container-lowest p-md rounded-lg border border-outline-variant">
-                  <div class="w-12 h-12 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-bold text-label-lg">AC</div>
+
+                <div style="display:flex; align-items:center; gap:0.75rem; background:#ffffff; padding:0.75rem; border-radius:0.5rem; border:1px solid #c2c7d0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#9ff0fb; color:#004d54; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">AC</div>
                   <div>
-                    <p class="font-bold text-on-surface">Ale Corva</p>
-                    <p class="text-body-sm text-on-surface-variant">Developer Fullstack / Angular</p>
+                    <p style="font-weight:700; color:#191c1d; margin:0; font-size:0.9rem;">Ale Corva</p>
+                    <p style="color:#42474f; font-size:0.8rem; margin:0;">Developer Fullstack / Angular</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-md bg-surface-container-lowest p-md rounded-lg border border-outline-variant">
-                  <div class="w-12 h-12 rounded-full bg-tertiary-container text-tertiary flex items-center justify-center font-bold text-label-lg">GV</div>
+
+                <div style="display:flex; align-items:center; gap:0.75rem; background:#ffffff; padding:0.75rem; border-radius:0.5rem; border:1px solid #c2c7d0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#d1e8e2; color:#003761; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">GV</div>
                   <div>
-                    <p class="font-bold text-on-surface">Gonzalo Velasco</p>
-                    <p class="text-body-sm text-on-surface-variant">Developer / Backend Django</p>
+                    <p style="font-weight:700; color:#191c1d; margin:0; font-size:0.9rem;">Gonzalo Velasco</p>
+                    <p style="color:#42474f; font-size:0.8rem; margin:0;">Developer / Backend Django</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-md bg-surface-container-lowest p-md rounded-lg border border-outline-variant">
-                  <div class="w-12 h-12 rounded-full bg-primary-container text-primary flex items-center justify-center font-bold text-label-lg">DS</div>
+
+                <div style="display:flex; align-items:center; gap:0.75rem; background:#ffffff; padding:0.75rem; border-radius:0.5rem; border:1px solid #c2c7d0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#d4e4f7; color:#003761; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">DS</div>
                   <div>
-                    <p class="font-bold text-on-surface">Daniela Salvo</p>
-                    <p class="text-body-sm text-on-surface-variant">Developer / Frontend UX</p>
+                    <p style="font-weight:700; color:#191c1d; margin:0; font-size:0.9rem;">Daniela Salvo</p>
+                    <p style="color:#42474f; font-size:0.8rem; margin:0;">Developer / Frontend UX</p>
                   </div>
                 </div>
-                <div class="flex items-center gap-md bg-surface-container-lowest p-md rounded-lg border border-outline-variant">
-                  <div class="w-12 h-12 rounded-full bg-secondary-container text-secondary flex items-center justify-center font-bold text-label-lg">GR</div>
+
+                <div style="display:flex; align-items:center; gap:0.75rem; background:#ffffff; padding:0.75rem; border-radius:0.5rem; border:1px solid #c2c7d0;">
+                  <div style="width:48px; height:48px; border-radius:50%; background:#9ff0fb; color:#004d54; display:flex; align-items:center; justify-content:center; font-weight:700; font-size:0.9rem; flex-shrink:0;">GR</div>
                   <div>
-                    <p class="font-bold text-on-surface">Gerardo Romero</p>
-                    <p class="text-body-sm text-on-surface-variant">Developer / Frontend Angular</p>
+                    <p style="font-weight:700; color:#191c1d; margin:0; font-size:0.9rem;">Gerardo Romero</p>
+                    <p style="color:#42474f; font-size:0.8rem; margin:0;">Developer / Frontend Angular</p>
                   </div>
                 </div>
+
               </div>
             </div>
           </div>
+
           <div class="team-body">
             <div class="d-flex align-items-center mb-3">
               <div class="avatars">
-                <img alt="Dev 1" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCivWYawIR0u5ccILdXsnqnmYOsZLst0O2_jaam7H0UJrz8ffAHMA4oJTe00JCBEzyT461WNj1X4rg7YcMbJWz_SVwMRzX26h4ZwpVnRgDesTIfTygGloSzFEwrwVbWV2nqDH2lSEITU2R3aO3NKYXLNmTAYVjAyHE9JclcXKzQvbkAaTEr-OP8lsVQl9xjJpJvnzyuAPId-i4jZKI8uNY89_6mDU5iaJuVt71T9dzQBbnUlauO0OOpUirQB-flhZin4m5Ygpw8j5Q"/>
-                <img alt="Dev 2" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-igD9GPhmNR0u9Qj2iYQGAZuCMYOW2iVo1_2clyD0W-skyEYKYsDwTqMrsT9BWdg5ZacnYSX8N1mMkk0GiOQRs8nGcue922FkVUv5GUl69WpBxrLBYbS34UzGtpv7ERrhb5umq7eAlkerkdwnPt2JjVDwsLyT6cucoNKsdYgNtfIW7a46yf0b8WJUnAwqf-2KTHHdETyiQLGbbAl4AQX76NMwW8IOj7tavP14gpieXUb2yCGafAQ_Zk5A9680GwiiB1j1CbEK6f4"/>
-                <img alt="Dev 3" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBifhmqDwArPTMb-VjQe2OlIz_0aXqdAqzs7uVsl0OB5GJGP-dxkwyjm9t7MdR8_lQSOEUH_dN10Hbw2QgSdCdoqx8UGrP_JZyJmXOaxEgpvD7rh4jZjJK9GNoOsklColgXoGjevrzC-uxCseIQRzxGB0HbQCQkM5tLctNi4xoaiWCNmN_uRGdeKFJv6GJSLT2vy1nK-4gfZ8bugiSFnxmE1hEZ12stiffEdnFHvO3LeTTKXPntTJUwhX5ckweJRVnTFk60mGoinyE"/>
-                <div class="avatar-more">+2</div>
+                <img alt="Jonathan Guillén — Product Owner" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCivWYawIR0u5ccILdXsnqnmYOsZLst0O2_jaam7H0UJrz8ffAHMA4oJTe00JCBEzyT461WNj1X4rg7YcMbJWz_SVwMRzX26h4ZwpVnRgDesTIfTygGloSzFEwrwVbWV2nqDH2lSEITU2R3aO3NKYXLNmTAYVjAyHE9JclcXKzQvbkAaTEr-OP8lsVQl9xjJpJvnzyuAPId-i4jZKI8uNY89_6mDU5iaJuVt71T9dzQBbnUlauO0OOpUirQB-flhZin4m5Ygpw8j5Q"/>
+                <img alt="Ale Corva — Developer Fullstack" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuA-igD9GPhmNR0u9Qj2iYQGAZuCMYOW2iVo1_2clyD0W-skyEYKYsDwTqMrsT9BWdg5ZacnYSX8N1mMkk0GiOQRs8nGcue922FkVUv5GUl69WpBxrLBYbS34UzGtpv7ERrhb5umq7eAlkerkdwnPt2JjVDwsLyT6cucoNKsdYgNtfIW7a46yf0b8WJUnAwqf-2KTHHdETyiQLGbbAl4AQX76NMwW8IOj7tavP14gpieXUb2yCGafAQ_Zk5A9680GwiiB1j1CbEK6f4"/>
+                <img alt="Gonzalo Velasco — Developer Backend" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBifhmqDwArPTMb-VjQe2OlIz_0aXqdAqzs7uVsl0OB5GJGP-dxkwyjm9t7MdR8_lQSOEUH_dN10Hbw2QgSdCdoqx8UGrP_JZyJmXOaxEgpvD7rh4jZjJK9GNoOsklColgXoGjevrzC-uxCseIQRzxGB0HbQCQkM5tLctNi4xoaiWCNmN_uRGdeKFJv6GJSLT2vy1nK-4gfZ8bugiSFnxmE1hEZ12stiffEdnFHvO3LeTTKXPntTJUwhX5ckweJRVnTFk60mGoinyE"/>
+                <div class="avatar-more" aria-label="2 integrantes más">+2</div>
               </div>
               <span class="team-count">5 Desarrolladores</span>
             </div>
@@ -120,7 +131,7 @@
             <div class="bg-surface-container-low p-3 rounded border border-outline-variant">
               <h5 class="text-label-md font-bold text-primary mb-2">Nuestro Stack y Especialidades:</h5>
               <ul class="text-body-sm text-on-surface-variant m-0 pl-4">
-                <li><strong>Frontend:</strong> Angular 21, TypeScript, RxJS, Signals, TailwindCSS/Bootstrap 5.</li>
+                <li><strong>Frontend:</strong> Angular 21, TypeScript, RxJS, Signals, Bootstrap 5.3 + Tailwind CSS CDN con Design Tokens.</li>
                 <li><strong>Backend:</strong> Python, Django 6.x, Django REST Framework.</li>
                 <li><strong>Base de Datos & Dev:</strong> MySQL, Git, GitHub Actions, Arquitectura SPA + API REST.</li>
               </ul>

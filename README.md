@@ -32,7 +32,7 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 | Frontend | **Angular 18** (Signals + Stand-alone Components) |
 | Backend | Django REST Framework |
 | Base de datos | MySQL |
-| Estilos | **Tailwind CSS** (Design System Institucional) |
+| Estilos | **Bootstrap 5.3** (npm) + **Tailwind CSS CDN** con Design Tokens institucionales |
 
 ---
 
@@ -40,6 +40,8 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 *   **Sprint 0 (Evidencia 1):** Bases de datos y API inicial.
 *   **Sprint 1 (Evidencia 2):** Sandbox, exportación y consolidación de UI.
+*   **Tablero de Gestión:** [Acceso Directo al Proyecto](https://github.com/orgs/ISPC-TSDWAD/projects/4/views/1)
+
 
 ---
 
@@ -48,9 +50,13 @@ Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 | Documento | Descripción | Enlace Directo |
 |-----------|-------------|----------------|
 | 📘 **Documentación Formal** | Memoria técnica y estratégica (Ev2). | [Ver Documento](docs/EduTools_Documentacion_formal_Ev2.md) |
-| 📐 **DER Institucional** | Diagrama Entidad-Relación. | [Ver Diagrama](docs/der.md) |
-| 🗄️ **Script SQL** | Código DDL MySQL. | [Ver Script](docs/sql/script_database.sql) |
+| 📐 **DER — Notación Chen** | Diagrama E-R con entidades (rectángulos), atributos (óvalos) y relaciones (rombos). | [Ver DER Chen](docs/der_chen.md) |
+| 🗄️ **Modelo Relacional** | Tablas físicas MySQL con tipos, PK, FK y validación cruzada con Django. | [Ver Modelo Relacional](docs/modelo_relacional.md) |
+| 📋 **Historias de Usuario** | Sprint Backlog con HU-01 a HU-05, criterios Gherkin (CA-n°) y validación de cumplimiento. | [Ver HU](docs/historias_de_usuario.md) |
+| 📝 **Script SQL DDL** | Código DDL MySQL ejecutable con datos iniciales. | [Ver Script](docs/sql/script_database.sql) |
 | 📚 **Wiki del Proyecto** | Base de conocimientos. | [Ir a la Wiki](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki) |
+
+
 
 ---
 
@@ -149,8 +155,19 @@ ModPWeb--Dev6/
 
 ## 📸 Evidencias de Funcionamiento
 
-### Conexión Exitosa con el Backend
-![Backend API](docs/capturas/Test%20conection%20-%20backend.png)
+### 📌 Evidencia 1 (Sprint 0): Bases de Datos y API
+Validación de la arquitectura base, endpoints RESTful y persistencia en MySQL.
 
-### Integración Frontend y Consola
-![Frontend Console](docs/capturas/Test%20conection%20-%20frontend.png)
+| Conexión API REST (Backend) | Base de Datos (MySQL) |
+| :---: | :---: |
+| <img src="docs/capturas/Test%20conection%20-%20backend.png" alt="Backend API" width="400"/> | <img src="docs/capturas/Test%20conection%20-%20bd.png" alt="Base de Datos" width="400"/> |
+
+### 📌 Evidencia 2 (Sprint 1): Sandbox y Consumo de API
+Integración del Frontend en Angular consumiendo los endpoints de Django y renderizado de componentes.
+
+<div align="center">
+  <img src="docs/capturas/Test%20conection%20-%20frontend.png" alt="Frontend Console" width="800"/>
+  <br/>
+  <i>Renderizado del Dashboard en Angular y consumo de datos</i>
+</div>
+

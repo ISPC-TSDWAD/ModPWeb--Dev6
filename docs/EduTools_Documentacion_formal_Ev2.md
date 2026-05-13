@@ -17,7 +17,8 @@
 6. [Identificación de Stakeholders y Roles del Equipo](#6-identificación-de-stakeholders-y-roles-del-equipo)
 7. [Historias de Usuario](#7-historias-de-usuario)
 8. [Enlaces y Herramientas del Proyecto](#8-enlaces-y-herramientas-del-proyecto)
-9. [Bibliografía](#9-bibliografía)
+9. [Seguimiento del Proyecto y Ceremonias](#9-seguimiento-del-proyecto-y-ceremonias)
+10. [Bibliografía](#10-bibliografía)
 
 ---
 
@@ -61,7 +62,7 @@ Siguiendo los lineamientos del **Project Management Institute (PMI)**, este docu
 *   **Entorno de Producción (Proyectado):** Despliegue del Frontend estático en servicios cloud distribuidos (ej. Vercel o AWS S3) y Backend alojado en contenedores escalables conectados a una instancia gestionada de MySQL.
 
 #### Conocimientos Disponibles en el Equipo
-El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización en desarrollo SPA con Angular 21, integración de utilidades Tailwind CSS, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
+El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización en desarrollo SPA con Angular 21, integración del stack híbrido **Bootstrap 5.3 + Tailwind CSS CDN** con Design Tokens institucionales, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
 
 #### Dependencias Externas
 *   Librerías de fuentes e iconos estandarizados (**Material Symbols** de Google).
@@ -269,7 +270,36 @@ A continuación se detallan las Historias de Usuario correspondientes a los requ
 
 ---
 
-## 9. BIBLIOGRAFÍA
+## 9. SEGUIMIENTO DEL PROYECTO Y CEREMONIAS (SPRINT 1)
+
+Durante el desarrollo del Sprint 1 (Evidencia 2), el equipo DEV6 llevó a cabo un seguimiento continuo mediante ceremonias ágiles adaptadas a nuestra modalidad de trabajo remoto.
+
+### 9.1. Backlog del Producto (Extensión desde el Día 1)
+Al inicio del Sprint 1, el Backlog se estructuró para abarcar las bases del sistema:
+*   **BACK-01 (#19):** Diseño del DER (Modelo Entidad-Relación) y modelado en Django con las entidades `Usuario`, `Categoria`, `Asignatura`, y `Recurso`. Creación de relaciones lógicas e integridad referencial (`ON DELETE PROTECT`/`CASCADE`).
+*   **BACK-02 (#18):** Desarrollo de la API REST y lógica de negocio. Implementación de Serializers, ViewSets y definición de las rutas (Endpoints) para operaciones CRUD en todas las entidades.
+*   **FRONT-01:** Configuración inicial del proyecto Angular 21, Bootstrap 5.3 (npm) y Tailwind CSS CDN con Design Tokens personalizados.
+*   **FRONT-02:** Maquetación del Dashboard, ruteo base y conexión preliminar con la API.
+
+*(Nota: Los tickets BACK-01 y BACK-02 fueron completados exitosamente, logrando la persistencia en MySQL y la exposición de endpoints funcionales).*
+
+### 9.2. Ceremonias y Dailies
+El equipo mantuvo una comunicación fluida. Las reuniones principales y de sincronización profunda se llevaron a cabo a través de **Discord**, utilizando pantalla compartida para revisión de código (Pair Programming) y análisis del flujo Gitflow.
+
+**Resumen de Avances Diarios (Dailies):**
+*   **Día 1:** Planificación del Sprint. Asignación de BACK-01 y BACK-02. Definición inicial de la arquitectura de la base de datos basándose en el prototipo Stitch.
+*   **Día 2:** Implementación de modelos en Django y generación del script SQL DDL. Sincronización en Discord para validar tipos de datos y relaciones.
+*   **Día 3:** Desarrollo de ViewSets y Serializers. Pruebas de CRUD usando la interfaz de DRF y Postman.
+*   **Día 4:** Conexión inicial del Frontend Angular con el Backend Django. Se debatió la estructura de las respuestas JSON y configuración de CORS.
+*   **Día 5:** Consolidación de documentación y despliegue local para la Evidencia 2.
+
+### 9.3. Impedimentos y Resolución
+*   **Debates Rápidos y Asíncronos:** Para decisiones arquitectónicas rápidas o resolución de impedimentos menores (como convenciones de nombres para la API o problemas de entorno), utilizamos **WhatsApp** como canal asíncrono. Esto permitió mantener el flujo de trabajo sin necesidad de convocar reuniones formales para cada detalle.
+*   **Ejemplo de Impedimento:** Hubo dudas sobre la estrategia de eliminación de registros. Tras un breve debate por WhatsApp, se acordó usar `ON DELETE PROTECT` para evitar que la eliminación accidental de una Categoría afecte a múltiples recursos pedagógicos, priorizando la integridad de los datos.
+
+---
+
+## 10. BIBLIOGRAFÍA
 
 1.  **Project Management Institute (PMI).** (2021). *Guía de los Fundamentos para la Dirección de Proyectos (Guía del PMBOK®) – Séptima Edición*. Project Management Institute.
 2.  **Schwaber, K., & Beedle, M.** (2020). *La Guía de Scrum (The Scrum Guide)*. Scrum.org.
