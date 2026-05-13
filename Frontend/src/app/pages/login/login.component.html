@@ -26,7 +26,7 @@
           <label class="text-label-lg font-label-lg text-on-surface" for="username">Usuario o Correo Institucional</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="person">person</span>
-            <input class="w-full pl-10 pr-3 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white" id="username" placeholder="ej. usuario@institucion.edu" type="text" />
+            <input class="w-full pl-10 pr-3 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white" id="username" placeholder="ej. admin" type="text" [(ngModel)]="username" name="username" autocomplete="username" />
           </div>
         </div>
 
@@ -35,9 +35,9 @@
           <label class="text-label-lg font-label-lg text-on-surface" for="password">Contraseña</label>
           <div class="relative">
             <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="lock">lock</span>
-            <input class="w-full pl-10 pr-10 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white" id="password" placeholder="••••••••" type="password" />
-            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary" type="button">
-              <span class="material-symbols-outlined" data-icon="visibility">visibility</span>
+            <input class="w-full pl-10 pr-10 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white" id="password" placeholder="••••••••" [type]="showPassword ? 'text' : 'password'" [(ngModel)]="password" name="password" autocomplete="current-password" />
+            <button class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary" type="button" (click)="togglePassword()">
+              <span class="material-symbols-outlined" aria-label="Mostrar u ocultar contraseña">{{ showPassword ? 'visibility_off' : 'visibility' }}</span>
             </button>
           </div>
         </div>
@@ -47,8 +47,14 @@
           <a class="text-label-md font-label-md text-primary hover:underline" href="#">Olvidé mi contraseña</a>
         </div>
 
+        <!-- Error Message -->
+        <div *ngIf="errorMsg" class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2" role="alert">
+          <span class="material-symbols-outlined text-[18px]" aria-hidden="true">error</span>
+          {{ errorMsg }}
+        </div>
+
         <!-- Primary CTA -->
-        <button class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary transition-colors duration-200" type="button" (click)="login()">
+        <button class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200" type="button" (click)="login()">
           Iniciar Sesión
         </button>
       </form>
