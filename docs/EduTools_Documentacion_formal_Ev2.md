@@ -62,7 +62,7 @@ Siguiendo los lineamientos del **Project Management Institute (PMI)**, este docu
 *   **Entorno de Producción (Proyectado):** Despliegue del Frontend estático en servicios cloud distribuidos (ej. Vercel o AWS S3) y Backend alojado en contenedores escalables conectados a una instancia gestionada de MySQL.
 
 #### Conocimientos Disponibles en el Equipo
-El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización en desarrollo SPA con Angular 21, integración de utilidades Tailwind CSS, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
+El equipo **DEV6** cuenta con cobertura completa de roles Full Stack: especialización en desarrollo SPA con Angular 21, integración del stack híbrido **Bootstrap 5.3 + Tailwind CSS CDN** con Design Tokens institucionales, manipulación nativa del DOM para el motor WYSIWYG y modelado de bases de datos relacionales con exposición REST en Python/Django.
 
 #### Dependencias Externas
 *   Librerías de fuentes e iconos estandarizados (**Material Symbols** de Google).
@@ -278,7 +278,7 @@ Durante el desarrollo del Sprint 1 (Evidencia 2), el equipo DEV6 llevó a cabo u
 Al inicio del Sprint 1, el Backlog se estructuró para abarcar las bases del sistema:
 *   **BACK-01 (#19):** Diseño del DER (Modelo Entidad-Relación) y modelado en Django con las entidades `Usuario`, `Categoria`, `Asignatura`, y `Recurso`. Creación de relaciones lógicas e integridad referencial (`ON DELETE PROTECT`/`CASCADE`).
 *   **BACK-02 (#18):** Desarrollo de la API REST y lógica de negocio. Implementación de Serializers, ViewSets y definición de las rutas (Endpoints) para operaciones CRUD en todas las entidades.
-*   **FRONT-01:** Configuración inicial del proyecto Angular 18 y TailwindCSS.
+*   **FRONT-01:** Configuración inicial del proyecto Angular 21, Bootstrap 5.3 (npm) y Tailwind CSS CDN con Design Tokens personalizados.
 *   **FRONT-02:** Maquetación del Dashboard, ruteo base y conexión preliminar con la API.
 
 *(Nota: Los tickets BACK-01 y BACK-02 fueron completados exitosamente, logrando la persistencia en MySQL y la exposición de endpoints funcionales).*

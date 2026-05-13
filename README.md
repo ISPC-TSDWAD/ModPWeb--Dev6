@@ -32,7 +32,7 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 | Frontend | **Angular 18** (Signals + Stand-alone Components) |
 | Backend | Django REST Framework |
 | Base de datos | MySQL |
-| Estilos | **Tailwind CSS** (Design System Institucional) |
+| Estilos | **Bootstrap 5.3** (npm) + **Tailwind CSS CDN** con Design Tokens institucionales |
 
 ---
 
