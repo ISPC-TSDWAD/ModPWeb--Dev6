@@ -157,9 +157,11 @@
 .team-header {
     background-color: var(--secondary-color);
     color: white;
-    padding: 0.75rem 1.25rem;
+    padding: 1.25rem 1.5rem;
     display: flex;
-    align-items: center;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.75rem;
 }
 
 .team-header h4 {
