@@ -50,9 +50,11 @@ Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 | Documento | Descripción | Enlace Directo |
 |-----------|-------------|----------------|
 | 📘 **Documentación Formal** | Memoria técnica y estratégica (Ev2). | [Ver Documento](docs/EduTools_Documentacion_formal_Ev2.md) |
-| 📐 **DER Institucional** | Diagrama Entidad-Relación. | [Ver Diagrama](docs/der.md) |
-| 🗄️ **Script SQL** | Código DDL MySQL. | [Ver Script](docs/sql/script_database.sql) |
+| 📐 **DER — Notación Chen** | Diagrama E-R con entidades (rectángulos), atributos (óvalos) y relaciones (rombos). | [Ver DER Chen](docs/der_chen.md) |
+| 🗄️ **Modelo Relacional** | Tablas físicas MySQL con tipos, PK, FK y validación cruzada con Django. | [Ver Modelo Relacional](docs/modelo_relacional.md) |
+| 📝 **Script SQL DDL** | Código DDL MySQL ejecutable con datos iniciales. | [Ver Script](docs/sql/script_database.sql) |
 | 📚 **Wiki del Proyecto** | Base de conocimientos. | [Ir a la Wiki](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki) |
+
 
 ---
 
