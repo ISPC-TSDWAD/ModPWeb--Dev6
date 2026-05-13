@@ -171,3 +171,4 @@ Integración del Frontend en Angular consumiendo los endpoints de Django y rende
   <i>Renderizado del Dashboard en Angular y consumo de datos</i>
 </div>
 
+**Nota de Integración:** Consulte la [Documentación Oficial de Inicio de Proyecto (Ev2)](docs/EduTools_Documentacion_formal_Ev2.md) para un desglose completo bajo estándares PMI y de Gestión Ágil.
