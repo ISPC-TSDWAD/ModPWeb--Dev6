@@ -11,6 +11,10 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
+  login(username: string, password: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}token/`, { username, password });
+  }
+
   private mockData = [
       { 
         id: 1, 
@@ -193,67 +197,23 @@ export class ApiService {
   ];
 
   getTestData(): Observable<TestData> {
-    return this.http.get<TestData>(`${this.baseUrl}test/`);
+    return this.http.get<TestData>(`${this.baseUrl}pedagogia/recursos/`);
   }
 
-  // Método simulado para el envío del formulario del Asesor
   createResource(resourceData: any): Observable<any> {
-    return new Observable(observer => {
-      console.log('ApiService: Enviando recurso simulado...', resourceData);
-      setTimeout(() => {
-        const newId = this.mockData.length > 0 ? Math.max(...this.mockData.map(d => d.id)) + 1 : 1;
-        
-        let imgPath = '/assets/images/edu_card_cta.png';
-        if (resourceData.categoria === 'ORGANIZADOR') imgPath = '/assets/images/edu_card_organizer.png';
-        if (resourceData.categoria === 'RESALTADO') imgPath = '/assets/images/edu_card_highlight.png';
-
-        const newResource = {
-          id: newId,
-          titulo: resourceData.titulo,
-          categoria: resourceData.categoria,
-          asignatura: resourceData.asignatura || 'Todas',
-          html: resourceData.html_content || '<div class="p-md bg-surface text-center font-bold">Nuevo Componente Vacío</div>',
-          url: resourceData.url || '',
-          imagen: imgPath,
-          icono: 'new_releases'
-        };
-        // Insertamos al principio de la lista
-        this.mockData.unshift(newResource);
-
-        observer.next({ success: true, data: newResource });
-        observer.complete();
-      }, 500);
-    });
+    return this.http.post(`${this.baseUrl}pedagogia/recursos/`, resourceData);
   }
 
   eliminarRecurso(id: number): Observable<any> {
-    return new Observable(observer => {
-      setTimeout(() => {
-        const idx = this.mockData.findIndex(r => r.id === id);
-        if (idx !== -1) {
-          this.mockData.splice(idx, 1);
-        }
-        observer.next({ success: true });
-        observer.complete();
-      }, 300);
-    });
+    return this.http.delete(`${this.baseUrl}pedagogia/recursos/${id}/`);
   }
 
   actualizarRecurso(id: number, nuevoHtml: string): Observable<any> {
-    return new Observable(observer => {
-      setTimeout(() => {
-        const idx = this.mockData.findIndex(r => r.id === id);
-        if (idx !== -1) {
-          this.mockData[idx].html = nuevoHtml;
-        }
-        observer.next({ success: true });
-        observer.complete();
-      }, 300);
-    });
+    return this.http.patch(`${this.baseUrl}pedagogia/recursos/${id}/`, { contenido: nuevoHtml });
   }
 
-  // Método simulado para obtener los recursos
   getRecursosMock(): Observable<any[]> {
-    return of(this.mockData);
+    // Retornamos de la API real
+    return this.http.get<any[]>(`${this.baseUrl}pedagogia/recursos/`);
   }
 }

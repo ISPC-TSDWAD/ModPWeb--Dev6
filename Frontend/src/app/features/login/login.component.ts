@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { ApiService } from '../../core/services/api.service';
 
 @Component({
   selector: 'app-login',
@@ -13,35 +14,31 @@ import { FormsModule } from '@angular/forms';
 })
 export class LoginComponent {
   private router = inject(Router);
+  private apiService = inject(ApiService);
 
   username = '';
   password = '';
   errorMsg = '';
   showPassword = false;
 
-  // Credenciales válidas (frontend-only, según README)
-  private readonly VALID_USER = 'admin';
-  private readonly VALID_EMAIL = 'admin@edutools.edu.ar';
-  private readonly VALID_PASS = 'Admin1234!';
-
   login() {
     this.errorMsg = '';
-
     if (!this.username.trim() || !this.password.trim()) {
       this.errorMsg = 'Por favor completá usuario y contraseña.';
       return;
     }
 
-    const userOk =
-      this.username.trim() === this.VALID_USER || this.username.trim() === this.VALID_EMAIL;
-    const passOk = this.password === this.VALID_PASS;
-
-    if (userOk && passOk) {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMsg = 'Usuario o contraseña incorrectos.';
-    }
+    this.apiService.login(this.username, this.password).subscribe({
+      next: (res) => {
+        localStorage.setItem('access_token', res.access);
+        localStorage.setItem('refresh_token', res.refresh);
+        localStorage.setItem('isLoggedIn', 'true');
+        this.router.navigate(['/home']);
+      },
+      error: (err) => {
+        this.errorMsg = 'Usuario o contraseña incorrectos.';
+      }
+    });
   }
 
   togglePassword() {
