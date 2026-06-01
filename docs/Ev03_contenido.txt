@@ -1,0 +1,253 @@
+TECNICATURA SUPERIOR EN 
+
+Desarrollo Web  
+
+y Aplicaciones Digitales 
+
+Módulo: Programador Web 
+
+Ev3: Sprint 2 - Evidencia Integradora  
+
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+  
+ 
+ 
+ 
+ 
+ 
+ 
+ 
+ISPC / Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales 
+
+Aplicación Web Angular y Django RF 
+
+Implementación completa 
+
+En esta tercera evidencia, el equipo deberá avanzar en la construcción funcional del sistema 
+incorporando  los  contenidos  trabajados  en  el  módulo,  integrando  frontend  y  backend  bajo 
+una arquitectura moderna. 
+
+El  objetivo  de  este  sprint  es  consolidar  una  aplicación  funcional  escalable,  modular  y 
+conectada  mediante  APIs  REST,  aplicando  buenas  prácticas  de  desarrollo  profesional, 
+organización del código y trabajo incremental. 
+
+Durante este Sprint el equipo deberá: 
+
+Implementar funcionalidades reales del sistema utilizando Angular 21 en el frontend. 
+
+● 
+●  Desarrollar servicios backend utilizando Django Rest Framework. 
+● 
+Integrar frontend y backend mediante consumo de APIs REST. 
+●  Aplicar arquitectura modular, reutilización de componentes y separación de 
+
+responsabilidades. 
+
+●  Gestionar estados de navegación, formularios, autenticación y persistencia de datos. 
+●  Documentar avances técnicos y evidencias funcionales del proyecto. 
+
+Tareas a realizar 
+
+Frontend 
+
+Arquitectura y Organización 
+
+●  Estructura modular escalable. 
+●  Separación entre: 
+
+○  Components 
+○  Services 
+○ 
+
+Interfaces/Models (opcional) 
+
+Navegación 
+
+● 
+
+Implementación de routing avanzado. 
+
+Consumo de API 
+
+●  Uso de HttpClient. 
+●  Manejo de observables con RxJS. 
+●  Gestión de errores HTTP. 
+
+Formularios 
+
+●  Formularios Reactivos. 
+●  Validaciones síncronas y personalizadas. 
+●  Mensajes de feedback al usuario. 
+
+UI/UX 
+
+2 
+
+ISPC / Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales 
+
+●  Diseño responsive. 
+●  Uso de componentes reutilizables. 
+●  Navegación intuitiva. 
+
+Backend 
+
+Arquitectura API REST 
+
+●  Creación de endpoints RESTful. 
+●  Separación entre: 
+
+○  Models 
+○  Serializers 
+○  Views/ViewSets 
+○  URLs 
+
+Base de Datos 
+
+●  Modelado relacional adecuado. 
+●  Migraciones correctamente aplicadas. 
+
+Seguridad 
+
+●  Sistema básico de autenticación. 
+●  Validación de permisos. 
+●  Manejo seguro de peticiones. 
+
+CRUD Completo 
+
+Implementar operaciones para usuarios y servicios/productos 
+
+●  Create 
+●  Read 
+●  Update 
+●  Delete 
+- 
+
+sobre las entidades principales del proyecto. 
+
+Integración 
+
+El sistema deberá demostrar: 
+
+●  Comunicación funcional entre Angular y Django REST. 
+●  Flujo completo de datos. 
+●  Persistencia correcta en base de datos. 
+●  Manejo de errores de integración. 
+
+Documentación del Proyecto 
+
+●  Mantener actualizada la Wiki del repositorio: página Home y secciones necesarias 
+
+Historias de Usuario con la lista completa, ceremonias de Scrum. 
+
+●  Enlaces a los documentos mencionados en el punto anterior. 
+
+●  Organizar la Wiki con una estructura clara de navegación y tabla de contenidos en 
+
+Home. Utilizar Markdown sin exceso de Iconos. 
+
+3 
+
+ 
+ISPC / Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales 
+
+Documento Técnico Sprint 2 
+Debe incluir: 
+
+Introducción 
+
+●  Objetivo del sprint. 
+
+Arquitectura implementada 
+
+●  Frontend. 
+●  Backend. 
+● 
+
+Integración. 
+
+Funcionalidades desarrolladas 
+
+●  Descripción técnica. 
+●  Endpoints documentados. 
+●  Ejemplos de request/response. 
+●  Evidencia de pruebas funcionales. 
+●  Diagramas: DER, Modelo Relacional y Diagrama de Clases 
+
+Evidencias visuales 
+
+●  Capturas del sistema funcionando. 
+
+Problemas encontrados 
+
+●  Obstáculos técnicos y resolución. 
+
+Próximos pasos 
+
+●  Roadmap del Sprint siguiente. 
+
+GitHub 
+
+●  En las carpetas de la evidencia anterior:  
+
+○  Frontend (Proyecto de Angular) 
+○  Backend (Proyecto Django Rest Framework) 
+
+●  Actualizar el archivo README.md con: 
+○  Descripción del proyecto 
+○ 
+○ 
+○ 
+
+Instrucciones de instalación del Front y Back 
+Integrantes del equipo y roles 
+Instrucciones básicas de uso: cómo ejecutar el backend y el frontend. 
+
+●  Respetar el flujo de trabajo de GIT (ramas: main, release, develop, etc.) (alpha 
+
+release…) 
+
+●  Cargar la Historias de Usuarios en la sección Issues 
+
+Criterios de Entrega 
+
+1.  Evidenciar que la aplicación permite: 
+
+a.  Navegación. 
+b.  CRUD funcionando (usuario y servicios /productos). 
+
+4 
+
+ 
+ISPC / Tecnicatura Superior en Desarrollo Web y Aplicaciones Digitales 
+
+c.  Consumo de API. 
+d.  Validaciones. 
+e.  Integración completa. 
+
+2.  URL del repositorio de GitHub. Contener lo solicitado en la rama MAIN.  
+
+3.  URL de los documentos PMI, agregando un anexo para la documentación técnica 
+(solicitado en el punto DOCUMENTO TÉCNICO SPRINT 2), documento Final de 
+Proyecto ABP y Póster que se encuentran en el bloque de Proyecto ABP. En 
+ambos documentos se debe aplicar un criterio base Normas APA. No se considerará 
+válido la entrega del archivo de texto markdown. 
+
+4.  Todos los participantes deben tener confirmaciones en el repositorio (no solo 
+
+documentar) 
+
+*No se revisarán commits en ramas develop e inferiores. 
+
+5 
+
+ 
+
