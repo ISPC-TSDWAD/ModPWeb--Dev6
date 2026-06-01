@@ -4,9 +4,9 @@ from django.views.generic import RedirectView # <--- Esto tiene que estar sí o 
 
 urlpatterns = [
     path('admin/', admin.site.urls), # <--- Asegurate que diga .urls
-    path('api/', include('api.urls')),
+    path('api/users/', include('users.urls')),
+    path('api/pedagogia/', include('pedagogia.urls')),
     
-    # Esta línea hace que al entrar a http://127.0.0.1:8000/ 
-    # te mande directo a la API sin errores
-    path('', RedirectView.as_view(url='/api/test/'), name='index'),
+    # Redireccion de prueba
+    path('', RedirectView.as_view(url='/api/pedagogia/recursos/'), name='index'),
 ]

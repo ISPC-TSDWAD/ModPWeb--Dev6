@@ -1,0 +1,139 @@
+<section class="hidden lg:flex lg:w-1/2 relative bg-primary overflow-hidden">
+  <img
+    alt="Campus Environment"
+    class="absolute inset-0 w-full h-full object-cover opacity-80"
+    src="https://lh3.googleusercontent.com/aida-public/AB6AXuDD7aLloTsYIzrO0_rFdaSmj1bRCTYn43B8Xx8w1zl9dBHsHVAj-D3Hgl0zSgBxU4AF9S0eyx74T1BSPTBUlv-2Kt5J7pJbgp4usNfV9D2WztA7h5GdJqK5fvObEYuI7DpUPK1aN10_EH_dQyGyqXs5XZH_5W0_yQ4DfuWBpJpueeiccS2YtoeX_LNptCGZUBPttfOUIRAHM58ErI8V8dDrGckoo2UOwDo7qYQIiF29OhXKGslJHE32yiMfR4w2drkm2juHSZoequs"
+  />
+  <div
+    class="relative z-10 p-xl flex flex-col justify-end bg-gradient-to-t from-primary/80 to-transparent w-full"
+  >
+    <h2 class="text-display-lg text-white mb-md">Excelencia Académica</h2>
+    <p class="text-body-lg text-white/90 max-w-md">
+      Impulsando la gestión del conocimiento a través de herramientas tecnológicas avanzadas para
+      instituciones educativas modernas.
+    </p>
+  </div>
+</section>
+
+<!-- Right: Login Form Section -->
+<section class="w-full lg:w-1/2 flex items-center justify-center p-lg">
+  <div class="w-full max-w-[440px]">
+    <!-- Hero Info -->
+    <div class="mb-xl text-center lg:text-left">
+      <div
+        class="w-16 h-16 bg-primary-container rounded-lg flex items-center justify-center mb-md mx-auto lg:mx-0"
+      >
+        <span
+          class="material-symbols-outlined text-on-primary-container text-[40px]"
+          data-icon="business_center"
+          >business_center</span
+        >
+      </div>
+      <h1 class="text-headline-lg font-headline-lg text-primary mb-xs">Bienvenido a EduTools</h1>
+      <p class="text-body-md font-body-md text-on-surface-variant">
+        Inicie sesión para gestionar sus recursos pedagógicos
+      </p>
+    </div>
+
+    <!-- Login Form Block -->
+    <div
+      class="bg-surface-container-lowest border border-outline-variant p-lg rounded-lg shadow-sm"
+    >
+      <form class="space-y-md" (submit)="$event.preventDefault()">
+        <!-- Username Input -->
+        <div class="space-y-xs">
+          <label class="text-label-lg font-label-lg text-on-surface" for="username"
+            >Usuario o Correo Institucional</label
+          >
+          <div class="relative">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline"
+              data-icon="person"
+              >person</span
+            >
+            <input
+              class="w-full pl-10 pr-3 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white"
+              id="username"
+              placeholder="ej. admin"
+              type="text"
+              [(ngModel)]="username"
+              name="username"
+              autocomplete="username"
+            />
+          </div>
+        </div>
+
+        <!-- Password Input -->
+        <div class="space-y-xs">
+          <label class="text-label-lg font-label-lg text-on-surface" for="password"
+            >Contraseña</label
+          >
+          <div class="relative">
+            <span
+              class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline"
+              data-icon="lock"
+              >lock</span
+            >
+            <input
+              class="w-full pl-10 pr-10 py-3 border border-outline rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-secondary text-body-md font-body-md bg-white"
+              id="password"
+              placeholder="••••••••"
+              [type]="showPassword ? 'text' : 'password'"
+              [(ngModel)]="password"
+              name="password"
+              autocomplete="current-password"
+            />
+            <button
+              class="absolute right-3 top-1/2 -translate-y-1/2 text-outline hover:text-primary"
+              type="button"
+              (click)="togglePassword()"
+            >
+              <span class="material-symbols-outlined" aria-label="Mostrar u ocultar contraseña">{{
+                showPassword ? 'visibility_off' : 'visibility'
+              }}</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Forgot Password Link -->
+        <div class="flex justify-end">
+          <a class="text-label-md font-label-md text-primary hover:underline" href="#"
+            >Olvidé mi contraseña</a
+          >
+        </div>
+
+        <!-- Error Message -->
+        @if (errorMsg) {
+          <div
+            class="bg-red-50 border border-red-300 text-red-700 px-4 py-3 rounded-lg text-sm flex items-center gap-2"
+            role="alert"
+          >
+            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">error</span>
+            {{ errorMsg }}
+          </div>
+        }
+
+        <!-- Primary CTA -->
+        <button
+          class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200"
+          type="button"
+          (click)="login()"
+        >
+          Iniciar Sesión
+        </button>
+      </form>
+
+      <!-- Help Section -->
+      <div class="mt-xl pt-lg border-t border-outline-variant text-center">
+        <p class="text-body-sm font-body-sm text-on-surface-variant mb-sm">
+          ¿Problemas para ingresar?
+        </p>
+        <button
+          class="w-full text-label-lg font-label-lg text-secondary border border-secondary px-md py-sm rounded-lg hover:bg-secondary-container transition-colors duration-200"
+        >
+          Contactar Soporte Técnico
+        </button>
+      </div>
+    </div>
+  </div>
+</section>

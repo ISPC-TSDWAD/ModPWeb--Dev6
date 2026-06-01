@@ -15,6 +15,9 @@
 | **HU-03** | Como asesor pedagógico, quiero filtrar recursos por asignatura, para ver solo los materiales de mi materia. | CA-05, CA-06 | 5 | Must Have | 1 |
 | **HU-04** | Como asesor pedagógico, quiero editar recursos con una barra visual (Negrita, Cursiva, Color), para formatear sin HTML. | CA-07, CA-08 | 8 | Must Have | 1 |
 | **HU-05** | Como maquetador, quiero descargar recursos en `.doc` o `.html`, para integrarlos en el LMS. | CA-09, CA-10 | 5 | Must Have | 1 |
+| **HU-06** | Como usuario, quiero que mi inicio de sesión sea verificado de forma segura en el servidor, para proteger mis datos y accesos. | CA-11, CA-12 | 5 | Must Have | 2 |
+| **HU-07** | Como administrador, quiero crear, editar y eliminar usuarios en el sistema, para mantener el control de accesos institucionales. | CA-13, CA-14 | 8 | Must Have | 2 |
+| **HU-08** | Como asesor pedagógico, quiero que los recursos que creo o edito se guarden de forma permanente en la base de datos, para no perder mi trabajo entre sesiones. | CA-15, CA-16 | 8 | Must Have | 2 |
 
 ---
 
@@ -32,6 +35,12 @@
 | **CA-08** | Inspección de HTML generado | El usuario editó texto en el Sandbox | Cambia a la pestaña "Código HTML" | Se muestra el marcado exacto con la etiqueta aplicada |
 | **CA-09** | Exportar a .doc | El usuario tiene recursos visibles (con o sin filtro) | Hace clic en "Exportar DOC" | El navegador descarga un archivo `.doc` válido que abre en Word |
 | **CA-10** | Exportar a .html | El usuario tiene recursos visibles (con o sin filtro) | Hace clic en "Exportar HTML" | El navegador descarga un archivo `.html` estándar con el contenido |
+| **CA-11** | Login seguro correcto | El usuario ingresa credenciales válidas en la UI | El Backend valida el JWT | El usuario obtiene acceso a las rutas protegidas |
+| **CA-12** | Ruta protegida sin token | Un visitante intenta acceder a /dashboard directo | No provee un token JWT válido | El sistema bloquea el acceso y lo redirige al /login |
+| **CA-13** | Crear usuario admin | El admin envía un formulario de nuevo usuario | Los datos pasan la validación del Backend | El usuario se guarda en la DB MySQL y aparece en la lista |
+| **CA-14** | Error en CRUD Usuarios | El admin intenta crear un usuario sin email | El formulario detecta el error | Se muestra un feedback visual claro de que el campo es requerido |
+| **CA-15** | Guardar recurso persistente | El asesor crea o edita un recurso en el Dashboard | Se envía un POST/PUT a la API | El recurso queda guardado en MySQL con su relación a Asignatura |
+| **CA-16** | Eliminar recurso persistente | El asesor presiona Eliminar en un recurso | Confirma el cuadro de diálogo | El recurso desaparece de la UI y se hace un DELETE en MySQL |
 
 ---
 
@@ -84,6 +93,36 @@
 - **Prioridad:** Must Have | **Estimación:** 5 SP | **Sprint:** 1
 - **Componente:** `Dashboard` — `exportarDoc()`, `descargarHtml()`
 - **Estado:** ✅ Done
+
+---
+
+### HU-06 — Autenticación Segura y JWT
+- **Como:** Usuario del sistema
+- **Quiero:** Que mi inicio de sesión sea verificado de forma segura en el servidor
+- **Para:** Proteger mis datos y accesos
+- **Prioridad:** Must Have | **Estimación:** 5 SP | **Sprint:** 2
+- **Componente:** `Backend (JWT)` + `Frontend (AuthGuard)`
+- **Estado:** ⏳ To Do
+
+---
+
+### HU-07 — Gestión de Usuarios (CRUD)
+- **Como:** Administrador
+- **Quiero:** Crear, editar y eliminar usuarios en el sistema
+- **Para:** Mantener el control de accesos institucionales
+- **Prioridad:** Must Have | **Estimación:** 8 SP | **Sprint:** 2
+- **Componente:** `Backend (API Usuarios)` + `Frontend (Formularios QA)`
+- **Estado:** ⏳ To Do
+
+---
+
+### HU-08 — Persistencia de Recursos (CRUD)
+- **Como:** Asesor Pedagógico
+- **Quiero:** Que los recursos que creo o edito se guarden de forma permanente en la base de datos
+- **Para:** No perder mi trabajo entre sesiones
+- **Prioridad:** Must Have | **Estimación:** 8 SP | **Sprint:** 2
+- **Componente:** `Backend (API Recursos)` + `Frontend (Integración HTTP)`
+- **Estado:** ⏳ To Do
 
 ---
 

@@ -1,0 +1,1117 @@
+<div
+  class="flex h-screen bg-surface dark:bg-surface-dim font-body-md text-on-surface dark:text-white overflow-hidden transition-colors"
+>
+  <!-- Sidebar -->
+  <aside
+    class="w-[300px] bg-surface-container-low dark:bg-surface-container-lowest border-r border-outline-variant dark:border-outline flex flex-col z-40 transition-colors hidden md:flex"
+  >
+    <div class="p-lg flex items-center gap-md">
+      <div class="w-10 h-10 bg-primary-container flex items-center justify-center rounded-lg">
+        <span class="material-symbols-outlined text-on-primary-container">school</span>
+      </div>
+      <div>
+        <h2
+          class="font-headline-sm text-headline-sm font-bold text-primary dark:text-primary-fixed-dim"
+        >
+          EduTools Admin
+        </h2>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">Institutional Panel</p>
+      </div>
+    </div>
+    <nav class="flex-1 mt-md flex flex-col">
+      <a
+        (click)="setSeccion('recursos')"
+        [class.bg-secondary-container]="seccionActiva === 'recursos'"
+        [class.border-l-4]="seccionActiva === 'recursos'"
+        [class.border-secondary]="seccionActiva === 'recursos'"
+        class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
+      >
+        <span class="material-symbols-outlined">folder_shared</span> Repositorio
+      </a>
+      <a
+        (click)="setSeccion('sandbox')"
+        [class.bg-secondary-container]="seccionActiva === 'sandbox'"
+        [class.border-l-4]="seccionActiva === 'sandbox'"
+        [class.border-secondary]="seccionActiva === 'sandbox'"
+        class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
+      >
+        <span class="material-symbols-outlined">science</span> Sandbox
+      </a>
+      <a
+        (click)="setSeccion('componentes')"
+        [class.bg-secondary-container]="seccionActiva === 'componentes'"
+        [class.border-l-4]="seccionActiva === 'componentes'"
+        [class.border-secondary]="seccionActiva === 'componentes'"
+        class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
+      >
+        <span class="material-symbols-outlined">view_module</span> Componentes
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content Area -->
+  <!-- Modificado para que ocupe el ancho sin margin sobrante -->
+  <main
+    class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full"
+  >
+    <!-- Content Start -->
+
+    <!-- REPOSITORIO -->
+    @if (seccionActiva === 'recursos') {
+      <div class="w-full max-w-none mx-auto animate-fade-in flex flex-col">
+        <header class="mb-xl">
+          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">
+            Repositorio de Recursos
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">
+            Gestione e integre los recursos y plantillas institucionales.
+          </p>
+        </header>
+        <!-- SUBIR RECURSO -->
+        <div
+          class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl p-lg mb-xl shadow-sm"
+        >
+          <h3 class="font-bold text-headline-sm mb-md text-primary dark:text-primary-fixed">
+            Subir Recurso Nuevo
+          </h3>
+          <form
+            [formGroup]="recursoForm"
+            (ngSubmit)="onSubmit()"
+            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-lg"
+          >
+            <div class="flex flex-col gap-xs">
+              <label class="font-label-md">Título del Recurso</label>
+              <input
+                type="text"
+                formControlName="titulo"
+                class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded"
+              />
+            </div>
+            <div class="flex flex-col gap-xs">
+              <label class="font-label-md">Categoría</label>
+              <select
+                formControlName="categoria"
+                class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded"
+              >
+                <option value="CTA">Llamado a la Acción</option>
+                <option value="RESALTADO">Resaltados</option>
+                <option value="ORGANIZADOR">Organizadores (Acordeón/Tabs)</option>
+                <option value="H5P">Interactivos H5P</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-xs">
+              <label class="font-label-md">Asignatura</label>
+              <select
+                formControlName="asignatura"
+                class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded"
+              >
+                <option value="Todas">Transversal (Todas)</option>
+                <option value="Matematicas">Matemáticas Avanzadas</option>
+                <option value="Historia">Historia Contemporánea</option>
+                <option value="Psicologia">Psicología Social</option>
+              </select>
+            </div>
+            <div class="flex flex-col gap-xs lg:col-span-2">
+              <label class="font-label-md">Contenido HTML</label>
+              <textarea
+                formControlName="html_content"
+                rows="3"
+                class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded font-mono text-sm"
+              ></textarea>
+            </div>
+            <div class="flex items-end lg:col-span-1">
+              <button
+                type="submit"
+                [disabled]="recursoForm.invalid"
+                class="bg-primary text-white w-full py-2 rounded hover:opacity-90 disabled:opacity-50 font-bold shadow-sm"
+              >
+                Guardar Nuevo Recurso
+              </button>
+            </div>
+          </form>
+          @if (mensajeExito) {
+            <div
+              class="mt-md text-secondary dark:text-secondary-fixed-dim font-bold bg-secondary-container dark:bg-surface-container p-2 rounded"
+            >
+              ¡Recurso guardado con éxito!
+            </div>
+          }
+        </div>
+        <!-- FILTROS Y ACCIONES DE BLOQUE -->
+        <div
+          class="bg-surface-container-low dark:bg-[#121212] border border-outline-variant dark:border-outline p-md rounded-lg mb-lg flex flex-wrap items-center justify-between gap-md shadow-sm"
+        >
+          <div class="flex items-center gap-sm">
+            <span class="material-symbols-outlined text-outline">filter_list</span>
+            <label class="font-bold text-label-md">Filtrar por Asignatura:</label>
+            <select
+              [(ngModel)]="filtroMateria"
+              class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-1 rounded cursor-pointer"
+            >
+              <option value="Todas">Todas las materias</option>
+              <option value="Matematicas">Matemáticas Avanzadas</option>
+              <option value="Historia">Historia Contemporánea</option>
+              <option value="Psicologia">Psicología Social</option>
+            </select>
+          </div>
+          <div class="flex gap-sm">
+            <button
+              (click)="exportarDoc()"
+              class="flex items-center gap-1 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed px-3 py-1 rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors font-bold text-sm shadow-sm"
+            >
+              <span class="material-symbols-outlined text-sm">description</span> Exportar a DOC
+            </button>
+            <button
+              (click)="descargarHtml()"
+              class="flex items-center gap-1 bg-primary text-white px-3 py-1 rounded hover:opacity-90 transition-opacity font-bold text-sm shadow-sm"
+            >
+              <span class="material-symbols-outlined text-sm">download</span> Descargar HTML
+            </button>
+          </div>
+        </div>
+        <!-- LISTADO RECURSOS -->
+        @if (cargando) {
+          <div class="text-center py-xl font-bold text-outline">Cargando recursos...</div>
+        }
+        @if (!cargando) {
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg pb-xl">
+            @for (recurso of getRecursosFiltrados(); track recurso) {
+              <div
+                class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden flex flex-col group hover:shadow-md transition-shadow"
+              >
+                <div
+                  class="h-32 bg-surface-container dark:bg-[#2d2d2d] flex items-center justify-center relative"
+                >
+                  <!-- Imagen Dinamica en vez de solo icono -->
+                  @if (recurso.imagen) {
+                    <img
+                      [src]="recurso.imagen"
+                      class="w-full h-full object-cover opacity-90 group-hover:opacity-100 transition-opacity"
+                    />
+                  }
+                  @if (!recurso.imagen) {
+                    <span
+                      class="material-symbols-outlined text-5xl text-outline opacity-50 group-hover:scale-110 transition-transform"
+                      >{{ recurso.icono || 'extension' }}</span
+                    >
+                  }
+                  <span
+                    class="absolute top-2 right-2 text-xs font-bold bg-white dark:bg-black px-2 py-1 rounded text-primary dark:text-primary-fixed border border-outline-variant dark:border-outline shadow-sm"
+                    >{{ recurso.categoria }}</span
+                  >
+                  <button
+                    (click)="eliminarRecurso(recurso.id)"
+                    class="absolute top-2 left-2 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 dark:hover:bg-red-900/80 rounded w-8 h-8 flex items-center justify-center hover:scale-110 transition-all shadow-sm border border-red-200 dark:border-red-800/50"
+                  >
+                    <span class="material-symbols-outlined text-sm">delete</span>
+                  </button>
+                </div>
+                <div class="p-md flex-1 flex flex-col">
+                  <h4 class="font-bold text-label-lg mb-1">{{ recurso.titulo }}</h4>
+                  <p class="text-xs text-outline mb-4">
+                    Modificado recientemente en {{ filtroMateria }}
+                  </p>
+                  <div class="mt-auto flex gap-2">
+                    <button
+                      (click)="enviarASandbox(recurso)"
+                      class="flex-1 text-center py-2 border border-outline-variant dark:border-outline rounded hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors text-sm font-bold shadow-sm"
+                    >
+                      Ver en Sandbox
+                    </button>
+                    <button
+                      (click)="seleccionarRecurso(recurso); copiarHTML()"
+                      class="flex-1 text-center py-2 bg-secondary text-white rounded hover:opacity-90 transition-opacity text-sm font-bold shadow-sm"
+                    >
+                      Copiar HTML
+                    </button>
+                  </div>
+                </div>
+              </div>
+            }
+          </div>
+        }
+      </div>
+    }
+
+    <!-- SANDBOX -->
+    @if (seccionActiva === 'sandbox') {
+      <div class="w-full max-w-none mx-auto flex flex-col h-[calc(100vh-80px)] animate-fade-in">
+        <header class="mb-md">
+          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">
+            Sandbox de Diseño
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">
+            Entorno estructurado para editar y previsualizar componentes HTML.
+          </p>
+        </header>
+        <div class="flex flex-1 gap-lg overflow-hidden pb-lg">
+          <!-- Left Col: List + Config -->
+          <div class="w-[320px] flex flex-col gap-md">
+            <!-- Lista -->
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg flex flex-col overflow-hidden h-1/2 shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-sm border-b border-outline-variant dark:border-outline"
+              >
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Componentes Disponibles
+                </h3>
+              </div>
+              <div class="flex-1 overflow-y-auto p-2">
+                @for (r of recursos; track r) {
+                  <div
+                    (click)="seleccionarRecurso(r)"
+                    [class.bg-primary-container]="recursoSeleccionado?.id === r.id"
+                    [class.dark:bg-[#0d6efd]]="recursoSeleccionado?.id === r.id"
+                    [class.text-white]="recursoSeleccionado?.id === r.id"
+                    class="p-2 border-b border-outline-variant dark:border-outline cursor-pointer hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors flex items-center gap-3 rounded mb-1"
+                  >
+                    <span class="material-symbols-outlined text-lg">{{ r.icono || 'code' }}</span>
+                    <span class="text-sm truncate font-medium">{{ r.titulo }}</span>
+                  </div>
+                }
+              </div>
+            </div>
+            <!-- Config -->
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg flex flex-col h-1/2 shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-sm border-b border-outline-variant dark:border-outline"
+              >
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Configuración del Elemento
+                </h3>
+              </div>
+              <div class="p-md space-y-md">
+                <div>
+                  <label class="text-sm font-bold block mb-1">Color Principal (Tokens)</label>
+                  <input
+                    type="color"
+                    [(ngModel)]="configElemento.color"
+                    class="w-full h-10 border border-outline cursor-pointer rounded p-1 dark:bg-[#2d2d2d]"
+                  />
+                </div>
+                <div class="flex items-center gap-2">
+                  <input
+                    type="checkbox"
+                    [(ngModel)]="configElemento.mostrarIcono"
+                    class="cursor-pointer h-4 w-4 text-primary focus:ring-primary rounded"
+                  />
+                  <label class="text-sm font-bold cursor-pointer">Mostrar íconos visuales</label>
+                </div>
+                <button
+                  class="w-full py-2 mt-4 bg-surface-container dark:bg-[#2d2d2d] dark:text-white text-sm font-bold border border-outline-variant dark:border-outline rounded hover:brightness-95 transition-all shadow-sm"
+                >
+                  Aplicar Estilo
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Right Col: Editor (Visual/HTML) -->
+          <div
+            class="flex-1 flex flex-col bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg overflow-hidden shadow-sm"
+          >
+            <!-- Tabs Mejoradas -->
+            <div class="flex bg-surface-container-low dark:bg-[#121212] pt-2 px-2 gap-2">
+              <button
+                (click)="modoEditor = 'visual'"
+                [class.bg-white]="modoEditor === 'visual'"
+                [class.dark:bg-[#1e1e1e]]="modoEditor === 'visual'"
+                [class.border-t-4]="modoEditor === 'visual'"
+                [class.border-primary]="modoEditor === 'visual'"
+                [class.text-primary]="modoEditor === 'visual'"
+                [class.dark:text-primary-fixed]="modoEditor === 'visual'"
+                class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a]"
+              >
+                Editor Visual (Rich Text)
+              </button>
+              <button
+                (click)="modoEditor = 'html'"
+                [class.bg-white]="modoEditor === 'html'"
+                [class.dark:bg-[#1e1e1e]]="modoEditor === 'html'"
+                [class.border-t-4]="modoEditor === 'html'"
+                [class.border-primary]="modoEditor === 'html'"
+                [class.text-primary]="modoEditor === 'html'"
+                [class.dark:text-primary-fixed]="modoEditor === 'html'"
+                class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a]"
+              >
+                Código HTML Interno
+              </button>
+            </div>
+            <div
+              class="flex flex-1 overflow-hidden border-t border-outline-variant dark:border-outline"
+            >
+              <!-- HTML Editor Mode -->
+              @if (modoEditor === 'html') {
+                <div class="flex-1 flex flex-col animate-fade-in">
+                  <textarea
+                    class="flex-1 bg-[#1e1e1e] text-[#d4d4d4] p-md font-mono text-sm resize-none focus:outline-none"
+                    (input)="onHtmlChange($event)"
+                    [value]="recursoSeleccionado?.htmlEditado"
+                    spellcheck="false"
+                  ></textarea>
+                </div>
+              }
+              <!-- Visual Preview / Rich Text Editor Mode -->
+              @if (modoEditor === 'visual') {
+                <div
+                  class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
+                >
+                  <!-- Toolbar de Formato Básico -->
+                  <div
+                    class="flex gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm"
+                  >
+                    <button
+                      (click)="formatText('bold')"
+                      class="px-3 py-1 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
+                      title="Negrita"
+                    >
+                      B
+                    </button>
+                    <button
+                      (click)="formatText('italic')"
+                      class="px-3 py-1 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
+                      title="Cursiva"
+                    >
+                      I
+                    </button>
+                    <button
+                      (click)="formatText('underline')"
+                      class="px-3 py-1 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
+                      title="Subrayado"
+                    >
+                      U
+                    </button>
+                    <button
+                      (click)="formatText('insertUnorderedList')"
+                      class="px-3 py-1 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center"
+                      title="Lista"
+                    >
+                      <span class="material-symbols-outlined text-[16px]"
+                        >format_list_bulleted</span
+                      >
+                    </button>
+                    <input
+                      type="color"
+                      (change)="formatText('foreColor', $any($event.target).value)"
+                      class="w-8 h-8 ml-2 border-none cursor-pointer rounded"
+                      title="Color de Texto"
+                    />
+                  </div>
+                  <div
+                    id="rich-editor"
+                    class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary"
+                    contenteditable="true"
+                    (input)="onVisualEdit($event)"
+                    [innerHTML]="recursoSeleccionado?.htmlEditado"
+                  ></div>
+                </div>
+              }
+            </div>
+            <!-- Bottom Toolbar - Mejorada separación -->
+            <div
+              class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-t border-outline-variant dark:border-outline flex justify-between items-center"
+            >
+              <div class="flex gap-4">
+                <button
+                  (click)="deshacer()"
+                  class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm px-2 py-1"
+                >
+                  <span class="material-symbols-outlined text-[18px]">undo</span> Deshacer
+                </button>
+                <button
+                  (click)="rehacer()"
+                  class="flex items-center gap-1 text-on-surface-variant hover:text-primary dark:text-outline dark:hover:text-white transition-colors font-bold text-sm px-2 py-1"
+                >
+                  <span class="material-symbols-outlined text-[18px]">redo</span> Rehacer
+                </button>
+              </div>
+              <div class="flex gap-md">
+                <button
+                  (click)="copiarComoImagen()"
+                  class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm"
+                >
+                  Copiar como Imagen
+                </button>
+                <button
+                  (click)="copiarHTML()"
+                  class="px-4 py-2 border border-primary text-primary dark:border-primary-fixed dark:text-primary-fixed font-bold rounded hover:bg-surface-container dark:hover:bg-[#1e1e1e] transition-colors shadow-sm text-sm flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[16px]">code</span> Copiar HTML
+                </button>
+                <button
+                  (click)="guardar()"
+                  class="px-6 py-2 bg-primary text-white font-bold rounded hover:opacity-90 flex items-center gap-2 shadow-sm text-sm transition-opacity"
+                  title="Aplica los cambios en el listado de Repositorio (Memoria RAM)"
+                >
+                  <span class="material-symbols-outlined text-[16px]">save</span> Guardar
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+
+    <!-- GALERIA DE COMPONENTES -->
+    @if (seccionActiva === 'componentes') {
+      <div class="w-full max-w-none mx-auto animate-fade-in pb-xl">
+        <header class="mb-xl">
+          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">
+            Galería de Componentes
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">
+            Catálogo oficial de bloques de diseño (Design System). Componentes estáticos basados en
+            lineamientos institucionales.
+          </p>
+        </header>
+        <!-- 1. Seccionado de CTA -->
+        <section
+          class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm"
+        >
+          <h2
+            class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+          >
+            1. Seccionado de CTA (Llamados a la Acción)
+          </h2>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Llamado a la Acción: Video
+                </h3>
+              </div>
+              <div class="bg-white text-black p-md border rounded shadow-sm">
+                <div
+                  class="dp-callout dp-callout-color-lg-tip card"
+                  style="border-color: #003087; border-radius: 5px"
+                >
+                  <div class="card-body">
+                    <p
+                      class="card-title"
+                      style="
+                        text-align: left;
+                        background-color: #003087;
+                        color: #ffffff;
+                        padding: 5px;
+                      "
+                    >
+                      <span style="font-size: 10pt">
+                        <em
+                          ><strong
+                            ><span class="material-symbols-outlined" style="vertical-align: middle"
+                              >play_circle</span
+                            ></strong
+                          ></em
+                        >
+                        <strong>Video </strong>
+                      </span>
+                    </p>
+                    <p>Introducción o invitación al video</p>
+                    <p class="card-text">
+                      <span style="color: #236fa1; font-weight: bold"
+                        >Ver video (LINK del video)</span
+                      >
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Llamado a la Acción: Consigna
+                </h3>
+              </div>
+              <div class="bg-white text-black p-md border rounded shadow-sm">
+                <div class="dp-callout card dp-callout-color-lg-info" style="border-radius: 5px">
+                  <div class="card-body">
+                    <p class="card-title" style="text-align: left">
+                      <span style="font-size: 10pt">
+                        <strong style="border-color: #003087">
+                          <span
+                            class="material-symbols-outlined"
+                            style="vertical-align: middle; color: #003087"
+                            >assignment</span
+                          >
+                          Actividad: NOMBRE DE ACTIVIDAD
+                        </strong>
+                      </span>
+                    </p>
+                    <p class="card-text"><span>Introducción o invitación a la actividad</span></p>
+                    <p class="card-text">
+                      <span style="color: #236fa1; font-weight: bold">Acceso a la consigna</span>
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 2. Resaltados -->
+        <section
+          class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm"
+        >
+          <h2
+            class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+          >
+            2. Resaltados
+          </h2>
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Resaltado: Importante
+                </h3>
+              </div>
+              <div class="bg-white text-black p-md border rounded shadow-sm">
+                <div
+                  class="dp-callout dp-callout-placeholder card dp-callout-color-danger border-l-4 border-red-600 pl-4 py-2"
+                >
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-red-600" style="font-size: 24px"
+                      >warning</span
+                    >
+                    <h3 class="card-title m-0 text-red-600 font-bold">Atención / Importante</h3>
+                  </div>
+                  <p class="card-text">
+                    <i><span>TEXTO A RESALTAR - PRESTAR MÁXIMA ATENCIÓN A LAS FECHAS.</span></i>
+                  </p>
+                </div>
+              </div>
+            </div>
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Para pensar / Saber más
+                </h3>
+              </div>
+              <div class="bg-white text-black p-md border rounded shadow-sm">
+                <div
+                  class="dp-callout dp-callout-placeholder card dp-callout-color-lg-warning border-l-4 border-yellow-500 pl-4 py-2 bg-yellow-50"
+                >
+                  <div class="flex items-center gap-2 mb-2">
+                    <span class="material-symbols-outlined text-yellow-600" style="font-size: 24px"
+                      >lightbulb</span
+                    >
+                    <h3 class="card-title m-0 text-yellow-700 font-bold">
+                      Para pensar / Para saber más
+                    </h3>
+                  </div>
+                  <p class="card-text">
+                    <i
+                      ><span
+                        >¿Qué sucedería si aplicamos las normativas de IT1 en el prototipo
+                        actual?</span
+                      ></i
+                    >
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 3. Elementos de Organizacion -->
+        <section
+          class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm"
+        >
+          <h2
+            class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+          >
+            3. Elementos de Organización
+          </h2>
+          <div class="grid grid-cols-1 gap-lg">
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Tarjetas Didácticas (Flipcards)
+                </h3>
+              </div>
+              <div
+                class="bg-white text-black p-md border rounded shadow-sm flex flex-wrap gap-4 justify-center"
+              >
+                <!-- Flipcard 1 -->
+                <div class="group relative w-[280px] h-[180px]" style="perspective: 1000px">
+                  <div
+                    class="absolute w-full h-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                  >
+                    <!-- Front -->
+                    <div
+                      class="absolute w-full h-full bg-[#e8eef3] border-l-[10px] border-[#003087] rounded flex flex-col justify-center items-center text-center p-4 [backface-visibility:hidden]"
+                    >
+                      <span class="material-symbols-outlined text-4xl text-[#003087] mb-2"
+                        >touch_app</span
+                      >
+                      <h4 class="font-bold text-[#003087]">Estrategias corporativas</h4>
+                    </div>
+                    <!-- Back -->
+                    <div
+                      class="absolute w-full h-full bg-[#003087] text-white rounded flex justify-center items-center text-center p-4 [transform:rotateY(180deg)] [backface-visibility:hidden]"
+                    >
+                      <p class="text-sm m-0">
+                        Definen en qué negocios participa la organización y cómo se gestiona la
+                        cartera.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+                <!-- Flipcard 2 -->
+                <div class="group relative w-[280px] h-[180px]" style="perspective: 1000px">
+                  <div
+                    class="absolute w-full h-full transition-transform duration-500 ease-in-out [transform-style:preserve-3d] group-hover:[transform:rotateY(180deg)]"
+                  >
+                    <!-- Front -->
+                    <div
+                      class="absolute w-full h-full bg-[#e8eef3] border-l-[10px] border-[#003087] rounded flex flex-col justify-center items-center text-center p-4 [backface-visibility:hidden]"
+                    >
+                      <span class="material-symbols-outlined text-4xl text-[#003087] mb-2"
+                        >trending_up</span
+                      >
+                      <h4 class="font-bold text-[#003087]">Estrategias competitivas</h4>
+                    </div>
+                    <!-- Back -->
+                    <div
+                      class="absolute w-full h-full bg-[#003087] text-white rounded flex justify-center items-center text-center p-4 [transform:rotateY(180deg)] [backface-visibility:hidden]"
+                    >
+                      <p class="text-sm m-0">
+                        Definen el comportamiento que se tendrá en cada mercado para sostener
+                        ventajas.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Acordeon Component -->
+            <div
+              class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212] mt-4"
+            >
+              <div class="flex justify-between items-start mb-4">
+                <h3 class="font-bold text-sm text-on-surface dark:text-white">
+                  Acordeón de Contenidos Expandible
+                </h3>
+              </div>
+              <div class="bg-white text-black p-md border rounded shadow-sm">
+                <div
+                  class="dp-panels-wrapper dp-accordion-default border border-[#b2e5ed] rounded overflow-hidden space-y-1"
+                >
+                  <details class="dp-panel-group border-b border-[#b2e5ed] group">
+                    <summary
+                      class="dp-panel-heading bg-[#e0f7fa] m-0 p-3 text-[#006972] font-bold cursor-pointer hover:bg-[#b2e5ed] transition flex justify-between items-center list-none outline-none"
+                    >
+                      <strong>Título Nivel 1</strong>
+                      <span
+                        class="material-symbols-outlined text-sm group-open:rotate-180 transition-transform"
+                        >expand_more</span
+                      >
+                    </summary>
+                    <div class="dp-panel-content p-4 bg-white border-t border-[#b2e5ed]">
+                      <p class="m-0 text-sm">
+                        Texto descriptivo que se revela al expandir el acordeón. Ideal para
+                        dosificar lectura.
+                      </p>
+                    </div>
+                  </details>
+                  <details class="dp-panel-group group">
+                    <summary
+                      class="dp-panel-heading bg-gray-50 m-0 p-3 text-gray-700 font-bold cursor-pointer hover:bg-gray-100 transition flex justify-between items-center list-none outline-none"
+                    >
+                      <strong>Título Nivel 2</strong>
+                      <span
+                        class="material-symbols-outlined text-sm group-open:rotate-180 transition-transform"
+                        >expand_more</span
+                      >
+                    </summary>
+                    <div class="dp-panel-content p-4 bg-white border-t border-gray-200">
+                      <p class="m-0 text-sm">Contenido oculto del segundo bloque.</p>
+                    </div>
+                  </details>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 4. Galeria de Chequeos de Comprension (Data real) -->
+        <section
+          class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm"
+        >
+          <h2
+            class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+          >
+            4. Galería de Chequeos de Comprensión
+          </h2>
+          <div
+            class="border border-outline-variant dark:border-outline p-md rounded bg-surface-container-low dark:bg-[#121212]"
+          >
+            <p class="text-sm italic text-outline mb-4">
+              Integraciones interactivas (Vista Previa Interactiva de Comprobación rápida H5P).
+            </p>
+            <div
+              class="bg-white text-black border border-outline-variant rounded-lg shadow-sm overflow-hidden"
+            >
+              <div class="bg-[#003761] p-lg text-white">
+                <div class="flex items-center gap-3 mb-2">
+                  <span class="material-symbols-outlined">bolt</span>
+                  <h3 class="text-headline-sm font-headline-sm uppercase tracking-tight font-bold">
+                    Comprobación rápida
+                  </h3>
+                </div>
+                <p class="text-body-md font-medium">
+                  ¿Cuál de los siguientes componentes es fundamental para un chequeo efectivo según
+                  la política institucional?
+                </p>
+              </div>
+              <div class="p-lg space-y-md">
+                <button
+                  class="w-full text-left p-md border border-outline-variant rounded hover:bg-gray-100 transition-colors flex justify-between items-center group mb-2"
+                >
+                  <span class="text-body-md">A.) Solo la pregunta y la respuesta correcta.</span>
+                  <span class="material-symbols-outlined text-outline group-hover:text-primary"
+                    >radio_button_unchecked</span
+                  >
+                </button>
+                <button
+                  class="w-full text-left p-md border-2 border-[#006972] bg-[#006972]/10 rounded flex justify-between items-center group mb-2"
+                >
+                  <span class="text-body-md font-semibold text-[#006972]"
+                    >B.) Pregunta, Feedback Positivo y Feedback de Corrección.</span
+                  >
+                  <span
+                    class="material-symbols-outlined text-[#006972]"
+                    style="font-variation-settings: 'FILL' 1"
+                    >check_circle</span
+                  >
+                </button>
+                <div
+                  class="flex gap-md p-md bg-[#9ff0fb] text-[#004f56] rounded border-l-4 border-[#006972] mb-2"
+                >
+                  <span class="material-symbols-outlined">check</span>
+                  <div>
+                    <p class="font-bold">¡Gran trabajo! Respuesta correcta.</p>
+                    <p class="text-body-sm opacity-90">
+                      La política de tres partes asegura que el estudiante sea guiado incluso cuando
+                      comete un error.
+                    </p>
+                  </div>
+                </div>
+                <button
+                  class="w-full text-left p-md border border-outline-variant rounded hover:bg-gray-100 transition-colors flex justify-between items-center group"
+                >
+                  <span class="text-body-md">C.) Una lista de términos sin retroalimentación.</span>
+                  <span class="material-symbols-outlined text-outline group-hover:text-primary"
+                    >radio_button_unchecked</span
+                  >
+                </button>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- 5 y 6. Pautas y Estandares (Data real) -->
+        <section
+          class="mb-xl bg-surface-container-lowest dark:bg-[#1e1e1e] p-lg rounded-xl border border-outline-variant dark:border-outline shadow-sm grid grid-cols-1 lg:grid-cols-2 gap-xl"
+        >
+          <!-- Pautas -->
+          <div>
+            <h2
+              class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+            >
+              5. Pautas y Referencias Institucionales
+            </h2>
+            <div
+              class="bg-white text-black border border-outline-variant p-lg rounded-lg hover:shadow-lg transition-shadow"
+            >
+              <h3 class="text-headline-sm font-bold text-secondary mb-4 flex items-center gap-2">
+                <span class="material-symbols-outlined">format_list_numbered</span> Jerarquía de
+                Estilos
+              </h3>
+              <ul class="space-y-sm text-body-sm list-none p-0 m-0">
+                <li class="flex items-center gap-2">
+                  <code>H1</code> <span class="text-gray-600">Título del módulo</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <code>H2</code>
+                  <span class="text-gray-600">Título de la página (≤110 caracteres)</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <code>H3</code> <span class="text-gray-600">Subtítulo (sin numeración)</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <code>H4</code> <span class="text-gray-600">Sub-subtítulo (sin numeración)</span>
+                </li>
+              </ul>
+            </div>
+            <div class="mt-4 bg-yellow-50 text-yellow-800 p-lg rounded-lg border border-yellow-200">
+              <h3 class="font-bold mb-2">Política de tres partes</h3>
+              <p class="text-sm">
+                <strong>1. Pregunta:</strong> Clara y directa. <br /><strong>2. Positivo:</strong>
+                Confirma el acierto. <br /><strong>3. Corrección:</strong> Señala el error y
+                redirige.
+              </p>
+            </div>
+          </div>
+          <!-- Estandares -->
+          <div class="space-y-xl">
+            <div>
+              <h2
+                class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+              >
+                6. Estándares de Recursos Visuales
+              </h2>
+              <div
+                class="bg-white text-black p-lg rounded-lg border border-outline-variant shadow-sm space-y-4"
+              >
+                <div>
+                  <h4 class="font-bold border-b pb-1 mb-2">Reglas para Figuras</h4>
+                  <ul class="list-disc ml-5 space-y-1 text-sm text-gray-700">
+                    <li><strong>N° Figura:</strong> "X"</li>
+                    <li><strong>Título:</strong> Menor a 110 caracteres.</li>
+                    <li>
+                      <strong>Texto alternativo (Alt):</strong> Descriptiva para accesibilidad.
+                    </li>
+                    <li><strong>Nota al pie:</strong> Fuente o link.</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 class="font-bold border-b pb-1 mb-2">Ejemplo de Tabla de Criterios</h4>
+                  <table class="w-full text-sm text-left border border-gray-300 rounded">
+                    <thead class="bg-[#1b1e31] text-white">
+                      <tr>
+                        <th class="p-2 border-b">Criterio</th>
+                        <th class="p-2 border-b">Ponderación</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-gray-800">
+                      <tr class="bg-gray-50 border-b">
+                        <td class="p-2">Identificación de relaciones</td>
+                        <td class="p-2">30 %</td>
+                      </tr>
+                      <tr class="border-b">
+                        <td class="p-2">Argumentación conceptual</td>
+                        <td class="p-2">30 %</td>
+                      </tr>
+                      <tr class="bg-gray-50 border-b">
+                        <td class="p-2">Lenguaje técnico</td>
+                        <td class="p-2">20 %</td>
+                      </tr>
+                      <tr>
+                        <td class="p-2">Presentación (APA)</td>
+                        <td class="p-2">20 %</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+            <div>
+              <h2
+                class="font-bold text-headline-sm mb-md border-b border-outline-variant dark:border-outline pb-2 text-primary dark:text-primary-fixed"
+              >
+                Ejemplo visual (Figura)
+              </h2>
+              <div
+                class="bg-white text-black p-md rounded-lg border border-outline-variant shadow-sm flex flex-col items-center text-center"
+              >
+                <div
+                  class="w-full bg-gray-100 border rounded flex items-center justify-center p-8 mb-2"
+                >
+                  <span class="material-symbols-outlined text-6xl text-gray-400">image</span>
+                </div>
+                <p class="font-bold text-sm text-[#003087]">
+                  Figura 1. Representación visual de datos
+                </p>
+                <p class="text-xs text-gray-500 mt-1">
+                  Fuente: Elaboración propia en base a directrices institucionales.
+                </p>
+              </div>
+            </div>
+          </div>
+        </section>
+      </div>
+    }
+
+    <!-- CONFIGURACION -->
+    @if (seccionActiva === 'configuracion') {
+      <div class="w-full max-w-none mx-auto animate-fade-in pb-xl">
+        <header class="mb-xl">
+          <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">
+            Configuración del Sistema
+          </h1>
+          <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">
+            Administre su perfil personal, preferencias de plataforma e información institucional.
+          </p>
+        </header>
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
+          <!-- Perfil y Preferencias -->
+          <div class="col-span-12 lg:col-span-8 space-y-lg">
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
+              >
+                <h3 class="font-bold text-primary dark:text-primary-fixed">Perfil de Usuario</h3>
+              </div>
+              <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-lg">
+                <div class="flex flex-col gap-xs">
+                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >Nombre Completo</label
+                  >
+                  <input
+                    type="text"
+                    value="Academic Admin"
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                  />
+                </div>
+                <div class="flex flex-col gap-xs">
+                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >Rol del Sistema</label
+                  >
+                  <input
+                    type="text"
+                    value="Institutional Lead"
+                    disabled
+                    class="border bg-surface-container dark:bg-[#2d2d2d] dark:border-outline px-3 py-2 rounded text-outline cursor-not-allowed"
+                  />
+                </div>
+                <div class="flex flex-col gap-xs">
+                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >Institución</label
+                  >
+                  <input
+                    type="text"
+                    value="Universidad UCC"
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                  />
+                </div>
+                <div class="flex flex-col gap-xs">
+                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >Correo Electrónico</label
+                  >
+                  <input
+                    type="email"
+                    value="admin@ucc.edu.ar"
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                  />
+                </div>
+              </div>
+              <div
+                class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-end border-t border-outline-variant dark:border-outline"
+              >
+                <button
+                  class="bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
+                >
+                  Guardar Perfil
+                </button>
+              </div>
+            </div>
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
+              >
+                <h3 class="font-bold text-primary dark:text-primary-fixed">
+                  Preferencias de Plataforma
+                </h3>
+              </div>
+              <div class="p-lg space-y-lg">
+                <div class="flex items-center justify-between">
+                  <div>
+                    <h4 class="font-bold text-lg">Idioma de Visualización</h4>
+                    <p class="text-sm text-on-surface-variant dark:text-outline">
+                      Seleccione el idioma predeterminado para la interfaz.
+                    </p>
+                  </div>
+                  <select
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-4 py-2 rounded font-bold min-w-[200px] cursor-pointer"
+                  >
+                    <option>Español (ES)</option>
+                    <option>English (US)</option>
+                  </select>
+                </div>
+              </div>
+              <div
+                class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-end border-t border-outline-variant dark:border-outline"
+              >
+                <button
+                  class="bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
+                >
+                  Guardar Preferencias
+                </button>
+              </div>
+            </div>
+          </div>
+          <!-- Seguridad -->
+          <div class="col-span-12 lg:col-span-4 space-y-lg">
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
+              >
+                <h3 class="font-bold text-primary dark:text-primary-fixed">
+                  Gestión de Institución
+                </h3>
+              </div>
+              <div class="p-lg space-y-md text-center">
+                <!-- File Input Overlay -->
+                <label
+                  class="block w-24 h-24 border-2 border-dashed border-outline-variant dark:border-outline mx-auto rounded cursor-pointer hover:bg-surface-container dark:hover:bg-[#2d2d2d] transition-colors relative group overflow-hidden"
+                >
+                  <input
+                    type="file"
+                    (change)="onImageUpload($event)"
+                    accept="image/*"
+                    class="hidden"
+                  />
+                  @if (fotoInstitucional) {
+                    <img [src]="fotoInstitucional" class="w-full h-full object-cover" />
+                  }
+                  @if (!fotoInstitucional) {
+                    <div class="w-full h-full flex flex-col items-center justify-center">
+                      <span
+                        class="material-symbols-outlined text-4xl text-outline opacity-50 group-hover:opacity-100"
+                        >business</span
+                      >
+                    </div>
+                  }
+                  <!-- Hover Edit Icon -->
+                  <div
+                    class="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                  >
+                    <span class="material-symbols-outlined text-white">upload</span>
+                  </div>
+                </label>
+                <span class="font-bold text-sm block mt-2">Logo Institucional / Perfil</span>
+                <div class="text-left mt-4">
+                  <label
+                    class="text-sm font-bold text-on-surface-variant dark:text-outline block mb-1"
+                    >Identificador (ID)</label
+                  >
+                  <input
+                    type="text"
+                    value="UCC-ADM-2024"
+                    disabled
+                    class="border bg-surface-container dark:bg-[#2d2d2d] dark:border-outline w-full px-3 py-2 rounded text-outline cursor-not-allowed"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    }
+  </main>
+</div>
