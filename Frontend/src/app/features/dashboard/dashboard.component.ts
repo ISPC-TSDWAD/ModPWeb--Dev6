@@ -30,6 +30,9 @@ export class DashboardComponent implements OnInit {
   cargando: boolean = true;
   recursoSeleccionado: any = null;
 
+  categorias: any[] = [];
+  asignaturas: any[] = [];
+
   filtroMateria: string = 'Todas';
 
   // Configuración de elemento en Sandbox
@@ -71,6 +74,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarDatosMaestros();
     this.cargarRecursos();
 
     // Escuchar parámetros de URL para abrir la sección correcta
@@ -79,6 +83,11 @@ export class DashboardComponent implements OnInit {
         this.seccionActiva = params['seccion'];
       }
     });
+  }
+
+  cargarDatosMaestros(): void {
+    this.apiService.getCategorias().subscribe(data => this.categorias = data);
+    this.apiService.getAsignaturas().subscribe(data => this.asignaturas = data);
   }
 
   cargarRecursos(): void {
