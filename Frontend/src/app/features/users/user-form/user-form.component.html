@@ -1,0 +1,51 @@
+<div class="card p-4 mb-4">
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+    
+    <div class="mb-3">
+      <label class="form-label">Nombre de Usuario</label>
+      <input type="text" class="form-control" formControlName="username">
+      <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-danger mt-1">
+        El nombre de usuario es requerido.
+      </div>
+    </div>
+
+    <div class="mb-3">
+      <label class="form-label">Email</label>
+      <input type="email" class="form-control" formControlName="email">
+      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger mt-1">
+        El email es requerido y debe tener formato válido. (CA-14)
+      </div>
+    </div>
+
+    <div class="mb-3" *ngIf="!user">
+      <label class="form-label">Contraseña</label>
+      <input type="password" class="form-control" formControlName="password">
+      <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger mt-1">
+        La contraseña es requerida para usuarios nuevos.
+      </div>
+    </div>
+
+    <div class="mb-3 d-flex gap-3">
+      <div class="flex-grow-1">
+        <label class="form-label">Nombre</label>
+        <input type="text" class="form-control" formControlName="first_name">
+      </div>
+      <div class="flex-grow-1">
+        <label class="form-label">Apellido</label>
+        <input type="text" class="form-control" formControlName="last_name">
+      </div>
+    </div>
+
+    <div class="form-check mb-3">
+      <input class="form-check-input" type="checkbox" formControlName="is_staff" id="is_staff">
+      <label class="form-check-label" for="is_staff">
+        Es Administrador (Staff)
+      </label>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="submit" class="btn btn-success" [disabled]="userForm.invalid">Guardar</button>
+      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+    </div>
+  </form>
+</div>

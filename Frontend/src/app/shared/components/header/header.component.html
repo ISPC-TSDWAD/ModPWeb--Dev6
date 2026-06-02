@@ -27,6 +27,11 @@
         routerLink="/dashboard"
         >Dashboard</a
       >
+      <a
+        class="text-label-lg font-label-lg text-on-surface-variant hover:text-primary transition-colors"
+        routerLink="/users"
+        >Usuarios</a
+      >
 
       <!-- Login / Logout / Profile -->
       <div class="ml-4 pl-4 border-l border-outline-variant relative">
@@ -115,6 +120,12 @@
         routerLink="/dashboard"
         (click)="menuMovilAbierto = false"
         >Dashboard</a
+      >
+      <a
+        class="text-label-lg text-on-surface-variant hover:text-primary py-2 transition-colors"
+        routerLink="/users"
+        (click)="menuMovilAbierto = false"
+        >Usuarios</a
       >
       @if (!isLoggedIn) {
         <a
