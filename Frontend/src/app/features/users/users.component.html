@@ -1,7 +1,16 @@
 <div class="container mt-4">
   <h2>Gestión de Usuarios</h2>
   
-  <button class="btn btn-primary mb-3" (click)="openNewUserForm()">Nuevo Usuario</button>
+  <!-- Banner de éxito -->
+  @if (successMsg) {
+    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-3" role="alert">
+      <span class="material-symbols-outlined text-[20px]">check_circle</span>
+      <div>{{ successMsg }}</div>
+      <button type="button" class="btn-close" (click)="successMsg = ''" aria-label="Cerrar"></button>
+    </div>
+  }
+
+  <button class="btn btn-primary mb-3" (click)="openNewUserForm()" [disabled]="cargando">Nuevo Usuario</button>
 
   <app-user-form 
     *ngIf="showForm" 
@@ -10,7 +19,17 @@
     (canceled)="onFormCanceled()">
   </app-user-form>
 
-  <table class="table table-striped" *ngIf="!showForm">
+  <!-- Spinner de carga -->
+  @if (cargando && !showForm) {
+    <div class="d-flex justify-content-center align-items-center my-5 gap-3">
+      <div class="spinner-border text-primary" role="status">
+        <span class="visually-hidden">Cargando...</span>
+      </div>
+      <span class="text-primary fw-bold">Cargando lista de usuarios...</span>
+    </div>
+  }
+
+  <table class="table table-striped" *ngIf="!showForm && !cargando">
     <thead>
       <tr>
         <th>ID</th>
@@ -33,6 +52,11 @@
           <button class="btn btn-sm btn-danger" (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" title="No se puede eliminar al Super Administrador principal">Eliminar</button>
         </td>
       </tr>
+      @if (users.length === 0) {
+        <tr>
+          <td colspan="6" class="text-center py-4 text-muted">No se encontraron usuarios.</td>
+        </tr>
+      }
     </tbody>
   </table>
 </div>

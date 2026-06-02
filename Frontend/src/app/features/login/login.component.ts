@@ -1,5 +1,5 @@
-import { Component, inject } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, inject, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 import { FormsModule } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 
@@ -12,15 +12,25 @@ import { AuthService } from '../../core/services/auth.service';
     class: 'w-full flex flex-grow',
   },
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private router = inject(Router);
+  private route = inject(ActivatedRoute);
+  private authService = inject(AuthService);
 
   username = '';
   password = '';
   errorMsg = '';
   showPassword = false;
 
-  private authService = inject(AuthService);
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      if (params['sessionExpired'] === 'true') {
+        this.errorMsg = 'Tu sesión expiró, por favor volvé a iniciar sesión.';
+      } else if (params['loginRequired'] === 'true') {
+        this.errorMsg = 'Por favor, iniciá sesión para acceder a esta página.';
+      }
+    });
+  }
 
   login() {
     this.errorMsg = '';

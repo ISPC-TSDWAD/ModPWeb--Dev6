@@ -4,12 +4,13 @@ import { AboutComponent } from './features/about/about.component';
 import { DashboardComponent } from './features/dashboard/dashboard.component';
 import { LoginComponent } from './features/login/login.component';
 import { UsersComponent } from './features/users/users.component';
+import { authGuard } from './core/guards/auth.guard';
 
 export const routes: Routes = [
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: 'login', component: LoginComponent },
-  { path: 'home', component: HomeComponent },
+  { path: 'home', component: HomeComponent, canActivate: [authGuard] },
   { path: 'about', component: AboutComponent },
-  { path: 'dashboard', component: DashboardComponent },
-  { path: 'users', component: UsersComponent }
+  { path: 'dashboard', component: DashboardComponent, canActivate: [authGuard] },
+  { path: 'users', component: UsersComponent, canActivate: [authGuard] }
 ];
