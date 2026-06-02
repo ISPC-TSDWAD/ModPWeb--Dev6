@@ -40,7 +40,7 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 *   **Sprint 0 (Evidencia 1):** Bases de datos y API inicial.
 *   **Sprint 1 (Evidencia 2):** Sandbox, exportación y consolidación de UI.
-*   **Tablero de Gestión:** [Acceso Directo al Proyecto](https://github.com/orgs/ISPC-TSDWAD/projects/4/views/1)
+*   **Tablero de Gestión:** [Acceso Directo al Proyecto](https://github.com/orgs/ISPC-TSDWAD/projects/4/views/5)
 
 
 ---

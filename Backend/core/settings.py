@@ -22,7 +22,8 @@ INSTALLED_APPS = [
     # Librerías para que funcione el intercambio con Angular
     'corsheaders', 
     'rest_framework',
-    'api',
+    'users',
+    'pedagogia',
 ]
 
 MIDDLEWARE = [
@@ -84,7 +85,21 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Modelo de usuario personalizado
-AUTH_USER_MODEL = 'api.Usuario'
+AUTH_USER_MODEL = 'users.Usuario'
 
 # CONFIGURACIÓN DE CORS (La llave maestra)
 CORS_ALLOW_ALL_ORIGINS = True
+
+# CONFIGURACIÓN DE REST FRAMEWORK Y JWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
