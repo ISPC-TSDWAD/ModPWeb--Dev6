@@ -12,6 +12,10 @@ class AsignaturaSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class RecursoSerializer(serializers.ModelSerializer):
+    categoria_nombre = serializers.ReadOnlyField(source='categoria.nombre')
+    asignatura_nombre = serializers.ReadOnlyField(source='asignatura.nombre')
+
     class Meta:
         model = Recurso
         fields = '__all__'
+        read_only_fields = ['creado_por']
