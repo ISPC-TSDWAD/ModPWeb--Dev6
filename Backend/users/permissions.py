@@ -11,7 +11,9 @@ class IsAdminOrOwner(permissions.BasePermission):
         # Solo administradores pueden crear usuarios (POST)
         if request.method == 'POST':
             return request.user and request.user.is_staff
-        # Para listar o ver, cualquier autenticado pasa (el filtro de object entra después)
+        # Solo administradores pueden listar a todos
+        if getattr(view, 'action', '') == 'list':
+            return request.user and request.user.is_staff
         return request.user and request.user.is_authenticated
 
     def has_object_permission(self, request, view, obj):
