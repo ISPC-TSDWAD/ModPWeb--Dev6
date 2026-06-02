@@ -22,3 +22,11 @@ class UsuarioSerializer(serializers.ModelSerializer):
         else:
             validated_data.pop('password', None)
         return super().update(instance, validated_data)
+
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    def validate(self, attrs):
+        data = super().validate(attrs)
+        data['is_staff'] = self.user.is_staff
+        return data
