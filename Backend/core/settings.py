@@ -89,3 +89,17 @@ AUTH_USER_MODEL = 'users.Usuario'
 
 # CONFIGURACIÓN DE CORS (La llave maestra)
 CORS_ALLOW_ALL_ORIGINS = True
+
+# CONFIGURACIÓN DE REST FRAMEWORK Y JWT
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    )
+}
+
+from datetime import timedelta
+SIMPLE_JWT = {
+    'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
+    'AUTH_HEADER_TYPES': ('Bearer',),
+}
