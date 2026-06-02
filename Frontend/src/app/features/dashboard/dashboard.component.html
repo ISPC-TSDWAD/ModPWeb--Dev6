@@ -93,10 +93,9 @@
                 formControlName="categoria"
                 class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded"
               >
-                <option value="CTA">Llamado a la Acción</option>
-                <option value="RESALTADO">Resaltados</option>
-                <option value="ORGANIZADOR">Organizadores (Acordeón/Tabs)</option>
-                <option value="H5P">Interactivos H5P</option>
+                @for (cat of categorias; track cat.id) {
+                  <option [value]="cat.id">{{ cat.nombre }}</option>
+                }
               </select>
             </div>
             <div class="flex flex-col gap-xs">
@@ -105,10 +104,9 @@
                 formControlName="asignatura"
                 class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-sm rounded"
               >
-                <option value="Todas">Transversal (Todas)</option>
-                <option value="Matematicas">Matemáticas Avanzadas</option>
-                <option value="Historia">Historia Contemporánea</option>
-                <option value="Psicologia">Psicología Social</option>
+                @for (asig of asignaturas; track asig.id) {
+                  <option [value]="asig.id">{{ asig.nombre }}</option>
+                }
               </select>
             </div>
             <div class="flex flex-col gap-xs lg:col-span-2">
@@ -149,9 +147,9 @@
               class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-1 rounded cursor-pointer"
             >
               <option value="Todas">Todas las materias</option>
-              <option value="Matematicas">Matemáticas Avanzadas</option>
-              <option value="Historia">Historia Contemporánea</option>
-              <option value="Psicologia">Psicología Social</option>
+              @for (asig of asignaturas; track asig.id) {
+                <option [value]="asig.nombre">{{ asig.nombre }}</option>
+              }
             </select>
           </div>
           <div class="flex gap-sm">

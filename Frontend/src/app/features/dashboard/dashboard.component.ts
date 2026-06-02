@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import {
   ReactiveFormsModule,
@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
@@ -29,6 +30,9 @@ export class DashboardComponent implements OnInit {
   recursos: any[] = [];
   cargando: boolean = true;
   recursoSeleccionado: any = null;
+
+  categorias: any[] = [];
+  asignaturas: any[] = [];
 
   filtroMateria: string = 'Todas';
 
@@ -71,6 +75,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarDatosMaestros();
     this.cargarRecursos();
 
     // Escuchar parámetros de URL para abrir la sección correcta
@@ -79,6 +84,11 @@ export class DashboardComponent implements OnInit {
         this.seccionActiva = params['seccion'];
       }
     });
+  }
+
+  cargarDatosMaestros(): void {
+    this.apiService.getCategorias().subscribe(data => this.categorias = data);
+    this.apiService.getAsignaturas().subscribe(data => this.asignaturas = data);
   }
 
   cargarRecursos(): void {
@@ -90,10 +100,12 @@ export class DashboardComponent implements OnInit {
         if (this.recursos.length > 0) {
           this.seleccionarRecurso(this.recursos[0]);
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar recursos:', err);
         this.cargando = false;
+        this.cdr.detectChanges();
       },
     });
   }

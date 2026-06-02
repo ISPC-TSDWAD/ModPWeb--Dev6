@@ -1,7 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
-import { ApiService } from '../../core/services/api.service';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -14,28 +14,27 @@ import { ApiService } from '../../core/services/api.service';
 })
 export class LoginComponent {
   private router = inject(Router);
-  private apiService = inject(ApiService);
 
   username = '';
   password = '';
   errorMsg = '';
   showPassword = false;
 
+  private authService = inject(AuthService);
+
   login() {
     this.errorMsg = '';
+
     if (!this.username.trim() || !this.password.trim()) {
       this.errorMsg = 'Por favor completá usuario y contraseña.';
       return;
     }
 
-    this.apiService.login(this.username, this.password).subscribe({
-      next: (res) => {
-        localStorage.setItem('access_token', res.access);
-        localStorage.setItem('refresh_token', res.refresh);
-        localStorage.setItem('isLoggedIn', 'true');
+    this.authService.login(this.username, this.password).subscribe({
+      next: () => {
         this.router.navigate(['/home']);
       },
-      error: (err) => {
+      error: () => {
         this.errorMsg = 'Usuario o contraseña incorrectos.';
       }
     });
