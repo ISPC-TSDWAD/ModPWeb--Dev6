@@ -11,7 +11,12 @@ User = get_user_model()
 admin_user = User.objects.filter(username='admin').first()
 
 if not admin_user:
-    admin_user = User.objects.first()
+    admin_user = User.objects.create_superuser(
+        username='admin',
+        email='admin@edutools.edu.ar',
+        password='Admin1234!'
+    )
+    print("Superusuario 'admin' creado exitosamente.")
 
 mockData = [
       { 
