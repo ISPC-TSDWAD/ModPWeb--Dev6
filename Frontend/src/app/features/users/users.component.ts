@@ -1,4 +1,4 @@
-import { Component, OnInit, inject } from '@angular/core';
+import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, User } from '../../core/services/user.service';
 import { UserFormComponent } from './user-form/user-form.component';
@@ -12,6 +12,7 @@ import { UserFormComponent } from './user-form/user-form.component';
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
+  private cdr = inject(ChangeDetectorRef);
   
   users: User[] = [];
   selectedUser: User | null = null;
@@ -23,7 +24,10 @@ export class UsersComponent implements OnInit {
 
   loadUsers(): void {
     this.userService.getUsers().subscribe({
-      next: (data) => this.users = data,
+      next: (data) => {
+        this.users = data;
+        this.cdr.detectChanges();
+      },
       error: (err) => console.error('Error loading users', err)
     });
   }

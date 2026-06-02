@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import {
   ReactiveFormsModule,
@@ -21,6 +21,7 @@ export class DashboardComponent implements OnInit {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
@@ -99,10 +100,12 @@ export class DashboardComponent implements OnInit {
         if (this.recursos.length > 0) {
           this.seleccionarRecurso(this.recursos[0]);
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar recursos:', err);
         this.cargando = false;
+        this.cdr.detectChanges();
       },
     });
   }
