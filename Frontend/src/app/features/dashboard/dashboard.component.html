@@ -55,6 +55,15 @@
     class="flex-1 overflow-y-auto p-xl bg-background dark:bg-surface-dim transition-colors relative flex flex-col w-full"
   >
     <!-- Content Start -->
+    @if (successMsg) {
+      <div class="fixed top-20 right-8 z-50 bg-[#e8f5e9] dark:bg-[#1b4332] border border-green-300 dark:border-green-800 text-green-800 dark:text-green-200 px-6 py-4 rounded-lg shadow-lg flex items-center gap-3 animate-fade-in max-w-md">
+        <span class="material-symbols-outlined text-[24px]" aria-hidden="true">check_circle</span>
+        <div class="font-bold text-sm">{{ successMsg }}</div>
+        <button (click)="successMsg = ''" class="ml-auto text-green-800 dark:text-green-200 hover:opacity-75 flex items-center">
+          <span class="material-symbols-outlined text-[18px]">close</span>
+        </button>
+      </div>
+    }
 
     <!-- REPOSITORIO -->
     @if (seccionActiva === 'recursos') {
@@ -169,7 +178,10 @@
         </div>
         <!-- LISTADO RECURSOS -->
         @if (cargando) {
-          <div class="text-center py-xl font-bold text-outline">Cargando recursos...</div>
+          <div class="flex flex-col items-center justify-center py-20 gap-4 w-full bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl shadow-sm">
+            <div class="w-12 h-12 border-4 border-primary/20 border-t-primary rounded-full animate-spin"></div>
+            <p class="font-bold text-lg text-primary dark:text-primary-fixed-dim">Cargando recursos institucionales...</p>
+          </div>
         }
         @if (!cargando) {
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-lg pb-xl">

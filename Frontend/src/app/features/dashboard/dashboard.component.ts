@@ -25,6 +25,7 @@ export class DashboardComponent implements OnInit {
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
+  successMsg: string = '';
   seccionActiva: string = 'recursos';
 
   recursos: any[] = [];
@@ -113,13 +114,14 @@ export class DashboardComponent implements OnInit {
   onSubmit(): void {
     if (this.recursoForm.valid) {
       this.apiService.createResource(this.recursoForm.value).subscribe(() => {
-        this.mensajeExito = true;
         this.recursoForm.reset();
         this.cargarRecursos(); // Recargar recursos
+        this.successMsg = '¡Recurso creado en el repositorio institucional con éxito!';
 
         setTimeout(() => {
-          this.mensajeExito = false;
-        }, 3000);
+          this.successMsg = '';
+          this.cdr.detectChanges();
+        }, 4000);
       });
     }
   }
@@ -200,9 +202,14 @@ export class DashboardComponent implements OnInit {
   }
 
   eliminarRecurso(id: number) {
-    if (confirm('¿Está seguro de que desea eliminar este recurso del repositorio institucional?')) {
+    if (confirm('¿Estás seguro de que querés eliminar este recurso del repositorio institucional?')) {
       this.apiService.eliminarRecurso(id).subscribe(() => {
+        this.successMsg = '¡Recurso eliminado del repositorio institucional con éxito!';
         this.cargarRecursos();
+        setTimeout(() => {
+          this.successMsg = '';
+          this.cdr.detectChanges();
+        }, 4000);
       });
     }
   }
@@ -234,8 +241,12 @@ export class DashboardComponent implements OnInit {
       this.apiService
         .actualizarRecurso(this.recursoSeleccionado.id, this.recursoSeleccionado.htmlEditado)
         .subscribe(() => {
-          alert(`¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`);
+          this.successMsg = `¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`;
           this.cargarRecursos();
+          setTimeout(() => {
+            this.successMsg = '';
+            this.cdr.detectChanges();
+          }, 4000);
         });
     } else {
       alert('Seleccione un recurso para guardar.');
