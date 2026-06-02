@@ -1,4 +1,4 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
 
 import {
   ReactiveFormsModule,
@@ -21,14 +21,19 @@ export class DashboardComponent implements OnInit {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
+  private cdr = inject(ChangeDetectorRef);
 
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
+  successMsg: string = '';
   seccionActiva: string = 'recursos';
 
   recursos: any[] = [];
   cargando: boolean = true;
   recursoSeleccionado: any = null;
+
+  categorias: any[] = [];
+  asignaturas: any[] = [];
 
   filtroMateria: string = 'Todas';
 
@@ -71,6 +76,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.cargarDatosMaestros();
     this.cargarRecursos();
 
     // Escuchar parámetros de URL para abrir la sección correcta
@@ -79,6 +85,11 @@ export class DashboardComponent implements OnInit {
         this.seccionActiva = params['seccion'];
       }
     });
+  }
+
+  cargarDatosMaestros(): void {
+    this.apiService.getCategorias().subscribe(data => this.categorias = data);
+    this.apiService.getAsignaturas().subscribe(data => this.asignaturas = data);
   }
 
   cargarRecursos(): void {
@@ -90,10 +101,12 @@ export class DashboardComponent implements OnInit {
         if (this.recursos.length > 0) {
           this.seleccionarRecurso(this.recursos[0]);
         }
+        this.cdr.detectChanges();
       },
       error: (err) => {
         console.error('Error al cargar recursos:', err);
         this.cargando = false;
+        this.cdr.detectChanges();
       },
     });
   }
@@ -101,13 +114,14 @@ export class DashboardComponent implements OnInit {
   onSubmit(): void {
     if (this.recursoForm.valid) {
       this.apiService.createResource(this.recursoForm.value).subscribe(() => {
-        this.mensajeExito = true;
         this.recursoForm.reset();
         this.cargarRecursos(); // Recargar recursos
+        this.successMsg = '¡Recurso creado en el repositorio institucional con éxito!';
 
         setTimeout(() => {
-          this.mensajeExito = false;
-        }, 3000);
+          this.successMsg = '';
+          this.cdr.detectChanges();
+        }, 4000);
       });
     }
   }
@@ -188,9 +202,14 @@ export class DashboardComponent implements OnInit {
   }
 
   eliminarRecurso(id: number) {
-    if (confirm('¿Está seguro de que desea eliminar este recurso del repositorio institucional?')) {
+    if (confirm('¿Estás seguro de que querés eliminar este recurso del repositorio institucional?')) {
       this.apiService.eliminarRecurso(id).subscribe(() => {
+        this.successMsg = '¡Recurso eliminado del repositorio institucional con éxito!';
         this.cargarRecursos();
+        setTimeout(() => {
+          this.successMsg = '';
+          this.cdr.detectChanges();
+        }, 4000);
       });
     }
   }
@@ -222,8 +241,12 @@ export class DashboardComponent implements OnInit {
       this.apiService
         .actualizarRecurso(this.recursoSeleccionado.id, this.recursoSeleccionado.htmlEditado)
         .subscribe(() => {
-          alert(`¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`);
+          this.successMsg = `¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`;
           this.cargarRecursos();
+          setTimeout(() => {
+            this.successMsg = '';
+            this.cdr.detectChanges();
+          }, 4000);
         });
     } else {
       alert('Seleccione un recurso para guardar.');

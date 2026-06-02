@@ -16,8 +16,15 @@ export class HeaderComponent {
     return localStorage.getItem('isLoggedIn') === 'true';
   }
 
+  get isStaff(): boolean {
+    return localStorage.getItem('is_staff') === 'true';
+  }
+
   logout() {
     localStorage.removeItem('isLoggedIn');
+    localStorage.removeItem('is_staff');
+    localStorage.removeItem('access_token');
+    localStorage.removeItem('refresh_token');
     this.menuPerfilAbierto = false;
     this.menuMovilAbierto = false;
     this.router.navigate(['/login']);
