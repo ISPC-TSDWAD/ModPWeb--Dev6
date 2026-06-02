@@ -30,7 +30,7 @@
         <td>{{ u.is_staff ? 'Sí' : 'No' }}</td>
         <td>
           <button class="btn btn-sm btn-warning me-2" (click)="editUser(u)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteUser(u.id)">Eliminar</button>
+          <button class="btn btn-sm btn-danger" (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" title="No se puede eliminar al Super Administrador principal">Eliminar</button>
         </td>
       </tr>
     </tbody>

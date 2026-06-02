@@ -17,9 +17,9 @@
       </div>
     </div>
 
-    <div class="mb-3" *ngIf="!user">
+    <div class="mb-3">
       <label class="form-label">Contraseña</label>
-      <input type="password" class="form-control" formControlName="password">
+      <input type="password" class="form-control" formControlName="password" [placeholder]="user ? 'Dejar en blanco para no cambiarla' : ''">
       <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger mt-1">
         La contraseña es requerida para usuarios nuevos.
       </div>

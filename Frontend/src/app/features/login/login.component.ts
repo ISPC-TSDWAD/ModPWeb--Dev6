@@ -1,6 +1,7 @@
 import { Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
@@ -19,10 +20,7 @@ export class LoginComponent {
   errorMsg = '';
   showPassword = false;
 
-  // Credenciales válidas (frontend-only, según README)
-  private readonly VALID_USER = 'admin';
-  private readonly VALID_EMAIL = 'admin@edutools.edu.ar';
-  private readonly VALID_PASS = 'Admin1234!';
+  private authService = inject(AuthService);
 
   login() {
     this.errorMsg = '';
@@ -32,16 +30,14 @@ export class LoginComponent {
       return;
     }
 
-    const userOk =
-      this.username.trim() === this.VALID_USER || this.username.trim() === this.VALID_EMAIL;
-    const passOk = this.password === this.VALID_PASS;
-
-    if (userOk && passOk) {
-      localStorage.setItem('isLoggedIn', 'true');
-      this.router.navigate(['/home']);
-    } else {
-      this.errorMsg = 'Usuario o contraseña incorrectos.';
-    }
+    this.authService.login(this.username, this.password).subscribe({
+      next: () => {
+        this.router.navigate(['/home']);
+      },
+      error: () => {
+        this.errorMsg = 'Usuario o contraseña incorrectos.';
+      }
+    });
   }
 
   togglePassword() {

@@ -43,7 +43,10 @@ export class UsersComponent implements OnInit {
     if (confirm('¿Estás seguro de eliminar este usuario?')) {
       this.userService.deleteUser(id).subscribe({
         next: () => this.loadUsers(),
-        error: (err) => console.error('Error deleting user', err)
+        error: (err) => {
+          if (err.status === 403) alert('No tienes permiso para eliminar a este usuario.');
+          else console.error('Error deleting user', err);
+        }
       });
     }
   }

@@ -31,6 +31,8 @@ export class UserFormComponent implements OnInit {
 
     if (!this.user) {
       this.userForm.addControl('password', this.fb.control('', [Validators.required]));
+    } else {
+      this.userForm.addControl('password', this.fb.control(''));
     }
   }
 
@@ -45,7 +47,10 @@ export class UserFormComponent implements OnInit {
     if (this.user) {
       this.userService.updateUser(this.user.id!, formValue).subscribe({
         next: () => this.saved.emit(),
-        error: (err) => alert('Error actualizando usuario')
+        error: (err) => {
+          if (err.status === 403) alert('No tienes permiso para editar a este usuario.');
+          else alert('Error actualizando usuario');
+        }
       });
     } else {
       this.userService.createUser(formValue).subscribe({
