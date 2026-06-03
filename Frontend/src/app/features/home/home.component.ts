@@ -25,11 +25,21 @@ export class HomeComponent implements OnInit {
   recursoForm: FormGroup;
   mensajeExito: boolean = false;
 
+  contactoForm: FormGroup;
+  mostrarModalContacto: boolean = false;
+  mensajeContactoExito: boolean = false;
+
   constructor() {
     this.recursoForm = this.fb.group({
       titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
       categoria: ['', Validators.required],
       url: ['', [Validators.required, Validators.pattern('https?://.+')]],
+    });
+
+    this.contactoForm = this.fb.group({
+      nombre: ['', [Validators.required, Validators.minLength(3)]],
+      email: ['', [Validators.required, Validators.email]],
+      mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
 
@@ -86,5 +96,31 @@ export class HomeComponent implements OnInit {
       .catch((err) => {
         console.error('Error al copiar al portapapeles: ', err);
       });
+  }
+
+  abrirModalContacto(): void {
+    this.mostrarModalContacto = true;
+  }
+
+  cerrarModalContacto(): void {
+    this.mostrarModalContacto = false;
+    this.contactoForm.reset();
+  }
+
+  enviarContacto(): void {
+    if (this.contactoForm.valid) {
+      // Simular envío de email
+      console.log('Enviando email de contacto:', this.contactoForm.value);
+      this.mensajeContactoExito = true;
+      setTimeout(() => {
+        this.mensajeContactoExito = false;
+        this.cerrarModalContacto();
+      }, 3000);
+    }
+  }
+
+  esCampoContactoInvalido(campo: string): boolean {
+    const control = this.contactoForm.get(campo);
+    return !!control && control.invalid && (control.dirty || control.touched);
   }
 }
