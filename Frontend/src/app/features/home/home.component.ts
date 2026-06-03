@@ -109,8 +109,14 @@ export class HomeComponent implements OnInit {
 
   enviarContacto(): void {
     if (this.contactoForm.valid) {
-      // Simular envío de email
-      console.log('Enviando email de contacto:', this.contactoForm.value);
+      const { nombre, email, mensaje } = this.contactoForm.value;
+      const destinatario = 'tecnologia.sied@ucc.edu.ar';
+      const asunto = encodeURIComponent(`Solicitud de Registro EduTools - ${nombre}`);
+      const cuerpo = encodeURIComponent(`Nombre: ${nombre}\nEmail: ${email}\n\nMensaje:\n${mensaje}`);
+      
+      // Redirigir al cliente de correo por defecto
+      window.location.href = `mailto:${destinatario}?subject=${asunto}&body=${cuerpo}`;
+
       this.mensajeContactoExito = true;
       setTimeout(() => {
         this.mensajeContactoExito = false;
