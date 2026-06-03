@@ -29,7 +29,7 @@ EduTools centraliza recursos y ofrece un **Sandbox de Diseño** que emula la hoj
 
 | Capa | Tecnología |
 |------|-----------|
-| Frontend | **Angular 18** (Signals + Stand-alone Components) |
+| Frontend | **Angular 17** (Standalone Components + Control Flow) |
 | Backend | Django REST Framework |
 | Base de datos | MySQL |
 | Estilos | **Bootstrap 5.3** (npm) + **Tailwind CSS CDN** con Design Tokens institucionales |
@@ -45,16 +45,19 @@ Se utiliza **GitHub Projects** para la gestión de Sprints y backlog:
 
 ---
 
-## 6. Documentación Oficial y Técnica (Evidencia 2)
+## 6. Documentación Oficial y Técnica
 
 | Documento | Descripción | Enlace Directo |
 |-----------|-------------|----------------|
-| 📘 **Documentación Formal** | Memoria técnica y estratégica (Ev2). | [Ver Documento](docs/EduTools_Documentacion_formal_Ev2.md) |
-| 📐 **DER — Notación Chen** | Diagrama E-R con entidades (rectángulos), atributos (óvalos) y relaciones (rombos). | [Ver DER Chen](docs/der_chen.md) |
-| 🗄️ **Modelo Relacional** | Tablas físicas MySQL con tipos, PK, FK y validación cruzada con Django. | [Ver Modelo Relacional](docs/modelo_relacional.md) |
-| 📋 **Historias de Usuario** | Sprint Backlog con HU-01 a HU-05, criterios Gherkin (CA-n°) y validación de cumplimiento. | [Ver HU](docs/historias_de_usuario.md) |
-| 📝 **Script SQL DDL** | Código DDL MySQL ejecutable con datos iniciales. | [Ver Script](docs/sql/script_database.sql) |
-| 📚 **Wiki del Proyecto** | Base de conocimientos. | [Ir a la Wiki](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki) |
+| Documentación Formal Ev2 | Memoria técnica y estratégica del Sprint 1. | [Ver Documento](docs/EduTools_Documentacion_formal_Ev2.md) |
+| Documento Técnico Sprint 2 | Arquitectura, endpoints y evidencias del Sprint 2 (APA). | [Ver PDF](docs/Documento_Tecnico_Sprint_2.pdf) |
+| Poster de Defensa | Poster institucional del proyecto EduTools. | [Ver Poster](docs/posterEduTools.pdf) |
+| DER - Notacion Chen | Diagrama E-R con entidades, atributos y relaciones. | [Ver DER Chen](docs/der_chen.md) |
+| Modelo Relacional | Tablas fisicas MySQL con tipos, PK, FK y validacion cruzada con Django. | [Ver Modelo Relacional](docs/modelo_relacional.md) |
+| Diagrama de Clases | Diagrama UML de clases del sistema. | [Ver Diagrama](docs/diagrama_clases.md) |
+| Historias de Usuario | Sprint Backlog HU-01 a HU-08, criterios Gherkin (BDD). | [Ver HU](docs/historias_de_usuario.md) |
+| Script SQL DDL | Codigo DDL MySQL ejecutable con datos iniciales. | [Ver Script](docs/sql/script_database.sql) |
+| Wiki del Proyecto | Base de conocimientos, ceremonias y gestion agil. | [Ir a la Wiki](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/wiki) |
 
 
 
@@ -125,22 +128,40 @@ ng serve
 ```
 ModPWeb--Dev6/
 ├── Backend/
-│   ├── api/
-│   │   ├── models.py        # Usuario, Categoría, Asignatura, Recurso
-│   │   ├── serializers.py   # Serializadores DRF
-│   │   ├── views.py         # ViewSets CRUD
-│   │   └── urls.py          # Rutas API
 │   ├── core/
-│   │   └── settings.py      # Configuración MySQL, CORS, timezone ARG
+│   │   ├── settings.py      # Configuracion MySQL, CORS, JWT, timezone ARG
+│   │   └── urls.py          # Rutas principales (api/token/, api/users/, api/pedagogia/)
+│   ├── users/
+│   │   ├── models.py        # Modelo Usuario (AbstractUser + roles)
+│   │   ├── serializers.py   # UsuarioSerializer + CustomTokenObtainPairSerializer
+│   │   ├── views.py         # UsuarioViewSet + CustomTokenObtainPairView
+│   │   ├── permissions.py   # IsAdminOrOwner (permisos granulares)
+│   │   ├── tests.py         # Tests unitarios de la API de usuarios
+│   │   └── urls.py          # Rutas /api/users/
+│   ├── pedagogia/
+│   │   ├── models.py        # Categoria, Asignatura, Recurso
+│   │   ├── serializers.py   # Serializadores DRF con campos relacionales
+│   │   ├── views.py         # ViewSets CRUD protegidos por JWT
+│   │   └── urls.py          # Rutas /api/pedagogia/
+│   ├── seed_mock_data.py    # Script de carga de datos de prueba
+│   ├── reset_db.py          # Script de reinicio de base de datos
 │   └── .env_modelo          # Modelo de variables de entorno
 ├── Frontend/
 │   └── src/app/
-│       ├── components/      # Header y Footer compartidos
-│       ├── pages/           # Home, About, Dashboard, Login
-│       └── services/        # ApiService (HttpClient + RxJS)
+│       ├── core/            # Servicios (AuthService, ApiService, UserService),
+│       │                    # Guards (authGuard), Interceptors (authInterceptor)
+│       ├── shared/          # Componentes reutilizables (Header, Footer)
+│       ├── features/        # Vistas principales:
+│       │   ├── login/       #   Login con Reactive Forms + JWT
+│       │   ├── home/        #   Home (catalogo de plantillas)
+│       │   ├── dashboard/   #   Dashboard (Repositorio, Sandbox, Componentes)
+│       │   ├── users/       #   CRUD de Usuarios (tabla + formulario reactivo)
+│       │   └── about/       #   Quienes Somos
+│       └── app.routes.ts    # Routing con AuthGuard en rutas protegidas
 └── docs/
-    ├── der.md               # Diagrama Entidad-Relación
-    └── sql/                 # Script de creación de BD
+    ├── wiki/                # Wiki del proyecto (Home, HU, Ceremonias)
+    ├── sql/                 # Script DDL de creacion de BD
+    └── *.pdf                # Documentos tecnicos y poster (APA)
 ```
 
 ---
@@ -153,17 +174,17 @@ ModPWeb--Dev6/
 
 ---
 
-## 📸 Evidencias de Funcionamiento
+## Evidencias de Funcionamiento
 
-### 📌 Evidencia 1 (Sprint 0): Bases de Datos y API
-Validación de la arquitectura base, endpoints RESTful y persistencia en MySQL.
+### Evidencia 1 (Sprint 0): Bases de Datos y API
+Validacion de la arquitectura base, endpoints RESTful y persistencia en MySQL.
 
-| Conexión API REST (Backend) | Base de Datos (MySQL) |
+| Conexion API REST (Backend) | Base de Datos (MySQL) |
 | :---: | :---: |
 | <img src="docs/capturas/Test%20conection%20-%20backend.png" alt="Backend API" width="400"/> | <img src="docs/capturas/Test%20conection%20-%20bd.png" alt="Base de Datos" width="400"/> |
 
-### 📌 Evidencia 2 (Sprint 1): Sandbox y Consumo de API
-Integración del Frontend en Angular consumiendo los endpoints de Django y renderizado de componentes.
+### Evidencia 2 (Sprint 1): Sandbox y Consumo de API
+Integracion del Frontend en Angular consumiendo los endpoints de Django y renderizado de componentes.
 
 <div align="center">
   <img src="docs/capturas/Test%20conection%20-%20frontend.png" alt="Frontend Console" width="800"/>
@@ -171,4 +192,16 @@ Integración del Frontend en Angular consumiendo los endpoints de Django y rende
   <i>Renderizado del Dashboard en Angular y consumo de datos</i>
 </div>
 
-**Nota de Integración:** Consulte la [Documentación Oficial de Inicio de Proyecto (Ev2)](docs/EduTools_Documentacion_formal_Ev2.md) para un desglose completo bajo estándares PMI y de Gestión Ágil.
+### Evidencia 3 (Sprint 2): Integracion Completa y Persistencia Real
+Conexion real entre Angular y Django REST Framework con autenticacion JWT, CRUD completo de Usuarios y Recursos, formularios reactivos con validaciones y persistencia en MySQL.
+
+**Funcionalidades implementadas en este Sprint:**
+- Login seguro con JWT (SimpleJWT) y proteccion de rutas con AuthGuard
+- CRUD completo de Usuarios con permisos granulares (IsAdminOrOwner)
+- CRUD completo de Recursos Pedagogicos con relaciones FK (Categoria, Asignatura)
+- Formularios Reactivos (ReactiveForms) con validaciones sincronas y mensajes de feedback
+- Interceptor HTTP para inyeccion automatica de tokens y manejo de sesion expirada (401)
+- Exportacion de recursos en formato DOC y HTML
+- Tests unitarios del backend (API de Usuarios)
+
+**Nota de Integracion:** Consulte la [Documentacion Oficial de Inicio de Proyecto (Ev2)](docs/EduTools_Documentacion_formal_Ev2.md) y el [Documento Tecnico Sprint 2](docs/Documento_Tecnico_Sprint_2.pdf) para un desglose completo.
