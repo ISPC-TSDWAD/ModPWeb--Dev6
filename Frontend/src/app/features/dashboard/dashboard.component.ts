@@ -5,7 +5,6 @@ import {
   FormBuilder,
   FormGroup,
   Validators,
-  FormsModule,
 } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
@@ -13,7 +12,7 @@ import { ApiService } from '../../core/services/api.service';
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [ReactiveFormsModule, FormsModule, RouterModule],
+  imports: [ReactiveFormsModule, RouterModule],
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
@@ -285,6 +284,18 @@ export class DashboardComponent implements OnInit {
   }
   rehacer() {
     alert('Rehacer acción (Mock)');
+  }
+
+  onFiltroMateriaChange(event: Event) {
+    this.filtroMateria = (event.target as HTMLSelectElement).value;
+  }
+
+  onColorChange(event: Event) {
+    this.configElemento.color = (event.target as HTMLInputElement).value;
+  }
+
+  onMostrarIconoChange(event: Event) {
+    this.configElemento.mostrarIcono = (event.target as HTMLInputElement).checked;
   }
 
   cerrarSesion() {

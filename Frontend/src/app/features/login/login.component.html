@@ -39,7 +39,7 @@
     <div
       class="bg-surface-container-lowest border border-outline-variant p-lg rounded-lg shadow-sm"
     >
-      <form class="space-y-md" (submit)="$event.preventDefault()">
+      <form [formGroup]="loginForm" class="space-y-md" (submit)="$event.preventDefault()">
         <!-- Username Input -->
         <div class="space-y-xs">
           <label class="text-label-lg font-label-lg text-on-surface" for="username"
@@ -56,11 +56,13 @@
               id="username"
               placeholder="ej. admin"
               type="text"
-              [(ngModel)]="username"
-              name="username"
+              formControlName="username"
               autocomplete="username"
             />
           </div>
+          @if (loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched) {
+            <p class="text-red-600 text-xs mt-1">Este campo es obligatorio</p>
+          }
         </div>
 
         <!-- Password Input -->
@@ -79,8 +81,7 @@
               id="password"
               placeholder="••••••••"
               [type]="showPassword ? 'text' : 'password'"
-              [(ngModel)]="password"
-              name="password"
+              formControlName="password"
               autocomplete="current-password"
             />
             <button
@@ -93,6 +94,12 @@
               }}</span>
             </button>
           </div>
+          @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
+            <p class="text-red-600 text-xs mt-1">Este campo es obligatorio</p>
+          }
+          @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
+            <p class="text-red-600 text-xs mt-1">La contraseña debe tener al menos 6 caracteres</p>
+          }
         </div>
 
         <!-- Forgot Password Link -->
