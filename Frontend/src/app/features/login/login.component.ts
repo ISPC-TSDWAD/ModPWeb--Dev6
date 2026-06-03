@@ -1,12 +1,12 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { FormsModule } from '@angular/forms';
+import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [ReactiveFormsModule],
   templateUrl: './login.component.html',
   host: {
     class: 'w-full flex flex-grow',
@@ -16,9 +16,13 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
+  private fb = inject(FormBuilder);
 
-  username = '';
-  password = '';
+  loginForm = this.fb.group({
+    username: ['', [Validators.required]],
+    password: ['', [Validators.required, Validators.minLength(6)]]
+  });
+
   errorMsg = '';
   showPassword = false;
 
@@ -35,12 +39,14 @@ export class LoginComponent implements OnInit {
   login() {
     this.errorMsg = '';
 
-    if (!this.username.trim() || !this.password.trim()) {
-      this.errorMsg = 'Por favor completá usuario y contraseña.';
+    if (this.loginForm.invalid) {
+      this.loginForm.markAllAsTouched();
       return;
     }
 
-    this.authService.login(this.username, this.password).subscribe({
+    const { username, password } = this.loginForm.value;
+
+    this.authService.login(username!, password!).subscribe({
       next: () => {
         this.router.navigate(['/home']);
       },
