@@ -39,6 +39,24 @@ En esta sección documentamos el seguimiento de nuestras reuniones ágiles como 
 
 ---
 
+### 🔍 Sprint Review & Retrospective (Sprint 2)
+**Fecha:** Cierre del Sprint 2
+**Duración:** 50 min.
+
+**Review (Demostración):**
+- Se demostró el flujo completo de autenticación JWT (login real contra la base de datos MySQL).
+- CRUD de Usuarios funcionando con permisos granulares (solo admin puede crear/listar usuarios).
+- CRUD de Recursos Pedagógicos conectado a la API real con persistencia en MySQL.
+- Migración exitosa de todos los formularios a ReactiveForms con validaciones y mensajes de error.
+- Se presentó el Documento Técnico Sprint 2 en formato APA y el Poster de Defensa.
+
+**Retrospective (Qué mejorar):**
+- **Lo que salió bien:** La refactorización del backend a dos apps modulares (users + pedagogia) fue clave para evitar conflictos. El uso estricto de ramas `feature/issue-XX` evitó los problemas de merge del sprint anterior.
+- **Lo que hay que mejorar:** Algunos tests unitarios quedaron solo en el backend; en el próximo sprint deberíamos agregar tests E2E en el frontend con Cypress o Playwright.
+- **Plan de acción para Sprint 3:** Implementar un sistema de roles más granular en el frontend, agregar paginación a los listados y mejorar la cobertura de tests.
+
+---
+
 ## ⏪ Sprint 1: Fundamentos (Evidencia 2)
 
 ### 🔍 Sprint Review & Retrospective
