@@ -152,7 +152,8 @@
             <span class="material-symbols-outlined text-outline">filter_list</span>
             <label class="font-bold text-label-md">Filtrar por Asignatura:</label>
             <select
-              [(ngModel)]="filtroMateria"
+              [value]="filtroMateria"
+              (change)="onFiltroMateriaChange($event)"
               class="border dark:bg-[#2d2d2d] dark:border-outline px-md py-1 rounded cursor-pointer"
             >
               <option value="Todas">Todas las materias</option>
@@ -299,14 +300,16 @@
                   <label class="text-sm font-bold block mb-1">Color Principal (Tokens)</label>
                   <input
                     type="color"
-                    [(ngModel)]="configElemento.color"
+                    [value]="configElemento.color"
+                    (input)="onColorChange($event)"
                     class="w-full h-10 border border-outline cursor-pointer rounded p-1 dark:bg-[#2d2d2d]"
                   />
                 </div>
                 <div class="flex items-center gap-2">
                   <input
                     type="checkbox"
-                    [(ngModel)]="configElemento.mostrarIcono"
+                    [checked]="configElemento.mostrarIcono"
+                    (change)="onMostrarIconoChange($event)"
                     class="cursor-pointer h-4 w-4 text-primary focus:ring-primary rounded"
                   />
                   <label class="text-sm font-bold cursor-pointer">Mostrar íconos visuales</label>
