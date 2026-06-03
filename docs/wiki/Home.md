@@ -16,9 +16,11 @@
 - 🤔 **Supuestos Iniciales:** Los usuarios finales poseen conocimientos básicos en ofimática. El servidor institucional soportará tráfico de hasta 100 usuarios concurrentes.
 
 ### 3. Documentación Técnica
-- 🏛️ **Arquitectura del Sistema:** Consulta el documento técnico formal del Sprint 2 *(Próximamente)*.
-- 💾 **Modelo de Datos:** Revisa el DER y el Modelo Relacional en nuestro [repositorio principal](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/blob/main/docs/modelo_relacional.md).
-- ⚙️ **Configuración de Entorno:** Las instrucciones para ejecutar el Backend (Django) y el Frontend (Angular) se encuentran detalladas en el [README.md](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6) del proyecto.
+- **Arquitectura del Sistema:** Consulta el [Documento Técnico Sprint 2 (PDF APA)](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/blob/main/docs/Documento_Tecnico_Sprint_2.pdf).
+- **Poster de Defensa:** Disponible en [posterEduTools.pdf](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/blob/main/docs/posterEduTools.pdf).
+- **Modelo de Datos:** Revisa el DER y el Modelo Relacional en nuestro [repositorio principal](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/blob/main/docs/modelo_relacional.md).
+- **Diagrama de Clases:** Consulta el [diagrama UML](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6/blob/main/docs/diagrama_clases.md).
+- **Configuración de Entorno:** Las instrucciones para ejecutar el Backend (Django) y el Frontend (Angular) se encuentran detalladas en el [README.md](https://github.com/ISPC-TSDWAD/ModPWeb--Dev6) del proyecto.
 
 ---
 

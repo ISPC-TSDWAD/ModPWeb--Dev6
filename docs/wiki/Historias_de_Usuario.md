@@ -18,9 +18,9 @@ Este documento centraliza todas las Historias de Usuario (HU) definidas para el 
 
 | ID | Historia de Usuario | Estimación | Estado |
 |:---:|---|:---:|:---:|
-| **HU-06** | Como usuario, quiero que mi inicio de sesión sea verificado de forma segura en el servidor mediante JWT, para proteger mis datos y accesos. | 5 SP | ⏳ En Curso |
-| **HU-07** | Como administrador, quiero crear, editar y eliminar usuarios en el sistema, para mantener el control de accesos institucionales. | 8 SP | ⏳ En Curso |
-| **HU-08** | Como asesor pedagógico, quiero que los recursos que creo o edito se guarden de forma permanente en la base de datos MySQL, para no perder mi trabajo entre sesiones. | 8 SP | ⏳ En Curso |
+| **HU-06** | Como usuario, quiero que mi inicio de sesión sea verificado de forma segura en el servidor mediante JWT, para proteger mis datos y accesos. | 5 SP | ✅ Done |
+| **HU-07** | Como administrador, quiero crear, editar y eliminar usuarios en el sistema, para mantener el control de accesos institucionales. | 8 SP | ✅ Done |
+| **HU-08** | Como asesor pedagógico, quiero que los recursos que creo o edito se guarden de forma permanente en la base de datos MySQL, para no perder mi trabajo entre sesiones. | 8 SP | ✅ Done |
 
 ---
 
