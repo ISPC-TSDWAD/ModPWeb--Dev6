@@ -6,26 +6,26 @@
       <div class="absolute top-0 left-0 w-96 h-96 bg-white rounded-full -translate-x-1/2 -translate-y-1/2"></div>
       <div class="absolute bottom-0 right-0 w-80 h-80 bg-white rounded-full translate-x-1/3 translate-y-1/3"></div>
     </div>
-    <div class="relative max-w-[1200px] mx-auto px-xl py-20 flex flex-col items-center text-center gap-lg">
-      <div class="flex items-center gap-sm">
-        <span class="material-symbols-outlined text-white text-[48px]">school</span>
-        <h1 class="text-display-lg text-white font-bold">EduTools</h1>
+    <div class="relative max-w-[1200px] mx-auto px-xl py-20 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+      <div class="flex flex-col items-start text-left gap-6 z-10">
+        <div class="flex items-center gap-sm">
+          <span class="material-symbols-outlined text-white text-[48px]">school</span>
+          <h1 class="text-display-lg text-white font-bold">EduTools</h1>
+        </div>
+        <p class="text-title-lg text-white/80">
+          La plataforma institucional para centralizar, estandarizar y distribuir recursos pedagógicos 
+          para entornos de educación a distancia.
+        </p>
+        <div class="mt-sm">
+          <button (click)="abrirModalContacto()"
+            class="bg-white text-primary font-bold px-8 py-3 rounded-lg shadow-lg hover:bg-primary-container transition-all flex items-center gap-2">
+            <span class="material-symbols-outlined text-[20px]">mail</span>
+            Contáctanos para registrarte
+          </button>
+        </div>
       </div>
-      <p class="text-title-lg text-white/80 max-w-2xl">
-        La plataforma institucional para centralizar, estandarizar y distribuir recursos pedagógicos 
-        para entornos de educación a distancia.
-      </p>
-      <div class="flex gap-md flex-wrap justify-center mt-sm">
-        <a routerLink="/dashboard"
-          class="bg-white text-primary font-bold px-8 py-3 rounded-lg hover:bg-primary-container transition-colors flex items-center gap-2">
-          <span class="material-symbols-outlined text-[20px]">folder_open</span>
-          Ir al Panel
-        </a>
-        <a routerLink="/about"
-          class="border border-white/60 text-white font-bold px-8 py-3 rounded-lg hover:bg-white/10 transition-colors flex items-center gap-2">
-          <span class="material-symbols-outlined text-[20px]">groups</span>
-          Quiénes Somos
-        </a>
+      <div class="z-10 rounded-2xl overflow-hidden shadow-2xl border-4 border-white/20">
+        <img src="assets/aula.png" alt="Aula de estudiantes interactuando y aprendiendo" class="w-full h-auto object-cover hover:scale-105 transition-transform duration-700">
       </div>
     </div>
   </section>
@@ -114,5 +114,83 @@
   </section>
 
 
+  <!-- Modal de Contacto -->
+  @if (mostrarModalContacto) {
+    <div class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm animate-fade-in">
+      <div class="bg-surface rounded-2xl shadow-2xl w-full max-w-lg overflow-hidden animate-slide-up">
+        
+        <div class="flex justify-between items-center bg-primary text-white px-6 py-4">
+          <h3 class="text-title-lg font-bold flex items-center gap-2">
+            <span class="material-symbols-outlined">mail</span>
+            Solicitar Registro
+          </h3>
+          <button (click)="cerrarModalContacto()" class="text-white/80 hover:text-white transition-colors">
+            <span class="material-symbols-outlined">close</span>
+          </button>
+        </div>
+
+        <div class="p-6">
+          @if (mensajeContactoExito) {
+            <div class="bg-[#e6f4ea] text-[#137333] p-4 rounded-lg flex items-start gap-3 mb-4 border border-[#ceead6]">
+              <span class="material-symbols-outlined">check_circle</span>
+              <div>
+                <p class="font-bold">¡Mensaje enviado con éxito!</p>
+                <p class="text-sm">Nos pondremos en contacto pronto.</p>
+              </div>
+            </div>
+          } @else {
+            <p class="text-on-surface-variant mb-6">
+              Completá el formulario y nuestro equipo te enviará las instrucciones para acceder al panel.
+            </p>
+
+            <form [formGroup]="contactoForm" (ngSubmit)="enviarContacto()" class="flex flex-col gap-4">
+              <!-- Nombre -->
+              <div>
+                <label class="block text-label-md text-on-surface mb-1 font-semibold">Nombre Completo</label>
+                <input type="text" formControlName="nombre" 
+                  class="w-full bg-surface border rounded-lg px-4 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  [class.border-error]="esCampoContactoInvalido('nombre')" [class.border-outline]="!esCampoContactoInvalido('nombre')">
+                @if (esCampoContactoInvalido('nombre')) {
+                  <p class="text-error text-body-sm mt-1">El nombre es requerido y debe tener al menos 3 letras.</p>
+                }
+              </div>
+
+              <!-- Email -->
+              <div>
+                <label class="block text-label-md text-on-surface mb-1 font-semibold">Correo Electrónico</label>
+                <input type="email" formControlName="email" 
+                  class="w-full bg-surface border rounded-lg px-4 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all"
+                  [class.border-error]="esCampoContactoInvalido('email')" [class.border-outline]="!esCampoContactoInvalido('email')">
+                @if (esCampoContactoInvalido('email')) {
+                  <p class="text-error text-body-sm mt-1">Ingresa un email válido.</p>
+                }
+              </div>
+
+              <!-- Mensaje -->
+              <div>
+                <label class="block text-label-md text-on-surface mb-1 font-semibold">Mensaje</label>
+                <textarea formControlName="mensaje" rows="4"
+                  class="w-full bg-surface border rounded-lg px-4 py-2 outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-all resize-none"
+                  [class.border-error]="esCampoContactoInvalido('mensaje')" [class.border-outline]="!esCampoContactoInvalido('mensaje')"></textarea>
+                @if (esCampoContactoInvalido('mensaje')) {
+                  <p class="text-error text-body-sm mt-1">El mensaje es requerido (mín. 10 caracteres).</p>
+                }
+              </div>
+
+              <div class="flex justify-end gap-3 mt-4">
+                <button type="button" (click)="cerrarModalContacto()" class="px-6 py-2 text-primary font-bold hover:bg-surface-variant rounded-lg transition-colors">
+                  Cancelar
+                </button>
+                <button type="submit" [disabled]="contactoForm.invalid" 
+                  class="bg-primary text-white px-6 py-2 rounded-lg font-bold disabled:opacity-50 hover:bg-primary/90 transition-colors">
+                  Enviar Mensaje
+                </button>
+              </div>
+            </form>
+          }
+        </div>
+      </div>
+    </div>
+  }
 
 </div>
