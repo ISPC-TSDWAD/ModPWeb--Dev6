@@ -25,6 +25,7 @@ export class LoginComponent implements OnInit {
 
   errorMsg = '';
   showPassword = false;
+  cargando = false;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
@@ -44,13 +45,16 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.cargando = true;
     const { username, password } = this.loginForm.value;
 
     this.authService.login(username!, password!).subscribe({
       next: () => {
+        this.cargando = false;
         this.router.navigate(['/home']);
       },
       error: () => {
+        this.cargando = false;
         this.errorMsg = 'Usuario o contraseña incorrectos.';
       }
     });
