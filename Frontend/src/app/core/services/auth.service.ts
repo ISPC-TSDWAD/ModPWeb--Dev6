@@ -26,6 +26,11 @@ export class AuthService {
         } else {
           localStorage.removeItem('is_staff');
         }
+        if (response.rol) {
+          localStorage.setItem('rol', response.rol);
+        } else {
+          localStorage.removeItem('rol');
+        }
       })
     );
   }
@@ -35,5 +40,6 @@ export class AuthService {
     localStorage.removeItem('refresh_token');
     localStorage.removeItem('isLoggedIn');
     localStorage.removeItem('is_staff');
+    localStorage.removeItem('rol');
   }
 }
