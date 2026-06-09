@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, OnInit, Output, inject } from '@angular
 import { CommonModule } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { UserService, User } from '../../../core/services/user.service';
+import { I18nService } from '../../../core/services/i18n.service';
+import { TranslatePipe } from '../../../core/pipes/translate.pipe';
 
 @Component({
   selector: 'app-user-form',
   standalone: true,
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, TranslatePipe],
   templateUrl: './user-form.component.html',
   styleUrls: ['./user-form.component.css']
 })
@@ -17,6 +19,7 @@ export class UserFormComponent implements OnInit {
 
   private fb = inject(FormBuilder);
   private userService = inject(UserService);
+  private i18n = inject(I18nService);
 
   userForm!: FormGroup;
 
@@ -26,7 +29,8 @@ export class UserFormComponent implements OnInit {
       email: [this.user?.email || '', [Validators.required, Validators.email]],
       first_name: [this.user?.first_name || ''],
       last_name: [this.user?.last_name || ''],
-      is_staff: [this.user?.is_staff || false]
+      is_staff: [this.user?.is_staff || false],
+      rol: [this.user?.rol || 'asesor']
     });
 
     if (!this.user) {
@@ -43,19 +47,20 @@ export class UserFormComponent implements OnInit {
     }
 
     const formValue = this.userForm.value;
+    formValue.is_staff = formValue.rol === 'admin';
 
     if (this.user) {
       this.userService.updateUser(this.user.id!, formValue).subscribe({
         next: () => this.saved.emit(),
         error: (err) => {
-          if (err.status === 403) alert('No tienes permiso para editar a este usuario.');
-          else alert('Error actualizando usuario');
+          if (err.status === 403) alert(this.i18n.t('uform.errEdit'));
+          else alert(this.i18n.t('uform.errUpdate'));
         }
       });
     } else {
       this.userService.createUser(formValue).subscribe({
         next: () => this.saved.emit(),
-        error: (err) => alert('Error creando usuario')
+        error: (err) => alert(this.i18n.t('uform.errCreate'))
       });
     }
   }

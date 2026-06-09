@@ -10,6 +10,7 @@ export interface User {
   first_name?: string;
   last_name?: string;
   is_staff?: boolean;
+  rol?: string;
 }
 
 @Injectable({
@@ -21,6 +22,21 @@ export class UserService {
 
   getUsers(): Observable<User[]> {
     return this.http.get<User[]>(this.baseUrl);
+  }
+
+  /** Datos del usuario autenticado. */
+  getMe(): Observable<User> {
+    return this.http.get<User>(`${this.baseUrl}me/`);
+  }
+
+  /** Actualiza el perfil del usuario autenticado (nombre, apellido, email). */
+  updateMe(data: Partial<User>): Observable<User> {
+    return this.http.patch<User>(`${this.baseUrl}me/`, data);
+  }
+
+  /** Cambia la contraseña propia validando la actual. */
+  changePassword(actual: string, nueva: string): Observable<any> {
+    return this.http.post(`${this.baseUrl}change-password/`, { actual, nueva });
   }
 
   createUser(user: User): Observable<User> {

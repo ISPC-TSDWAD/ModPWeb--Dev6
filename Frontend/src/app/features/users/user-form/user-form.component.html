@@ -1,52 +1,64 @@
-<div class="card p-4 mb-4">
-  <form [formGroup]="userForm" (ngSubmit)="onSubmit()">
+<div class="bg-surface-container-lowest border border-outline-variant rounded-2xl shadow-sm p-6 mb-8 animate-fade-in">
+  <h3 class="text-headline-sm font-bold text-on-surface mb-6">{{ (user ? 'uform.editTitle' : 'uform.createTitle') | translate }}</h3>
+  <form [formGroup]="userForm" (ngSubmit)="onSubmit()" class="flex flex-col gap-6">
     
-    <div class="mb-3">
-      <label class="form-label">Nombre de Usuario</label>
-      <input type="text" class="form-control" formControlName="username">
-      <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-danger mt-1">
-        El nombre de usuario es obligatorio
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.username' | translate }} <span class="text-error">*</span></label>
+        <input type="text" formControlName="username" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+        <div *ngIf="userForm.get('username')?.invalid && userForm.get('username')?.touched" class="text-error text-body-sm mt-1">
+          {{ 'uform.usernameReq' | translate }}
+        </div>
+      </div>
+
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.email' | translate }} <span class="text-error">*</span></label>
+        <input type="email" formControlName="email" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+        <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-error text-body-sm mt-1">
+          <span *ngIf="userForm.get('email')?.hasError('required')">{{ 'uform.emailReq' | translate }}</span>
+          <span *ngIf="userForm.get('email')?.hasError('email')">{{ 'uform.emailInvalid' | translate }}</span>
+        </div>
       </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Email</label>
-      <input type="email" class="form-control" formControlName="email">
-      <div *ngIf="userForm.get('email')?.invalid && userForm.get('email')?.touched" class="text-danger mt-1">
-        <span *ngIf="userForm.get('email')?.hasError('required')">El email es requerido.</span>
-        <span *ngIf="userForm.get('email')?.hasError('email')">Ingrese un email válido.</span>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.firstName' | translate }}</label>
+        <input type="text" formControlName="first_name" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.lastName' | translate }}</label>
+        <input type="text" formControlName="last_name" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
       </div>
     </div>
 
-    <div class="mb-3">
-      <label class="form-label">Contraseña</label>
-      <input type="password" class="form-control" formControlName="password" [placeholder]="user ? 'Dejar en blanco para no cambiarla' : ''">
-      <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-danger mt-1">
-        La contraseña es requerida para usuarios nuevos.
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.password' | translate }} <span *ngIf="!user" class="text-error">*</span></label>
+        <input type="password" formControlName="password" [placeholder]="user ? ('uform.passwordPlaceholder' | translate) : ''" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors">
+        <div *ngIf="userForm.get('password')?.invalid && userForm.get('password')?.touched" class="text-error text-body-sm mt-1">
+          {{ 'uform.passwordReq' | translate }}
+        </div>
+      </div>
+      <div class="flex flex-col gap-2">
+        <label class="font-bold text-label-md text-on-surface-variant">{{ 'uform.role' | translate }}</label>
+        <select formControlName="rol" class="border border-outline-variant rounded-lg px-4 py-3 bg-surface text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none cursor-pointer">
+          <option value="admin">{{ 'uform.roleAdmin' | translate }}</option>
+          <option value="maquetador">{{ 'uform.roleMaquetador' | translate }}</option>
+          <option value="asesor">{{ 'uform.roleAsesor' | translate }}</option>
+        </select>
       </div>
     </div>
 
-    <div class="mb-3 d-flex gap-3">
-      <div class="flex-grow-1">
-        <label class="form-label">Nombre</label>
-        <input type="text" class="form-control" formControlName="first_name">
-      </div>
-      <div class="flex-grow-1">
-        <label class="form-label">Apellido</label>
-        <input type="text" class="form-control" formControlName="last_name">
-      </div>
-    </div>
 
-    <div class="form-check mb-3">
-      <input class="form-check-input" type="checkbox" formControlName="is_staff" id="is_staff">
-      <label class="form-check-label" for="is_staff">
-        Es Administrador (Staff)
-      </label>
-    </div>
 
-    <div class="d-flex gap-2">
-      <button type="submit" class="btn btn-success" [disabled]="userForm.invalid">Guardar</button>
-      <button type="button" class="btn btn-secondary" (click)="onCancel()">Cancelar</button>
+    <div class="flex gap-4 mt-4 pt-6 border-t border-outline-variant">
+      <button type="submit" [disabled]="userForm.invalid" class="bg-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors disabled:opacity-50 shadow-sm">
+        {{ 'uform.save' | translate }}
+      </button>
+      <button type="button" (click)="onCancel()" class="bg-surface-container-high text-on-surface font-bold px-6 py-3 rounded-lg hover:bg-surface-container-highest transition-colors border border-outline-variant shadow-sm">
+        {{ 'uform.cancel' | translate }}
+      </button>
     </div>
   </form>
 </div>

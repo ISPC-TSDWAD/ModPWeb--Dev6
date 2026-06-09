@@ -15,19 +15,21 @@
         >
           EduTools Admin
         </h2>
-        <p class="font-body-sm text-body-sm text-on-surface-variant">Institutional Panel</p>
+        <p class="font-body-sm text-body-sm text-on-surface-variant">{{ 'side.panel' | translate }}</p>
       </div>
     </div>
     <nav class="flex-1 mt-md flex flex-col">
-      <a
-        (click)="setSeccion('recursos')"
-        [class.bg-secondary-container]="seccionActiva === 'recursos'"
-        [class.border-l-4]="seccionActiva === 'recursos'"
-        [class.border-secondary]="seccionActiva === 'recursos'"
-        class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
-      >
-        <span class="material-symbols-outlined">folder_shared</span> Repositorio
-      </a>
+      @if (rol !== 'asesor') {
+        <a
+          (click)="setSeccion('recursos')"
+          [class.bg-secondary-container]="seccionActiva === 'recursos'"
+          [class.border-l-4]="seccionActiva === 'recursos'"
+          [class.border-secondary]="seccionActiva === 'recursos'"
+          class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
+        >
+          <span class="material-symbols-outlined">folder_shared</span> {{ 'side.repo' | translate }}
+        </a>
+      }
       <a
         (click)="setSeccion('sandbox')"
         [class.bg-secondary-container]="seccionActiva === 'sandbox'"
@@ -35,7 +37,7 @@
         [class.border-secondary]="seccionActiva === 'sandbox'"
         class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
       >
-        <span class="material-symbols-outlined">science</span> Sandbox
+        <span class="material-symbols-outlined">science</span> {{ 'side.sandbox' | translate }}
       </a>
       <a
         (click)="setSeccion('componentes')"
@@ -44,7 +46,7 @@
         [class.border-secondary]="seccionActiva === 'componentes'"
         class="flex items-center gap-md px-lg py-md hover:bg-surface-container-high transition-all cursor-pointer font-bold dark:text-white"
       >
-        <span class="material-symbols-outlined">view_module</span> Componentes
+        <span class="material-symbols-outlined">view_module</span> {{ 'side.components' | translate }}
       </a>
     </nav>
   </aside>
@@ -210,12 +212,14 @@
                     class="absolute top-2 right-2 text-xs font-bold bg-white dark:bg-black px-2 py-1 rounded text-primary dark:text-primary-fixed border border-outline-variant dark:border-outline shadow-sm"
                     >{{ recurso.categoria }}</span
                   >
-                  <button
-                    (click)="eliminarRecurso(recurso.id)"
-                    class="absolute top-2 left-2 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 dark:hover:bg-red-900/80 rounded w-8 h-8 flex items-center justify-center hover:scale-110 transition-all shadow-sm border border-red-200 dark:border-red-800/50"
-                  >
-                    <span class="material-symbols-outlined text-sm">delete</span>
-                  </button>
+                  @if (rol !== 'asesor') {
+                    <button
+                      (click)="eliminarRecurso(recurso.id)"
+                      class="absolute top-2 left-2 bg-red-50 text-red-600 hover:bg-red-100 dark:bg-red-900/50 dark:text-red-400 dark:hover:bg-red-900/80 rounded w-8 h-8 flex items-center justify-center hover:scale-110 transition-all shadow-sm border border-red-200 dark:border-red-800/50"
+                    >
+                      <span class="material-symbols-outlined text-sm">delete</span>
+                    </button>
+                  }
                 </div>
                 <div class="p-md flex-1 flex flex-col">
                   <h4 class="font-bold text-label-lg mb-1">{{ recurso.titulo }}</h4>
@@ -286,7 +290,7 @@
             </div>
             <!-- Config -->
             <div
-              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg flex flex-col h-1/2 shadow-sm"
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg flex flex-col h-1/2 shadow-sm overflow-hidden"
             >
               <div
                 class="bg-surface-container-high dark:bg-[#2d2d2d] p-sm border-b border-outline-variant dark:border-outline"
@@ -295,29 +299,54 @@
                   Configuración del Elemento
                 </h3>
               </div>
-              <div class="p-md space-y-md">
+              <div class="p-md space-y-md flex-1 overflow-y-auto">
                 <div>
-                  <label class="text-sm font-bold block mb-1">Color Principal (Tokens)</label>
+                  <label for="cfg-color" class="text-sm font-bold block mb-1">Color Principal (Tokens)</label>
                   <input
+                    id="cfg-color"
                     type="color"
                     [value]="configElemento.color"
                     (input)="onColorChange($event)"
                     class="w-full h-10 border border-outline cursor-pointer rounded p-1 dark:bg-[#2d2d2d]"
                   />
                 </div>
+                <div>
+                  <label for="cfg-icono" class="text-sm font-bold block mb-1">Nombre de Ícono (Material)</label>
+                  <input
+                    id="cfg-icono"
+                    type="text"
+                    [value]="configElemento.iconoNombre || ''"
+                    (input)="onIconoNombreChange($event)"
+                    placeholder="ej. play_circle, book, info"
+                    class="w-full border border-outline rounded p-2 text-sm dark:bg-[#2d2d2d]"
+                  />
+                  <a href="https://fonts.google.com/icons" target="_blank" class="text-xs text-primary hover:underline mt-1 inline-block">Ver catálogo de íconos</a>
+                </div>
                 <div class="flex items-center gap-2">
                   <input
+                    id="cfg-mostrar-icono"
                     type="checkbox"
                     [checked]="configElemento.mostrarIcono"
                     (change)="onMostrarIconoChange($event)"
                     class="cursor-pointer h-4 w-4 text-primary focus:ring-primary rounded"
                   />
-                  <label class="text-sm font-bold cursor-pointer">Mostrar íconos visuales</label>
+                  <label for="cfg-mostrar-icono" class="text-sm font-bold cursor-pointer">Mostrar íconos visuales</label>
                 </div>
                 <button
-                  class="w-full py-2 mt-4 bg-surface-container dark:bg-[#2d2d2d] dark:text-white text-sm font-bold border border-outline-variant dark:border-outline rounded hover:brightness-95 transition-all shadow-sm"
+                  type="button"
+                  (click)="aplicarEstilo()"
+                  class="w-full py-2 mt-2 bg-surface-container dark:bg-[#2d2d2d] dark:text-white text-sm font-bold border border-outline-variant dark:border-outline rounded hover:brightness-95 transition-all shadow-sm"
                 >
                   Aplicar Estilo
+                </button>
+                <button
+                  type="button"
+                  (click)="restaurarComponente()"
+                  class="w-full py-2 flex items-center justify-center gap-1 text-error text-sm font-bold border border-error/40 rounded hover:bg-error-container transition-all"
+                  title="Vuelve el componente a su HTML original"
+                >
+                  <span class="material-symbols-outlined text-[16px]" aria-hidden="true">restart_alt</span>
+                  Restaurar componente
                 </button>
               </div>
             </div>
@@ -329,7 +358,7 @@
             <!-- Tabs Mejoradas -->
             <div class="flex bg-surface-container-low dark:bg-[#121212] pt-2 px-2 gap-2">
               <button
-                (click)="modoEditor = 'visual'"
+                (click)="activarEditorVisual()"
                 [class.bg-white]="modoEditor === 'visual'"
                 [class.dark:bg-[#1e1e1e]]="modoEditor === 'visual'"
                 [class.border-t-4]="modoEditor === 'visual'"
@@ -341,7 +370,7 @@
                 Editor Visual (Rich Text)
               </button>
               <button
-                (click)="modoEditor = 'html'"
+                (click)="activarEditorHtml()"
                 [class.bg-white]="modoEditor === 'html'"
                 [class.dark:bg-[#1e1e1e]]="modoEditor === 'html'"
                 [class.border-t-4]="modoEditor === 'html'"
@@ -352,7 +381,87 @@
               >
                 Código HTML Interno
               </button>
+              <button
+                (click)="activarVistaPrevia()"
+                [class.bg-white]="modoEditor === 'preview'"
+                [class.dark:bg-[#1e1e1e]]="modoEditor === 'preview'"
+                [class.border-t-4]="modoEditor === 'preview'"
+                [class.border-secondary]="modoEditor === 'preview'"
+                [class.text-secondary]="modoEditor === 'preview'"
+                [class.dark:text-secondary-fixed]="modoEditor === 'preview'"
+                class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a] flex items-center gap-1"
+              >
+                <span class="material-symbols-outlined text-[16px]">visibility</span>
+                Vista Previa
+              </button>
+              @if (tipoPanel) {
+                <button
+                  (click)="activarEditorPaneles()"
+                  [class.bg-white]="modoEditor === 'paneles'"
+                  [class.dark:bg-[#1e1e1e]]="modoEditor === 'paneles'"
+                  [class.border-t-4]="modoEditor === 'paneles'"
+                  [class.border-secondary]="modoEditor === 'paneles'"
+                  [class.text-secondary]="modoEditor === 'paneles'"
+                  [class.dark:text-secondary-fixed]="modoEditor === 'paneles'"
+                  class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a] flex items-center gap-1"
+                >
+                  <span class="material-symbols-outlined text-[16px]">{{ tipoPanel === 'acordeon' ? 'expand_circle_down' : 'tab' }}</span>
+                  Editor de {{ tipoPanel === 'acordeon' ? 'Secciones' : 'Pestañas' }}
+                </button>
+              }
             </div>
+
+            <!-- Panel de Accesibilidad del contenido -->
+            <div class="border-t border-outline-variant dark:border-outline">
+              <button
+                type="button"
+                (click)="toggleA11yPanel()"
+                [attr.aria-expanded]="a11yPanelAbierto"
+                aria-controls="a11y-panel"
+                class="w-full flex items-center justify-between gap-2 px-md py-2 text-sm font-bold transition-colors hover:bg-surface-container dark:hover:bg-[#1e1e1e]"
+                [class.bg-error-container]="a11yErrores > 0"
+                [class.text-on-error-container]="a11yErrores > 0"
+              >
+                <span class="flex items-center gap-2">
+                  <span class="material-symbols-outlined text-[18px]" aria-hidden="true">
+                    {{ a11yIssues.length === 0 ? 'verified' : (a11yErrores > 0 ? 'error' : 'warning') }}
+                  </span>
+                  @if (a11yIssues.length === 0) {
+                    Accesibilidad: sin problemas detectados
+                  } @else {
+                    Accesibilidad: {{ a11yErrores }} error(es), {{ a11yAdvertencias }} advertencia(s)
+                  }
+                </span>
+                <span class="material-symbols-outlined text-[18px]" aria-hidden="true">
+                  {{ a11yPanelAbierto ? 'expand_less' : 'expand_more' }}
+                </span>
+              </button>
+              @if (a11yPanelAbierto) {
+                <div id="a11y-panel" class="px-md pb-3 animate-fade-in">
+                  @if (a11yIssues.length === 0) {
+                    <p class="text-sm text-on-surface-variant dark:text-gray-300">
+                      No se detectaron problemas de accesibilidad en el contenido. Recordá igualmente
+                      verificar el contraste de colores y que los videos tengan subtítulos.
+                    </p>
+                  } @else {
+                    <ul class="space-y-1">
+                      @for (issue of a11yIssues; track issue) {
+                        <li class="flex items-start gap-2 text-sm">
+                          <span
+                            class="material-symbols-outlined text-[16px] mt-0.5"
+                            [class.text-error]="issue.tipo === 'error'"
+                            [class.text-secondary]="issue.tipo === 'warn'"
+                            aria-hidden="true"
+                          >{{ issue.tipo === 'error' ? 'error' : 'warning' }}</span>
+                          <span class="text-on-surface dark:text-gray-200">{{ issue.mensaje }}</span>
+                        </li>
+                      }
+                    </ul>
+                  }
+                </div>
+              }
+            </div>
+
             <div
               class="flex flex-1 overflow-hidden border-t border-outline-variant dark:border-outline"
             >
@@ -362,6 +471,7 @@
                   <textarea
                     class="flex-1 bg-[#1e1e1e] text-[#d4d4d4] p-md font-mono text-sm resize-none focus:outline-none"
                     (input)="onHtmlChange($event)"
+                    (keydown)="onHtmlKeydown($event)"
                     [value]="recursoSeleccionado?.htmlEditado"
                     spellcheck="false"
                   ></textarea>
@@ -372,54 +482,188 @@
                 <div
                   class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
                 >
-                  <!-- Toolbar de Formato Básico -->
-                  <div
-                    class="flex gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm"
-                  >
-                    <button
-                      (click)="formatText('bold')"
-                      class="px-3 py-1 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Negrita"
-                    >
-                      B
-                    </button>
-                    <button
-                      (click)="formatText('italic')"
-                      class="px-3 py-1 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Cursiva"
-                    >
-                      I
-                    </button>
-                    <button
-                      (click)="formatText('underline')"
-                      class="px-3 py-1 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Subrayado"
-                    >
-                      U
-                    </button>
-                    <button
-                      (click)="formatText('insertUnorderedList')"
-                      class="px-3 py-1 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center"
-                      title="Lista"
-                    >
-                      <span class="material-symbols-outlined text-[16px]"
-                        >format_list_bulleted</span
+                  <!-- Toolbar de Formato Completo -->
+                  <div class="sandbox-toolbar flex flex-wrap gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm items-center" role="toolbar" aria-label="Herramientas de formato de texto">
+                    <!-- Formatos básicos -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button type="button" (click)="formatText('bold')" class="w-8 h-8 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Negrita" aria-label="Negrita">B</button>
+                      <button type="button" (click)="formatText('italic')" class="w-8 h-8 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Cursiva" aria-label="Cursiva">I</button>
+                      <button type="button" (click)="formatText('underline')" class="w-8 h-8 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Subrayado" aria-label="Subrayado">U</button>
+                    </div>
+
+                    <!-- Encabezados -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <select (change)="formatText('formatBlock', $any($event.target).value)" class="h-8 px-2 border border-outline-variant rounded text-sm bg-white dark:bg-[#1e1e1e] cursor-pointer" title="Estilo de Párrafo" aria-label="Estilo de párrafo o encabezado">
+                        <option value="P">Párrafo Normal</option>
+                        <option value="H1">Título 1</option>
+                        <option value="H2">Título 2</option>
+                        <option value="H3">Título 3</option>
+                        <option value="H4">Título 4</option>
+                      </select>
+                    </div>
+
+                    <!-- Alineación -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button type="button" (click)="formatText('justifyLeft')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Alinear a la Izquierda" aria-label="Alinear a la izquierda">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_align_left</span>
+                      </button>
+                      <button type="button" (click)="formatText('justifyCenter')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Centrar" aria-label="Centrar">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_align_center</span>
+                      </button>
+                      <button type="button" (click)="formatText('justifyRight')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Alinear a la Derecha" aria-label="Alinear a la derecha">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_align_right</span>
+                      </button>
+                      <button type="button" (click)="formatText('justifyFull')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Justificar" aria-label="Justificar">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_align_justify</span>
+                      </button>
+                    </div>
+
+                    <!-- Listas e Insertar -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button type="button" (click)="formatText('insertUnorderedList')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Lista con Viñetas" aria-label="Lista con viñetas">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_list_bulleted</span>
+                      </button>
+                      <button type="button" (click)="formatText('insertOrderedList')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Lista Numerada" aria-label="Lista numerada">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_list_numbered</span>
+                      </button>
+                      <button type="button" (click)="insertLink()" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Insertar Enlace" aria-label="Insertar enlace">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">link</span>
+                      </button>
+                      <button type="button" (click)="insertImage()" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Insertar imagen (pide texto alternativo)" aria-label="Insertar imagen con texto alternativo">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">image</span>
+                      </button>
+                    </div>
+
+                    <!-- Color y Limpiar -->
+                    <div class="flex gap-1 items-center border-r border-outline-variant pr-2">
+                      <input type="color" (change)="formatText('foreColor', $any($event.target).value)" class="w-8 h-8 border-none cursor-pointer rounded" title="Color de Texto" aria-label="Color de texto" />
+                      <button type="button" (click)="formatText('removeFormat')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Limpiar Formato" aria-label="Limpiar formato">
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">format_clear</span>
+                      </button>
+                    </div>
+
+                    <!-- Guías de edición -->
+                    <div class="flex gap-1 items-center">
+                      <button
+                        type="button"
+                        (click)="toggleGuias()"
+                        [attr.aria-pressed]="mostrarGuias"
+                        class="h-8 px-2 flex items-center gap-1 text-xs font-bold border rounded transition"
+                        [class.bg-secondary-container]="mostrarGuias"
+                        [class.text-on-secondary-container]="mostrarGuias"
+                        [class.border-secondary]="mostrarGuias"
+                        [class.bg-white]="!mostrarGuias"
+                        [class.dark:bg-[#1e1e1e]]="!mostrarGuias"
+                        [class.border-outline-variant]="!mostrarGuias"
+                        title="Muestra etiquetas de Título/Contenido en pestañas y secciones"
                       >
-                    </button>
-                    <input
-                      type="color"
-                      (change)="formatText('foreColor', $any($event.target).value)"
-                      class="w-8 h-8 ml-2 border-none cursor-pointer rounded"
-                      title="Color de Texto"
-                    />
+                        <span class="material-symbols-outlined text-[16px]" aria-hidden="true">{{ mostrarGuias ? 'visibility' : 'visibility_off' }}</span>
+                        Guías
+                      </button>
+                    </div>
                   </div>
                   <div
                     id="rich-editor"
                     class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary"
+                    [class.guias-edicion]="mostrarGuias"
                     contenteditable="true"
+                    role="textbox"
+                    aria-multiline="true"
+                    aria-label="Editor de contenido del recurso"
+                    dir="ltr"
                     (input)="onVisualEdit($event)"
-                    [innerHTML]="recursoSeleccionado?.htmlEditado"
                   ></div>
+                </div>
+              }
+              <!-- Vista Previa Interactiva -->
+              @if (modoEditor === 'preview') {
+                <div
+                  class="flex-1 flex flex-col bg-white dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
+                >
+                  <div class="flex items-center gap-2 mb-4 p-3 bg-secondary-container rounded-lg">
+                    <span class="material-symbols-outlined text-secondary">info</span>
+                    <p class="text-sm font-medium text-on-secondary-container">
+                      Vista previa interactiva — Los acordeones, tabs y demás componentes funcionan como en la plataforma.
+                    </p>
+                  </div>
+                  <div
+                    id="preview-container"
+                    class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px]"
+                    [innerHTML]="previewSafeHtml"
+                  ></div>
+                </div>
+              }
+              <!-- Editor Estructurado de Paneles (tabs / acordeón) -->
+              @if (modoEditor === 'paneles') {
+                <div
+                  class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
+                >
+                  <div class="flex items-center gap-2 mb-4 p-3 bg-secondary-container rounded-lg">
+                    <span class="material-symbols-outlined text-secondary" aria-hidden="true">tune</span>
+                    <p class="text-sm font-medium text-on-secondary-container">
+                      Editor de {{ tipoPanel === 'acordeon' ? 'secciones' : 'pestañas' }}: cada bloque es
+                      una {{ tipoPanel === 'acordeon' ? 'sección' : 'pestaña' }}. El <strong>Título</strong>
+                      es lo que se ve cerrado y el <strong>Contenido</strong> es lo que aparece al abrirla.
+                    </p>
+                  </div>
+
+                  <div class="space-y-4">
+                    @for (panel of paneles; track $index) {
+                      <div class="bg-white dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-lg shadow-sm overflow-hidden">
+                        <div class="flex items-center justify-between gap-2 bg-surface-container-high dark:bg-[#2d2d2d] px-3 py-2 border-b border-outline-variant dark:border-outline">
+                          <span class="flex items-center gap-2 text-sm font-bold text-primary dark:text-primary-fixed">
+                            <span class="material-symbols-outlined text-[18px]" aria-hidden="true">{{ tipoPanel === 'acordeon' ? 'expand_circle_down' : 'tab' }}</span>
+                            {{ tipoPanel === 'acordeon' ? 'Sección' : 'Pestaña' }} {{ $index + 1 }}
+                          </span>
+                          <div class="flex items-center gap-1">
+                            <button type="button" (click)="moverPanel($index, -1)" [disabled]="$first" class="w-7 h-7 flex items-center justify-center rounded border border-outline-variant disabled:opacity-30 hover:bg-surface-container transition" [attr.aria-label]="'Mover ' + (tipoPanel === 'acordeon' ? 'sección' : 'pestaña') + ' hacia arriba'" title="Subir">
+                              <span class="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_upward</span>
+                            </button>
+                            <button type="button" (click)="moverPanel($index, 1)" [disabled]="$last" class="w-7 h-7 flex items-center justify-center rounded border border-outline-variant disabled:opacity-30 hover:bg-surface-container transition" [attr.aria-label]="'Mover ' + (tipoPanel === 'acordeon' ? 'sección' : 'pestaña') + ' hacia abajo'" title="Bajar">
+                              <span class="material-symbols-outlined text-[16px]" aria-hidden="true">arrow_downward</span>
+                            </button>
+                            <button type="button" (click)="eliminarPanel($index)" class="w-7 h-7 flex items-center justify-center rounded border border-error/40 text-error hover:bg-error-container transition" [attr.aria-label]="'Eliminar ' + (tipoPanel === 'acordeon' ? 'sección' : 'pestaña')" title="Eliminar">
+                              <span class="material-symbols-outlined text-[16px]" aria-hidden="true">delete</span>
+                            </button>
+                          </div>
+                        </div>
+                        <div class="p-3 space-y-3">
+                          <div>
+                            <label [attr.for]="'panel-titulo-' + $index" class="text-xs font-bold uppercase tracking-wide text-on-surface-variant dark:text-gray-300 block mb-1">Título</label>
+                            <input
+                              [id]="'panel-titulo-' + $index"
+                              type="text"
+                              [value]="panel.titulo"
+                              (input)="onPanelTituloChange($index, $event)"
+                              class="w-full border border-outline rounded p-2 text-sm font-bold dark:bg-[#2d2d2d] dark:text-white"
+                              placeholder="Título visible de la pestaña/sección"
+                            />
+                          </div>
+                          <div>
+                            <label [attr.for]="'panel-contenido-' + $index" class="text-xs font-bold uppercase tracking-wide text-on-surface-variant dark:text-gray-300 block mb-1">Contenido (texto / HTML)</label>
+                            <textarea
+                              [id]="'panel-contenido-' + $index"
+                              [value]="panel.contenido"
+                              (input)="onPanelContenidoChange($index, $event)"
+                              rows="4"
+                              spellcheck="false"
+                              class="w-full border border-outline rounded p-2 text-sm font-mono dark:bg-[#2d2d2d] dark:text-white resize-y"
+                              placeholder="Contenido que se muestra al abrir esta pestaña/sección"
+                            ></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    }
+                  </div>
+
+                  <button
+                    type="button"
+                    (click)="agregarPanel()"
+                    class="mt-4 self-start flex items-center gap-1 px-4 py-2 bg-primary text-white font-bold rounded hover:opacity-90 transition-opacity shadow-sm text-sm"
+                  >
+                    <span class="material-symbols-outlined text-[18px]" aria-hidden="true">add</span>
+                    Agregar {{ tipoPanel === 'acordeon' ? 'sección' : 'pestaña' }}
+                  </button>
                 </div>
               }
             </div>
@@ -959,10 +1203,10 @@
       <div class="w-full max-w-none mx-auto animate-fade-in pb-xl">
         <header class="mb-xl">
           <h1 class="font-display-lg text-display-lg text-primary dark:text-primary-fixed mb-xs">
-            Configuración del Sistema
+            {{ 'config.title' | translate }}
           </h1>
           <p class="font-body-lg text-body-lg text-on-surface-variant dark:text-gray-300">
-            Administre su perfil personal, preferencias de plataforma e información institucional.
+            {{ 'config.subtitle' | translate }}
           </p>
         </header>
         <div class="grid grid-cols-1 lg:grid-cols-12 gap-lg">
@@ -974,60 +1218,67 @@
               <div
                 class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
               >
-                <h3 class="font-bold text-primary dark:text-primary-fixed">Perfil de Usuario</h3>
+                <h3 class="font-bold text-primary dark:text-primary-fixed">{{ 'config.profile' | translate }}</h3>
               </div>
-              <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-lg">
-                <div class="flex flex-col gap-xs">
-                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
-                    >Nombre Completo</label
-                  >
-                  <input
-                    type="text"
-                    value="Academic Admin"
-                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
-                  />
+              <form [formGroup]="perfilForm" (ngSubmit)="guardarPerfil()">
+                <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-lg">
+                  <div class="flex flex-col gap-xs">
+                    <label for="perfil-nombre" class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                      >{{ 'config.firstName' | translate }}</label
+                    >
+                    <input
+                      id="perfil-nombre"
+                      type="text"
+                      formControlName="first_name"
+                      class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                    />
+                  </div>
+                  <div class="flex flex-col gap-xs">
+                    <label for="perfil-apellido" class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                      >{{ 'config.lastName' | translate }}</label
+                    >
+                    <input
+                      id="perfil-apellido"
+                      type="text"
+                      formControlName="last_name"
+                      class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                    />
+                  </div>
+                  <div class="flex flex-col gap-xs">
+                    <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                      >{{ 'config.role' | translate }}</label
+                    >
+                    <input
+                      type="text"
+                      [value]="usuarioRolDisplay"
+                      disabled
+                      class="border bg-surface-container dark:bg-[#2d2d2d] dark:border-outline px-3 py-2 rounded text-outline cursor-not-allowed"
+                    />
+                  </div>
+                  <div class="flex flex-col gap-xs">
+                    <label for="perfil-email" class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                      >{{ 'config.email' | translate }}</label
+                    >
+                    <input
+                      id="perfil-email"
+                      type="email"
+                      formControlName="email"
+                      class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                    />
+                  </div>
                 </div>
-                <div class="flex flex-col gap-xs">
-                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
-                    >Rol del Sistema</label
-                  >
-                  <input
-                    type="text"
-                    value="Institutional Lead"
-                    disabled
-                    class="border bg-surface-container dark:bg-[#2d2d2d] dark:border-outline px-3 py-2 rounded text-outline cursor-not-allowed"
-                  />
-                </div>
-                <div class="flex flex-col gap-xs">
-                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
-                    >Institución</label
-                  >
-                  <input
-                    type="text"
-                    value="Universidad UCC"
-                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
-                  />
-                </div>
-                <div class="flex flex-col gap-xs">
-                  <label class="text-sm font-bold text-on-surface-variant dark:text-outline"
-                    >Correo Electrónico</label
-                  >
-                  <input
-                    type="email"
-                    value="admin@ucc.edu.ar"
-                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
-                  />
-                </div>
-              </div>
-              <div
-                class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-end border-t border-outline-variant dark:border-outline"
-              >
-                <button
-                  class="bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
+                <div
+                  class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-between items-center gap-2 border-t border-outline-variant dark:border-outline"
                 >
-                  Guardar Perfil
-                </button>
-              </div>
+                  <span class="text-sm font-bold text-secondary">{{ perfilMsg }}</span>
+                  <button
+                    type="submit"
+                    class="bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
+                  >
+                    {{ 'config.saveProfile' | translate }}
+                  </button>
+                </div>
+              </form>
             </div>
             <div
               class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm"
@@ -1036,22 +1287,25 @@
                 class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
               >
                 <h3 class="font-bold text-primary dark:text-primary-fixed">
-                  Preferencias de Plataforma
+                  {{ 'config.prefs' | translate }}
                 </h3>
               </div>
               <div class="p-lg space-y-lg">
                 <div class="flex items-center justify-between">
                   <div>
-                    <h4 class="font-bold text-lg">Idioma de Visualización</h4>
+                    <h4 class="font-bold text-lg">{{ 'config.language' | translate }}</h4>
                     <p class="text-sm text-on-surface-variant dark:text-outline">
-                      Seleccione el idioma predeterminado para la interfaz.
+                      {{ 'config.languageDesc' | translate }}
                     </p>
                   </div>
                   <select
+                    [value]="idiomaActual"
+                    (change)="onIdiomaChange($event)"
+                    aria-label="Idioma de la plataforma"
                     class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-4 py-2 rounded font-bold min-w-[200px] cursor-pointer"
                   >
-                    <option>Español (ES)</option>
-                    <option>English (US)</option>
+                    <option value="es">Español (ES)</option>
+                    <option value="en">English (US)</option>
                   </select>
                 </div>
               </div>
@@ -1059,9 +1313,11 @@
                 class="p-md bg-surface-container-low dark:bg-[#2d2d2d] flex justify-end border-t border-outline-variant dark:border-outline"
               >
                 <button
+                  type="button"
+                  (click)="guardarPreferencias()"
                   class="bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
                 >
-                  Guardar Preferencias
+                  {{ 'config.savePrefs' | translate }}
                 </button>
               </div>
             </div>
@@ -1074,8 +1330,58 @@
               <div
                 class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
               >
+                <h3 class="font-bold text-primary dark:text-primary-fixed">{{ 'config.security' | translate }}</h3>
+              </div>
+              <form [formGroup]="passwordForm" (ngSubmit)="cambiarContrasena()" class="p-lg space-y-md">
+                <div class="flex flex-col gap-xs">
+                  <label for="pwd-actual" class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >{{ 'config.currentPass' | translate }}</label
+                  >
+                  <input
+                    id="pwd-actual"
+                    type="password"
+                    formControlName="actual"
+                    autocomplete="current-password"
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                  />
+                </div>
+                <div class="flex flex-col gap-xs">
+                  <label for="pwd-nueva" class="text-sm font-bold text-on-surface-variant dark:text-outline"
+                    >{{ 'config.newPass' | translate }}</label
+                  >
+                  <input
+                    id="pwd-nueva"
+                    type="password"
+                    formControlName="nueva"
+                    autocomplete="new-password"
+                    class="border border-outline-variant dark:bg-[#121212] dark:border-outline px-3 py-2 rounded focus:border-secondary outline-none"
+                  />
+                  @if (passwordForm.get('nueva')?.hasError('minlength') && passwordForm.get('nueva')?.touched) {
+                    <span class="text-error text-xs">{{ 'config.minChars' | translate }}</span>
+                  }
+                </div>
+                @if (passwordMsg) {
+                  <p class="text-sm font-bold text-secondary">{{ passwordMsg }}</p>
+                }
+                @if (passwordError) {
+                  <p class="text-sm font-bold text-error">{{ passwordError }}</p>
+                }
+                <button
+                  type="submit"
+                  class="w-full bg-primary text-white font-bold py-2 px-6 rounded hover:opacity-90 shadow-sm"
+                >
+                  {{ 'config.changePass' | translate }}
+                </button>
+              </form>
+            </div>
+            <div
+              class="bg-surface-container-lowest dark:bg-[#1e1e1e] border border-outline-variant dark:border-outline rounded-xl overflow-hidden shadow-sm"
+            >
+              <div
+                class="bg-surface-container-high dark:bg-[#2d2d2d] p-md border-b border-outline-variant dark:border-outline"
+              >
                 <h3 class="font-bold text-primary dark:text-primary-fixed">
-                  Gestión de Institución
+                  {{ 'config.institution' | translate }}
                 </h3>
               </div>
               <div class="p-lg space-y-md text-center">
@@ -1107,11 +1413,11 @@
                     <span class="material-symbols-outlined text-white">upload</span>
                   </div>
                 </label>
-                <span class="font-bold text-sm block mt-2">Logo Institucional / Perfil</span>
+                <span class="font-bold text-sm block mt-2">{{ 'config.logo' | translate }}</span>
                 <div class="text-left mt-4">
                   <label
                     class="text-sm font-bold text-on-surface-variant dark:text-outline block mb-1"
-                    >Identificador (ID)</label
+                    >{{ 'config.idLabel' | translate }}</label
                   >
                   <input
                     type="text"

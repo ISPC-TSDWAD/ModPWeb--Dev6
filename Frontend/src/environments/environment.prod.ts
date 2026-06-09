@@ -1,6 +1,7 @@
 export const environment = {
-  production: false,
-  apiUrl: 'http://127.0.0.1:8000/api/',
+  production: true,
+  // Reemplazar por la URL real del backend en producción.
+  apiUrl: '/api/',
   emailjs: {
     serviceId: 'service_3y3pw1p',
     templateId: 'template_9vvt6sp',

@@ -8,11 +8,15 @@ class IsAdminOrOwner(permissions.BasePermission):
     """
 
     def has_permission(self, request, view):
+        accion = getattr(view, 'action', '')
+        # Acciones sobre el propio usuario: cualquier autenticado.
+        if accion in ('me', 'change_password'):
+            return request.user and request.user.is_authenticated
         # Solo administradores pueden crear usuarios (POST)
         if request.method == 'POST':
             return request.user and request.user.is_staff
         # Solo administradores pueden listar a todos
-        if getattr(view, 'action', '') == 'list':
+        if accion == 'list':
             return request.user and request.user.is_staff
         return request.user and request.user.is_authenticated
 

@@ -7,10 +7,9 @@
   <div
     class="relative z-10 p-xl flex flex-col justify-end bg-gradient-to-t from-primary/80 to-transparent w-full"
   >
-    <h2 class="text-display-lg text-white mb-md">Excelencia Académica</h2>
+    <h2 class="text-display-lg text-white mb-md">{{ 'login.heroTitle' | translate }}</h2>
     <p class="text-body-lg text-white/90 max-w-md">
-      Impulsando la gestión del conocimiento a través de herramientas tecnológicas avanzadas para
-      instituciones educativas modernas.
+      {{ 'login.heroText' | translate }}
     </p>
   </div>
 </section>
@@ -29,9 +28,9 @@
           >business_center</span
         >
       </div>
-      <h1 class="text-headline-lg font-headline-lg text-primary mb-xs">Bienvenido a EduTools</h1>
+      <h1 class="text-headline-lg font-headline-lg text-primary mb-xs">{{ 'login.welcome' | translate }}</h1>
       <p class="text-body-md font-body-md text-on-surface-variant">
-        Inicie sesión para gestionar sus recursos pedagógicos
+        {{ 'login.subtitle' | translate }}
       </p>
     </div>
 
@@ -43,7 +42,7 @@
         <!-- Username Input -->
         <div class="space-y-xs">
           <label class="text-label-lg font-label-lg text-on-surface" for="username"
-            >Usuario o Correo Institucional</label
+            >{{ 'login.userLabel' | translate }}</label
           >
           <div class="relative">
             <span
@@ -61,14 +60,14 @@
             />
           </div>
           @if (loginForm.get('username')?.hasError('required') && loginForm.get('username')?.touched) {
-            <p class="text-red-600 text-xs mt-1">Este campo es obligatorio</p>
+            <p class="text-red-600 text-xs mt-1">{{ 'login.required' | translate }}</p>
           }
         </div>
 
         <!-- Password Input -->
         <div class="space-y-xs">
           <label class="text-label-lg font-label-lg text-on-surface" for="password"
-            >Contraseña</label
+            >{{ 'login.passwordLabel' | translate }}</label
           >
           <div class="relative">
             <span
@@ -95,17 +94,17 @@
             </button>
           </div>
           @if (loginForm.get('password')?.hasError('required') && loginForm.get('password')?.touched) {
-            <p class="text-red-600 text-xs mt-1">Este campo es obligatorio</p>
+            <p class="text-red-600 text-xs mt-1">{{ 'login.required' | translate }}</p>
           }
           @if (loginForm.get('password')?.hasError('minlength') && loginForm.get('password')?.touched) {
-            <p class="text-red-600 text-xs mt-1">La contraseña debe tener al menos 6 caracteres</p>
+            <p class="text-red-600 text-xs mt-1">{{ 'login.passwordMin' | translate }}</p>
           }
         </div>
 
         <!-- Forgot Password Link -->
         <div class="flex justify-end">
           <a class="text-label-md font-label-md text-primary hover:underline" href="#"
-            >Olvidé mi contraseña</a
+            >{{ 'login.forgot' | translate }}</a
           >
         </div>
 
@@ -122,23 +121,29 @@
 
         <!-- Primary CTA -->
         <button
-          class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200"
+          class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-50 flex justify-center items-center gap-2"
           type="button"
           (click)="login()"
+          [disabled]="cargando"
         >
-          Iniciar Sesión
+          @if (cargando) {
+            <span class="material-symbols-outlined animate-spin text-[20px]">sync</span>
+            {{ 'login.submitting' | translate }}
+          } @else {
+            {{ 'login.submit' | translate }}
+          }
         </button>
       </form>
 
       <!-- Help Section -->
       <div class="mt-xl pt-lg border-t border-outline-variant text-center">
         <p class="text-body-sm font-body-sm text-on-surface-variant mb-sm">
-          ¿Problemas para ingresar?
+          {{ 'login.helpQuestion' | translate }}
         </p>
         <button
           class="w-full text-label-lg font-label-lg text-secondary border border-secondary px-md py-sm rounded-lg hover:bg-secondary-container transition-colors duration-200"
         >
-          Contactar Soporte Técnico
+          {{ 'login.contactSupport' | translate }}
         </button>
       </div>
     </div>

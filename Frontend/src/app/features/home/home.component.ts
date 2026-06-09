@@ -1,101 +1,41 @@
-import { Component, OnInit, inject } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ApiService } from '../../core/services/api.service';
-import { TestData } from '../../core/models/api-response.model';
+import emailjs from '@emailjs/browser';
+import { environment } from '../../../environments/environment';
+import { I18nService } from '../../core/services/i18n.service';
+import { TranslatePipe } from '../../core/pipes/translate.pipe';
+
+const EMAILJS_SERVICE_ID  = environment.emailjs.serviceId;
+const EMAILJS_TEMPLATE_ID = environment.emailjs.templateId;
+const EMAILJS_PUBLIC_KEY  = environment.emailjs.publicKey;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   host: {
     class: 'w-full flex flex-grow',
   },
 })
-export class HomeComponent implements OnInit {
-  private apiService = inject(ApiService);
+export class HomeComponent {
   private fb = inject(FormBuilder);
-
-  recursos: any[] = [];
-  cargando: boolean = true;
-
-  recursoForm: FormGroup;
-  mensajeExito: boolean = false;
+  private i18n = inject(I18nService);
 
   contactoForm: FormGroup;
   mostrarModalContacto: boolean = false;
   mensajeContactoExito: boolean = false;
+  enviando: boolean = false;
+  mensajeError: string | null = null;
 
   constructor() {
-    this.recursoForm = this.fb.group({
-      titulo: ['', [Validators.required, Validators.minLength(5), Validators.maxLength(50)]],
-      categoria: ['', Validators.required],
-      url: ['', [Validators.required, Validators.pattern('https?://.+')]],
-    });
-
     this.contactoForm = this.fb.group({
       nombre: ['', [Validators.required, Validators.minLength(3)]],
       email: ['', [Validators.required, Validators.email]],
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
-  }
-
-  ngOnInit(): void {
-    // Consumimos los datos directamente desde el servicio simulado
-    this.cargarRecursos();
-  }
-
-  cargarRecursos(): void {
-    this.apiService.getRecursosMock().subscribe({
-      next: (data) => {
-        this.recursos = data;
-        this.cargando = false;
-      },
-      error: (err) => {
-        console.error('Error al cargar recursos:', err);
-        this.cargando = false;
-      },
-    });
-  }
-
-  onSubmit(): void {
-    if (this.recursoForm.valid) {
-      // Simular envío a la API
-      this.apiService.createResource(this.recursoForm.value).subscribe(() => {
-        this.mensajeExito = true;
-        this.recursoForm.reset();
-
-        // Recargar la lista simulada
-        this.cargando = true;
-        this.cargarRecursos();
-
-        setTimeout(() => {
-          this.mensajeExito = false;
-        }, 3000);
-      });
-    }
-  }
-
-  esCampoInvalido(campo: string): boolean {
-    const control = this.recursoForm.get(campo);
-    return !!control && control.invalid && (control.dirty || control.touched);
-  }
-
-  copiarHTML(recurso: any): void {
-    // Generamos un HTML de prueba basado en el recurso seleccionado
-    const htmlGenerado = `<!-- EduTools: ${recurso.titulo} -->\n<div class="edutools-plantilla edutools-${recurso.categoria.toLowerCase()}">\n  <h2>${recurso.titulo}</h2>\n  <p>Contenido oficial para Canvas LMS.</p>\n</div>`;
-
-    navigator.clipboard
-      .writeText(htmlGenerado)
-      .then(() => {
-        alert(`¡Listo! El código HTML de "${recurso.titulo}" se ha copiado al portapapeles.`);
-      })
-      .catch((err) => {
-        console.error('Error al copiar al portapapeles: ', err);
-      });
   }
 
   abrirModalContacto(): void {
@@ -109,13 +49,29 @@ export class HomeComponent implements OnInit {
 
   enviarContacto(): void {
     if (this.contactoForm.valid) {
-      // Simular envío de email
-      console.log('Enviando email de contacto:', this.contactoForm.value);
-      this.mensajeContactoExito = true;
-      setTimeout(() => {
-        this.mensajeContactoExito = false;
-        this.cerrarModalContacto();
-      }, 3000);
+      this.enviando = true;
+      this.mensajeError = null;
+
+      const templateParams = {
+        nombre:  this.contactoForm.value.nombre,
+        email:   this.contactoForm.value.email,
+        mensaje: this.contactoForm.value.mensaje,
+      };
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+        .then(() => {
+          this.enviando = false;
+          this.mensajeContactoExito = true;
+          setTimeout(() => {
+            this.mensajeContactoExito = false;
+            this.cerrarModalContacto();
+          }, 3000);
+        })
+        .catch((err) => {
+          this.enviando = false;
+          this.mensajeError = this.i18n.t('home.errorSend');
+          console.error('EmailJS error:', err);
+        });
     }
   }
 
@@ -124,3 +80,4 @@ export class HomeComponent implements OnInit {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 }
+

@@ -56,6 +56,83 @@
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     body { font-family: 'Inter', sans-serif; }
+
+    /* Dirección LTR base en editor y vista previa.
+       Importante: NO forzar text-align aquí, para no romper los botones de
+       alineación (centrar/derecha/justificar) del editor. El aislamiento bidi
+       evita el "texto al revés" sin pisar la alineación de los bloques hijos. */
+    #rich-editor,
+    #preview-container {
+      direction: ltr;
+      unicode-bidi: isolate;
+    }
+
+    /* Foco visible para accesibilidad de la interfaz del sandbox */
+    #rich-editor:focus-visible,
+    .sandbox-toolbar button:focus-visible,
+    .sandbox-toolbar select:focus-visible {
+      outline: 2px solid #003761;
+      outline-offset: 2px;
+    }
+
+    /* Guías de edición: etiquetas visuales sobre pestañas/secciones.
+       Son pseudo-elementos (::before/::after), por lo que NO se guardan en el
+       HTML del recurso: sólo ayudan a ver qué es título y qué es contenido. */
+    #rich-editor.guias-edicion .dp-panels-wrapper { counter-reset: dp-panel; }
+    #rich-editor.guias-edicion .dp-panel-group {
+      counter-increment: dp-panel;
+      position: relative;
+      border: 1px dashed #8a8f98;
+      border-radius: 8px;
+      padding: 18px 10px 12px;
+      margin: 14px 0;
+    }
+    #rich-editor.guias-edicion .dp-panel-group::before {
+      content: "Panel " counter(dp-panel);
+      position: absolute;
+      top: -10px;
+      left: 10px;
+      background: #003761;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 1px 8px;
+      border-radius: 10px;
+    }
+    #rich-editor.guias-edicion .dp-tabs .dp-panel-group::before { content: "Pestaña " counter(dp-panel); }
+    #rich-editor.guias-edicion .dp-accordion-default .dp-panel-group::before { content: "Sección " counter(dp-panel); }
+    #rich-editor.guias-edicion .dp-panel-heading {
+      position: relative;
+      border-left: 4px solid #006972;
+      padding-left: 10px;
+    }
+    #rich-editor.guias-edicion .dp-panel-heading::after {
+      content: "TÍTULO";
+      display: inline-block;
+      vertical-align: middle;
+      margin-left: 8px;
+      background: #006972;
+      color: #fff;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      padding: 1px 6px;
+      border-radius: 8px;
+    }
+    #rich-editor.guias-edicion .dp-panel-content {
+      border-left: 4px solid #c2c7d0;
+      padding-left: 10px;
+      margin-top: 6px;
+    }
+    #rich-editor.guias-edicion .dp-panel-content::before {
+      content: "CONTENIDO";
+      display: block;
+      font-size: 9px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      color: #727780;
+      margin-bottom: 4px;
+    }
   </style>
 </head>
 <body>

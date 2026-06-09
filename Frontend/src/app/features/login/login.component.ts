@@ -2,11 +2,13 @@ import { Component, inject, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { ReactiveFormsModule, FormBuilder, Validators } from '@angular/forms';
 import { AuthService } from '../../core/services/auth.service';
+import { I18nService } from '../../core/services/i18n.service';
+import { TranslatePipe } from '../../core/pipes/translate.pipe';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, TranslatePipe],
   templateUrl: './login.component.html',
   host: {
     class: 'w-full flex flex-grow',
@@ -17,6 +19,7 @@ export class LoginComponent implements OnInit {
   private route = inject(ActivatedRoute);
   private authService = inject(AuthService);
   private fb = inject(FormBuilder);
+  private i18n = inject(I18nService);
 
   loginForm = this.fb.group({
     username: ['', [Validators.required]],
@@ -25,13 +28,14 @@ export class LoginComponent implements OnInit {
 
   errorMsg = '';
   showPassword = false;
+  cargando = false;
 
   ngOnInit(): void {
     this.route.queryParams.subscribe(params => {
       if (params['sessionExpired'] === 'true') {
-        this.errorMsg = 'Tu sesión expiró, por favor volvé a iniciar sesión.';
+        this.errorMsg = this.i18n.t('login.errSessionExpired');
       } else if (params['loginRequired'] === 'true') {
-        this.errorMsg = 'Por favor, iniciá sesión para acceder a esta página.';
+        this.errorMsg = this.i18n.t('login.errLoginRequired');
       }
     });
   }
@@ -44,14 +48,17 @@ export class LoginComponent implements OnInit {
       return;
     }
 
+    this.cargando = true;
     const { username, password } = this.loginForm.value;
 
     this.authService.login(username!, password!).subscribe({
       next: () => {
+        this.cargando = false;
         this.router.navigate(['/home']);
       },
       error: () => {
-        this.errorMsg = 'Usuario o contraseña incorrectos.';
+        this.cargando = false;
+        this.errorMsg = this.i18n.t('login.errInvalid');
       }
     });
   }

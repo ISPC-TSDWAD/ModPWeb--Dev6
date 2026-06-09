@@ -1,16 +1,31 @@
-<div class="container mt-4">
-  <h2>Gestión de Usuarios</h2>
+<div class="w-full px-4 md:px-8 lg:px-12 py-12 animate-fade-in flex flex-col flex-grow">
+  <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
+    <div>
+      <h2 class="text-display-sm font-bold text-on-surface">{{ 'users.title' | translate }}</h2>
+      <p class="text-body-md text-on-surface-variant mt-1">{{ 'users.subtitle' | translate }}</p>
+    </div>
+
+    <button
+      class="bg-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50"
+      (click)="openNewUserForm()"
+      [disabled]="cargando">
+      <span class="material-symbols-outlined text-[20px]">person_add</span>
+      {{ 'users.new' | translate }}
+    </button>
+  </div>
   
   <!-- Banner de éxito -->
   @if (successMsg) {
-    <div class="alert alert-success alert-dismissible fade show d-flex align-items-center gap-2 mb-3" role="alert">
-      <span class="material-symbols-outlined text-[20px]">check_circle</span>
-      <div>{{ successMsg }}</div>
-      <button type="button" class="btn-close" (click)="successMsg = ''" aria-label="Cerrar"></button>
+    <div class="bg-[#e6f4ea] border border-[#ceead6] text-[#137333] px-4 py-3 rounded-lg flex items-center justify-between shadow-sm mb-6 animate-slide-up">
+      <div class="flex items-center gap-3">
+        <span class="material-symbols-outlined text-[20px]">check_circle</span>
+        <span class="font-medium">{{ successMsg }}</span>
+      </div>
+      <button type="button" class="text-[#137333]/70 hover:text-[#137333] transition-colors" (click)="successMsg = ''" aria-label="Cerrar">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
   }
-
-  <button class="btn btn-primary mb-3" (click)="openNewUserForm()" [disabled]="cargando">Nuevo Usuario</button>
 
   <app-user-form 
     *ngIf="showForm" 
@@ -21,42 +36,72 @@
 
   <!-- Spinner de carga -->
   @if (cargando && !showForm) {
-    <div class="d-flex justify-content-center align-items-center my-5 gap-3">
-      <div class="spinner-border text-primary" role="status">
-        <span class="visually-hidden">Cargando...</span>
-      </div>
-      <span class="text-primary fw-bold">Cargando lista de usuarios...</span>
+    <div class="flex flex-col items-center justify-center py-20 gap-4">
+      <span class="material-symbols-outlined text-primary text-[40px] animate-spin">sync</span>
+      <span class="text-title-md font-bold text-primary">{{ 'users.loading' | translate }}</span>
     </div>
   }
 
-  <table class="table table-striped" *ngIf="!showForm && !cargando">
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Usuario</th>
-        <th>Email</th>
-        <th>Nombre</th>
-        <th>Admin</th>
-        <th>Acciones</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr *ngFor="let u of users">
-        <td>{{ u.id }}</td>
-        <td>{{ u.username }}</td>
-        <td>{{ u.email }}</td>
-        <td>{{ u.first_name }} {{ u.last_name }}</td>
-        <td>{{ u.is_staff ? 'Sí' : 'No' }}</td>
-        <td>
-          <button class="btn btn-sm btn-warning me-2" (click)="editUser(u)">Editar</button>
-          <button class="btn btn-sm btn-danger" (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" title="No se puede eliminar al Super Administrador principal">Eliminar</button>
-        </td>
-      </tr>
-      @if (users.length === 0) {
-        <tr>
-          <td colspan="6" class="text-center py-4 text-muted">No se encontraron usuarios.</td>
-        </tr>
-      }
-    </tbody>
-  </table>
+  @if (!showForm && !cargando) {
+    <div class="bg-surface border border-outline-variant rounded-2xl shadow-sm overflow-x-auto">
+      <table class="w-full text-left border-collapse">
+        <thead>
+          <tr class="bg-surface-container-lowest border-b border-outline-variant text-label-lg text-on-surface">
+            <th class="py-4 px-6 font-bold">ID</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colUser' | translate }}</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colEmail' | translate }}</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colFullName' | translate }}</th>
+            <th class="py-4 px-6 font-bold text-center">{{ 'users.colRole' | translate }}</th>
+            <th class="py-4 px-6 font-bold text-right">{{ 'users.colActions' | translate }}</th>
+          </tr>
+        </thead>
+        <tbody class="text-body-md text-on-surface divide-y divide-outline-variant">
+          <tr *ngFor="let u of users" class="hover:bg-surface-container-lowest transition-colors group">
+            <td class="py-4 px-6 font-medium text-on-surface-variant">#{{ u.id }}</td>
+            <td class="py-4 px-6 font-bold text-primary">{{ u.username }}</td>
+            <td class="py-4 px-6 text-on-surface-variant">{{ u.email }}</td>
+            <td class="py-4 px-6">{{ u.first_name }} {{ u.last_name }}</td>
+            <td class="py-4 px-6 text-center">
+              @if (u.rol === 'admin') {
+                <span class="inline-flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-label-sm font-bold">
+                  <span class="material-symbols-outlined text-[14px]">shield_person</span> {{ 'users.roleAdmin' | translate }}
+                </span>
+              } @else if (u.rol === 'maquetador') {
+                <span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-sm font-bold">
+                  <span class="material-symbols-outlined text-[14px]">code</span> {{ 'users.roleMaquetador' | translate }}
+                </span>
+              } @else {
+                <span class="inline-flex items-center gap-1 bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-bold">
+                  <span class="material-symbols-outlined text-[14px]">school</span> {{ 'users.roleAsesor' | translate }}
+                </span>
+              }
+            </td>
+            <td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+              <button 
+                class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-secondary hover:bg-secondary-container transition-colors" 
+                (click)="editUser(u)" [title]="'users.edit' | translate">
+                <span class="material-symbols-outlined text-[20px]">edit</span>
+              </button>
+              <button 
+                class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-error hover:bg-error-container transition-colors disabled:opacity-30 disabled:hover:bg-transparent" 
+                (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" [title]="'users.delete' | translate">
+                <span class="material-symbols-outlined text-[20px]">delete</span>
+              </button>
+            </td>
+          </tr>
+          @if (users.length === 0) {
+            <tr>
+              <td colspan="6" class="py-12 text-center text-on-surface-variant">
+                <div class="flex flex-col items-center gap-2">
+                  <span class="material-symbols-outlined text-[48px] opacity-50">group_off</span>
+                  <p class="text-title-md font-bold">{{ 'users.emptyTitle' | translate }}</p>
+                  <p class="text-body-sm">{{ 'users.emptyDesc' | translate }}</p>
+                </div>
+              </td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  }
 </div>

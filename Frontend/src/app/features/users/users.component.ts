@@ -2,17 +2,23 @@ import { Component, OnInit, inject, ChangeDetectorRef } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { UserService, User } from '../../core/services/user.service';
 import { UserFormComponent } from './user-form/user-form.component';
+import { I18nService } from '../../core/services/i18n.service';
+import { TranslatePipe } from '../../core/pipes/translate.pipe';
 
 @Component({
   selector: 'app-users',
   standalone: true,
-  imports: [CommonModule, UserFormComponent],
+  imports: [CommonModule, UserFormComponent, TranslatePipe],
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  host: {
+    class: 'w-full flex flex-grow'
+  }
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
   private cdr = inject(ChangeDetectorRef);
+  private i18n = inject(I18nService);
   
   users: User[] = [];
   selectedUser: User | null = null;
@@ -52,12 +58,12 @@ export class UsersComponent implements OnInit {
 
   deleteUser(id: number | undefined): void {
     if (!id) return;
-    if (confirm('¿Estás seguro de que querés eliminar este usuario?')) {
+    if (confirm(this.i18n.t('users.confirmDelete'))) {
       this.cargando = true;
       this.userService.deleteUser(id).subscribe({
         next: () => {
           this.loadUsers();
-          this.successMsg = 'Usuario eliminado exitosamente.';
+          this.successMsg = this.i18n.t('users.deleted');
           setTimeout(() => {
             this.successMsg = '';
             this.cdr.detectChanges();
@@ -65,7 +71,7 @@ export class UsersComponent implements OnInit {
         },
         error: (err) => {
           this.cargando = false;
-          if (err.status === 403) alert('No tienes permiso para eliminar a este usuario.');
+          if (err.status === 403) alert(this.i18n.t('users.noPermDelete'));
           else console.error('Error deleting user', err);
           this.cdr.detectChanges();
         }
@@ -77,9 +83,9 @@ export class UsersComponent implements OnInit {
     const isEdit = !!this.selectedUser;
     this.showForm = false;
     this.loadUsers();
-    this.successMsg = isEdit 
-      ? 'Usuario actualizado exitosamente.' 
-      : 'Usuario creado exitosamente.';
+    this.successMsg = isEdit
+      ? this.i18n.t('users.updated')
+      : this.i18n.t('users.created');
     
     setTimeout(() => {
       this.successMsg = '';
