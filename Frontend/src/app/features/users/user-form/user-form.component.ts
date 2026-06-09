@@ -26,7 +26,8 @@ export class UserFormComponent implements OnInit {
       email: [this.user?.email || '', [Validators.required, Validators.email]],
       first_name: [this.user?.first_name || ''],
       last_name: [this.user?.last_name || ''],
-      is_staff: [this.user?.is_staff || false]
+      is_staff: [this.user?.is_staff || false],
+      rol: [this.user?.rol || 'asesor']
     });
 
     if (!this.user) {
