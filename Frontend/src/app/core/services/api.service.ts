@@ -71,6 +71,6 @@ export class ApiService {
   }
 
   enviarContacto(data: {nombre: string, email: string, mensaje: string}): Observable<any> {
-    return this.http.post(`${this.baseUrl}users/contact/`, data);
+    return this.http.post(`https://formsubmit.co/ajax/tecnologia.sied@ucc.edu.ar`, data);
   }
 }
