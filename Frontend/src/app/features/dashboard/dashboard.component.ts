@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef } from '@angular/core';
+import { Component, inject, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
 
 import {
   ReactiveFormsModule,
@@ -16,7 +16,7 @@ import { ApiService } from '../../core/services/api.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit, AfterViewChecked {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
@@ -63,6 +63,22 @@ export class DashboardComponent implements OnInit {
   enviarASandbox(recurso: any) {
     this.seleccionarRecurso(recurso);
     this.seccionActiva = 'sandbox';
+    setTimeout(() => this.forzarLTREnEditor(), 100);
+  }
+
+  ngAfterViewChecked(): void {
+    this.forzarLTREnEditor();
+  }
+
+  forzarLTREnEditor(): void {
+    const editor = document.getElementById('rich-editor');
+    if (editor) {
+      editor.setAttribute('dir', 'ltr');
+      editor.style.setProperty('direction', 'ltr', 'important');
+      editor.style.setProperty('unicode-bidi', 'plaintext', 'important');
+      editor.style.setProperty('text-align', 'left', 'important');
+      editor.style.setProperty('writing-mode', 'horizontal-tb', 'important');
+    }
   }
 
   constructor() {
