@@ -8,6 +8,7 @@ import {
 } from '@angular/forms';
 import { RouterModule, ActivatedRoute } from '@angular/router';
 import { ApiService } from '../../core/services/api.service';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-dashboard',
@@ -41,10 +42,11 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   configElemento = {
     color: '#003087',
     mostrarIcono: true,
+    iconoNombre: ''
   };
 
   // Tab state in Sandbox
-  modoEditor: 'visual' | 'html' = 'visual';
+  modoEditor: 'visual' | 'html' | 'preview' = 'visual';
 
   // Configuración Institucional Mock
   fotoInstitucional: string | ArrayBuffer | null = null;
@@ -59,9 +61,15 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   seleccionarRecurso(recurso: any) {
     this.recursoSeleccionado = recurso;
     if (!this.recursoSeleccionado.htmlEditado) {
-      this.recursoSeleccionado.htmlEditado = this.sanitizarRTL(this.recursoSeleccionado.html);
+      this.recursoSeleccionado.htmlEditado = this.recursoSeleccionado.html;
     }
-    setTimeout(() => this.aplicarLTRConObserver(), 50);
+    // Cargar el HTML manualmente en el editor (sin [innerHTML] binding de Angular)
+    setTimeout(() => {
+      const editor = document.getElementById('rich-editor');
+      if (editor) {
+        editor.innerHTML = this.recursoSeleccionado.htmlEditado || '';
+      }
+    }, 0);
   }
 
   sanitizarRTL(html: string): string {
@@ -193,6 +201,26 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  onHtmlKeydown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+      const textarea = event.target as HTMLTextAreaElement;
+      const start = textarea.selectionStart;
+      const end = textarea.selectionEnd;
+
+      // Insert tab character
+      textarea.value = textarea.value.substring(0, start) + '  ' + textarea.value.substring(end);
+      
+      // Update cursor position
+      textarea.selectionStart = textarea.selectionEnd = start + 2;
+
+      // Update model
+      if (this.recursoSeleccionado) {
+        this.recursoSeleccionado.htmlEditado = textarea.value;
+      }
+    }
+  }
+
   onVisualEdit(event: Event) {
     const element = event.target as HTMLElement;
     if (this.recursoSeleccionado) {
@@ -205,6 +233,13 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
     const el = document.getElementById('rich-editor');
     if (el && this.recursoSeleccionado) {
       this.recursoSeleccionado.htmlEditado = el.innerHTML;
+    }
+  }
+
+  insertLink() {
+    const url = prompt('Ingrese la URL del enlace:', 'https://');
+    if (url) {
+      this.formatText('createLink', url);
     }
   }
 
@@ -337,13 +372,41 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   copiarComoImagen() {
-    alert('Copiando previsualización como imagen al portapapeles...');
+    const selector = this.modoEditor === 'preview' ? '#preview-container' : '#rich-editor';
+    const element = document.querySelector(selector) as HTMLElement;
+    
+    if (element) {
+      this.successMsg = 'Generando imagen, por favor espere...';
+      this.cdr.detectChanges();
+      
+      html2canvas(element, { useCORS: true, backgroundColor: '#ffffff' }).then((canvas) => {
+        canvas.toBlob((blob) => {
+          if (blob) {
+            const item = new ClipboardItem({ 'image/png': blob });
+            navigator.clipboard.write([item]).then(() => {
+              this.successMsg = '¡Imagen copiada al portapapeles con éxito!';
+              this.cdr.detectChanges();
+              setTimeout(() => {
+                this.successMsg = '';
+                this.cdr.detectChanges();
+              }, 4000);
+            }).catch(err => {
+              console.error('Error al copiar imagen:', err);
+              this.successMsg = 'Error al copiar al portapapeles. Intente copiar el HTML.';
+              this.cdr.detectChanges();
+            });
+          }
+        });
+      });
+    }
   }
+
   deshacer() {
-    alert('Deshacer acción (Mock)');
+    this.formatText('undo');
   }
+
   rehacer() {
-    alert('Rehacer acción (Mock)');
+    this.formatText('redo');
   }
 
   onFiltroMateriaChange(event: Event) {
@@ -356,6 +419,209 @@ export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
 
   onMostrarIconoChange(event: Event) {
     this.configElemento.mostrarIcono = (event.target as HTMLInputElement).checked;
+  }
+
+  onIconoNombreChange(event: Event) {
+    this.configElemento.iconoNombre = (event.target as HTMLInputElement).value;
+  }
+
+  activarVistaPrevia(): void {
+    // Sincronizar el HTML del editor antes de mostrar la vista previa
+    const editor = document.getElementById('rich-editor');
+    if (editor && this.recursoSeleccionado && this.modoEditor === 'visual') {
+      this.recursoSeleccionado.htmlEditado = editor.innerHTML;
+    }
+    this.modoEditor = 'preview';
+
+    // Esperar a que Angular renderice el contenedor de vista previa
+    setTimeout(() => {
+      this.iniciarInteractividadVistaPrevia();
+    }, 50);
+  }
+
+  iniciarInteractividadVistaPrevia(): void {
+    const container = document.getElementById('preview-container');
+    if (!container) return;
+
+    // 1. Acordeones (.dp-accordion-default)
+    const accordions = container.querySelectorAll('.dp-accordion-default');
+    accordions.forEach((acc) => {
+      const groups = acc.querySelectorAll('.dp-panel-group');
+      groups.forEach((group, index) => {
+        const heading = group.querySelector('.dp-panel-heading') as HTMLElement;
+        const content = group.querySelector('.dp-panel-content') as HTMLElement;
+        if (heading && content) {
+          // Estilizar el heading para que parezca interactivo
+          heading.style.cursor = 'pointer';
+          heading.style.padding = '10px';
+          heading.style.backgroundColor = '#f1f1f1';
+          heading.style.border = '1px solid #ccc';
+          heading.style.marginTop = '5px';
+          heading.style.position = 'relative';
+          
+          // Ocultar todos los contenidos por defecto excepto el primero (opcional)
+          content.style.display = 'none';
+          content.style.padding = '10px';
+          content.style.border = '1px solid #ccc';
+          content.style.borderTop = 'none';
+
+          // Agregar evento de click
+          heading.addEventListener('click', () => {
+            const isVisible = content.style.display === 'block';
+            content.style.display = isVisible ? 'none' : 'block';
+          });
+        }
+      });
+    });
+
+    // 2. Tabs (.dp-tabs)
+    const tabsWrappers = container.querySelectorAll('.dp-tabs');
+    tabsWrappers.forEach((tabsWrapper) => {
+      const groups = tabsWrapper.querySelectorAll('.dp-panel-group');
+      if (groups.length === 0) return;
+
+      // Crear el contenedor de los botones de los tabs
+      const tabsNav = document.createElement('div');
+      tabsNav.style.display = 'flex';
+      tabsNav.style.gap = '2px';
+      tabsNav.style.marginBottom = '10px';
+      tabsNav.style.borderBottom = '2px solid #003087';
+
+      tabsWrapper.insertBefore(tabsNav, tabsWrapper.firstChild);
+
+      groups.forEach((group, index) => {
+        const heading = group.querySelector('.dp-panel-heading') as HTMLElement;
+        const content = group.querySelector('.dp-panel-content') as HTMLElement;
+        if (heading && content) {
+          // Ocultar los headings originales
+          heading.style.display = 'none';
+          
+          // Crear un botón para este tab
+          const btn = document.createElement('button');
+          btn.innerHTML = heading.innerHTML;
+          btn.style.padding = '10px 20px';
+          btn.style.cursor = 'pointer';
+          btn.style.border = '1px solid #ccc';
+          btn.style.borderBottom = 'none';
+          btn.style.backgroundColor = index === 0 ? '#003087' : '#f1f1f1';
+          btn.style.color = index === 0 ? 'white' : 'black';
+          
+          // Inicialmente mostrar solo el primer tab
+          content.style.display = index === 0 ? 'block' : 'none';
+
+          // Evento de click para cambiar de tab
+          btn.addEventListener('click', () => {
+            // Ocultar todos los contenidos
+            groups.forEach(g => {
+              const c = g.querySelector('.dp-panel-content') as HTMLElement;
+              if (c) c.style.display = 'none';
+            });
+            // Resetear todos los botones
+            Array.from(tabsNav.children).forEach((b: any) => {
+              b.style.backgroundColor = '#f1f1f1';
+              b.style.color = 'black';
+            });
+            
+            // Mostrar este contenido y activar este botón
+            content.style.display = 'block';
+            btn.style.backgroundColor = '#003087';
+            btn.style.color = 'white';
+          });
+
+          tabsNav.appendChild(btn);
+        }
+      });
+    });
+  }
+
+  activarEditorHtml(): void {
+    const editor = document.getElementById('rich-editor');
+    if (editor && this.recursoSeleccionado && this.modoEditor === 'visual') {
+      this.recursoSeleccionado.htmlEditado = editor.innerHTML;
+    }
+    this.modoEditor = 'html';
+  }
+
+  activarEditorVisual(): void {
+    this.modoEditor = 'visual';
+    // Esperar a que Angular renderice el div y cargar el contenido
+    setTimeout(() => {
+      const editor = document.getElementById('rich-editor');
+      if (editor && this.recursoSeleccionado) {
+        editor.innerHTML = this.recursoSeleccionado.htmlEditado || '';
+      }
+      this.aplicarLTRConObserver();
+    }, 0);
+  }
+
+  aplicarEstilo(): void {
+    const editor = document.getElementById('rich-editor');
+    if (!editor || !this.recursoSeleccionado) return;
+
+    const nuevoColor = this.configElemento.color;
+    const mostrarIconos = this.configElemento.mostrarIcono;
+
+    // 1. Cambiar border-color en el contenedor principal (dp-callout / card)
+    editor.querySelectorAll('[style*="border-color"]').forEach((el) => {
+      (el as HTMLElement).style.borderColor = nuevoColor;
+    });
+    // También aplicar a elementos con clase dp-callout que tengan borde
+    editor.querySelectorAll('.dp-callout, .card').forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      if (htmlEl.style.borderColor) {
+        htmlEl.style.borderColor = nuevoColor;
+      }
+    });
+
+    // 2. Cambiar background-color en las barras de título (card-title con fondo)
+    editor.querySelectorAll('[style*="background-color"]').forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      const bg = htmlEl.style.backgroundColor;
+      // Solo cambiar fondos que no sean blancos/transparentes (los de título/header)
+      if (bg && bg !== 'white' && bg !== 'transparent' && bg !== 'rgb(255, 255, 255)') {
+        htmlEl.style.backgroundColor = nuevoColor;
+      }
+    });
+
+    // 3. Cambiar color y nombre de íconos (material-symbols-outlined con color inline)
+    editor.querySelectorAll('.material-symbols-outlined').forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      if (htmlEl.style.color || htmlEl.getAttribute('style')?.includes('color')) {
+        htmlEl.style.color = nuevoColor;
+      }
+      // Cambiar nombre del ícono si se proveyó uno
+      if (this.configElemento.iconoNombre && this.configElemento.iconoNombre.trim() !== '') {
+        htmlEl.innerText = this.configElemento.iconoNombre.trim();
+      }
+      // Controlar visibilidad de íconos
+      htmlEl.style.display = mostrarIconos ? '' : 'none';
+    });
+
+    // 4. Cambiar color en textos con color de marca (links, spans con color específico)
+    editor.querySelectorAll('[style*="color"]').forEach((el) => {
+      const htmlEl = el as HTMLElement;
+      const color = htmlEl.style.color;
+      // Cambiar colores de marca (azules institucionales), no blanco ni negro
+      if (color && color !== 'white' && color !== 'black' &&
+          color !== 'rgb(255, 255, 255)' && color !== 'rgb(0, 0, 0)' &&
+          !htmlEl.classList.contains('material-symbols-outlined')) {
+        htmlEl.style.color = nuevoColor;
+      }
+    });
+
+    // 5. Cambiar border-left en elementos con borde lateral decorativo
+    editor.querySelectorAll('[class*="border-l"]').forEach((el) => {
+      (el as HTMLElement).style.borderLeftColor = nuevoColor;
+    });
+
+    // Sincronizar el HTML editado con el modelo
+    this.recursoSeleccionado.htmlEditado = editor.innerHTML;
+    this.successMsg = `¡Estilo aplicado con color ${nuevoColor}!`;
+    this.cdr.detectChanges();
+    setTimeout(() => {
+      this.successMsg = '';
+      this.cdr.detectChanges();
+    }, 3000);
   }
 
   cerrarSesion() {

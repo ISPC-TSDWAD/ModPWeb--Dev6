@@ -309,6 +309,17 @@
                     class="w-full h-10 border border-outline cursor-pointer rounded p-1 dark:bg-[#2d2d2d]"
                   />
                 </div>
+                <div>
+                  <label class="text-sm font-bold block mb-1">Nombre de Ícono (Material)</label>
+                  <input
+                    type="text"
+                    [value]="configElemento.iconoNombre || ''"
+                    (input)="onIconoNombreChange($event)"
+                    placeholder="ej. play_circle, book, info"
+                    class="w-full border border-outline rounded p-2 text-sm dark:bg-[#2d2d2d]"
+                  />
+                  <a href="https://fonts.google.com/icons" target="_blank" class="text-xs text-primary hover:underline mt-1 inline-block">Ver catálogo de íconos</a>
+                </div>
                 <div class="flex items-center gap-2">
                   <input
                     type="checkbox"
@@ -319,6 +330,7 @@
                   <label class="text-sm font-bold cursor-pointer">Mostrar íconos visuales</label>
                 </div>
                 <button
+                  (click)="aplicarEstilo()"
                   class="w-full py-2 mt-4 bg-surface-container dark:bg-[#2d2d2d] dark:text-white text-sm font-bold border border-outline-variant dark:border-outline rounded hover:brightness-95 transition-all shadow-sm"
                 >
                   Aplicar Estilo
@@ -333,7 +345,7 @@
             <!-- Tabs Mejoradas -->
             <div class="flex bg-surface-container-low dark:bg-[#121212] pt-2 px-2 gap-2">
               <button
-                (click)="modoEditor = 'visual'"
+                (click)="activarEditorVisual()"
                 [class.bg-white]="modoEditor === 'visual'"
                 [class.dark:bg-[#1e1e1e]]="modoEditor === 'visual'"
                 [class.border-t-4]="modoEditor === 'visual'"
@@ -345,7 +357,7 @@
                 Editor Visual (Rich Text)
               </button>
               <button
-                (click)="modoEditor = 'html'"
+                (click)="activarEditorHtml()"
                 [class.bg-white]="modoEditor === 'html'"
                 [class.dark:bg-[#1e1e1e]]="modoEditor === 'html'"
                 [class.border-t-4]="modoEditor === 'html'"
@@ -355,6 +367,19 @@
                 class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a]"
               >
                 Código HTML Interno
+              </button>
+              <button
+                (click)="activarVistaPrevia()"
+                [class.bg-white]="modoEditor === 'preview'"
+                [class.dark:bg-[#1e1e1e]]="modoEditor === 'preview'"
+                [class.border-t-4]="modoEditor === 'preview'"
+                [class.border-secondary]="modoEditor === 'preview'"
+                [class.text-secondary]="modoEditor === 'preview'"
+                [class.dark:text-secondary-fixed]="modoEditor === 'preview'"
+                class="px-6 py-3 font-bold text-sm transition-colors rounded-t-lg border-x border-t border-outline-variant dark:border-outline hover:bg-surface dark:hover:bg-[#1a1a1a] flex items-center gap-1"
+              >
+                <span class="material-symbols-outlined text-[16px]">visibility</span>
+                Vista Previa
               </button>
             </div>
             <div
@@ -366,6 +391,7 @@
                   <textarea
                     class="flex-1 bg-[#1e1e1e] text-[#d4d4d4] p-md font-mono text-sm resize-none focus:outline-none"
                     (input)="onHtmlChange($event)"
+                    (keydown)="onHtmlKeydown($event)"
                     [value]="recursoSeleccionado?.htmlEditado"
                     spellcheck="false"
                   ></textarea>
@@ -376,54 +402,87 @@
                 <div
                   class="flex-1 flex flex-col bg-surface-container-low dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
                 >
-                  <!-- Toolbar de Formato Básico -->
-                  <div
-                    class="flex gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm"
-                  >
-                    <button
-                      (click)="formatText('bold')"
-                      class="px-3 py-1 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Negrita"
-                    >
-                      B
-                    </button>
-                    <button
-                      (click)="formatText('italic')"
-                      class="px-3 py-1 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Cursiva"
-                    >
-                      I
-                    </button>
-                    <button
-                      (click)="formatText('underline')"
-                      class="px-3 py-1 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition"
-                      title="Subrayado"
-                    >
-                      U
-                    </button>
-                    <button
-                      (click)="formatText('insertUnorderedList')"
-                      class="px-3 py-1 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center"
-                      title="Lista"
-                    >
-                      <span class="material-symbols-outlined text-[16px]"
-                        >format_list_bulleted</span
-                      >
-                    </button>
-                    <input
-                      type="color"
-                      (change)="formatText('foreColor', $any($event.target).value)"
-                      class="w-8 h-8 ml-2 border-none cursor-pointer rounded"
-                      title="Color de Texto"
-                    />
+                  <!-- Toolbar de Formato Completo -->
+                  <div class="flex flex-wrap gap-2 mb-2 p-2 bg-surface-container dark:bg-[#2d2d2d] border border-outline-variant rounded shadow-sm items-center">
+                    <!-- Formatos básicos -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button (click)="formatText('bold')" class="w-8 h-8 font-bold bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Negrita">B</button>
+                      <button (click)="formatText('italic')" class="w-8 h-8 italic bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Cursiva">I</button>
+                      <button (click)="formatText('underline')" class="w-8 h-8 underline bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition" title="Subrayado">U</button>
+                    </div>
+                    
+                    <!-- Encabezados -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <select (change)="formatText('formatBlock', $any($event.target).value)" class="h-8 px-2 border border-outline-variant rounded text-sm bg-white dark:bg-[#1e1e1e] cursor-pointer" title="Estilo de Párrafo">
+                        <option value="P">Párrafo Normal</option>
+                        <option value="H1">Título 1</option>
+                        <option value="H2">Título 2</option>
+                        <option value="H3">Título 3</option>
+                        <option value="H4">Título 4</option>
+                      </select>
+                    </div>
+
+                    <!-- Alineación -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button (click)="formatText('justifyLeft')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Alinear a la Izquierda">
+                        <span class="material-symbols-outlined text-[16px]">format_align_left</span>
+                      </button>
+                      <button (click)="formatText('justifyCenter')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Centrar">
+                        <span class="material-symbols-outlined text-[16px]">format_align_center</span>
+                      </button>
+                      <button (click)="formatText('justifyRight')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Alinear a la Derecha">
+                        <span class="material-symbols-outlined text-[16px]">format_align_right</span>
+                      </button>
+                      <button (click)="formatText('justifyFull')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Justificar">
+                        <span class="material-symbols-outlined text-[16px]">format_align_justify</span>
+                      </button>
+                    </div>
+
+                    <!-- Listas e Insertar -->
+                    <div class="flex gap-1 border-r border-outline-variant pr-2">
+                      <button (click)="formatText('insertUnorderedList')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Lista con Viñetas">
+                        <span class="material-symbols-outlined text-[16px]">format_list_bulleted</span>
+                      </button>
+                      <button (click)="formatText('insertOrderedList')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Lista Numerada">
+                        <span class="material-symbols-outlined text-[16px]">format_list_numbered</span>
+                      </button>
+                      <button (click)="insertLink()" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Insertar Enlace">
+                        <span class="material-symbols-outlined text-[16px]">link</span>
+                      </button>
+                    </div>
+
+                    <!-- Color y Limpiar -->
+                    <div class="flex gap-1 items-center">
+                      <input type="color" (change)="formatText('foreColor', $any($event.target).value)" class="w-8 h-8 border-none cursor-pointer rounded" title="Color de Texto" />
+                      <button (click)="formatText('removeFormat')" class="w-8 h-8 bg-white dark:bg-[#1e1e1e] border border-outline-variant rounded hover:bg-gray-100 transition flex items-center justify-center" title="Limpiar Formato">
+                        <span class="material-symbols-outlined text-[16px]">format_clear</span>
+                      </button>
+                    </div>
                   </div>
                   <div
                     id="rich-editor"
                     class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary"
                     contenteditable="true"
                     dir="ltr"
-                    style="unicode-bidi: plaintext; text-align: left;"
+                    style="direction: ltr; text-align: left;"
                     (input)="onVisualEdit($event)"
+                  ></div>
+                </div>
+              }
+              <!-- Vista Previa Interactiva -->
+              @if (modoEditor === 'preview') {
+                <div
+                  class="flex-1 flex flex-col bg-white dark:bg-[#121212] overflow-y-auto p-xl animate-fade-in"
+                >
+                  <div class="flex items-center gap-2 mb-4 p-3 bg-secondary-container rounded-lg">
+                    <span class="material-symbols-outlined text-secondary">info</span>
+                    <p class="text-sm font-medium text-on-secondary-container">
+                      Vista previa interactiva — Los acordeones, tabs y demás componentes funcionan como en la plataforma.
+                    </p>
+                  </div>
+                  <div
+                    id="preview-container"
+                    class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px]"
                     [innerHTML]="recursoSeleccionado?.htmlEditado"
                   ></div>
                 </div>
