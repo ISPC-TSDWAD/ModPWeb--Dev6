@@ -26,6 +26,7 @@ export class DashboardComponent implements OnInit {
   mensajeExito: boolean = false;
   successMsg: string = '';
   seccionActiva: string = 'recursos';
+  rol: string = '';
 
   recursos: any[] = [];
   cargando: boolean = true;
@@ -78,10 +79,14 @@ export class DashboardComponent implements OnInit {
     this.cargarDatosMaestros();
     this.cargarRecursos();
 
+    this.rol = localStorage.getItem('rol') || 'asesor';
+
     // Escuchar parámetros de URL para abrir la sección correcta
     this.route.queryParams.subscribe((params) => {
       if (params['seccion']) {
         this.seccionActiva = params['seccion'];
+      } else if (this.rol === 'asesor') {
+        this.seccionActiva = 'sandbox';
       }
     });
   }
@@ -240,7 +245,11 @@ export class DashboardComponent implements OnInit {
       this.apiService
         .actualizarRecurso(this.recursoSeleccionado.id, this.recursoSeleccionado.htmlEditado)
         .subscribe(() => {
-          this.successMsg = `¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`;
+          if (this.rol === 'asesor') {
+            this.successMsg = `¡Copia personal creada exitosamente!`;
+          } else {
+            this.successMsg = `¡Cambios guardados en "${this.recursoSeleccionado.titulo}" exitosamente!`;
+          }
           this.cargarRecursos();
           setTimeout(() => {
             this.successMsg = '';

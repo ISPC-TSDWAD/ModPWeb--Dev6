@@ -122,11 +122,17 @@
 
         <!-- Primary CTA -->
         <button
-          class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200"
+          class="w-full bg-primary-container text-on-primary-container font-label-lg text-label-lg py-4 rounded-lg hover:bg-primary hover:text-white transition-colors duration-200 disabled:opacity-50 flex justify-center items-center gap-2"
           type="button"
           (click)="login()"
+          [disabled]="cargando"
         >
-          Iniciar Sesión
+          @if (cargando) {
+            <span class="material-symbols-outlined animate-spin text-[20px]">sync</span>
+            Iniciando Sesión...
+          } @else {
+            Iniciar Sesión
+          }
         </button>
       </form>
 

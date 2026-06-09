@@ -50,6 +50,9 @@ class Recurso(models.Model):
     asignatura = models.ForeignKey(Asignatura, on_delete=models.PROTECT, related_name='recursos')
     creado_por = models.ForeignKey(Usuario, on_delete=models.CASCADE, related_name='recursos')
 
+    es_plantilla_base = models.BooleanField(default=False)
+    copia_de = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL, related_name='copias')
+
     activo = models.BooleanField(default=True)
     creado_en = models.DateTimeField(auto_now_add=True)
     actualizado_en = models.DateTimeField(auto_now=True)

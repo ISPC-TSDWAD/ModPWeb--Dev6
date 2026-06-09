@@ -8,7 +8,10 @@ import { UserFormComponent } from './user-form/user-form.component';
   standalone: true,
   imports: [CommonModule, UserFormComponent],
   templateUrl: './users.component.html',
-  styleUrls: ['./users.component.css']
+  styleUrls: ['./users.component.css'],
+  host: {
+    class: 'w-full flex flex-grow'
+  }
 })
 export class UsersComponent implements OnInit {
   private userService = inject(UserService);
