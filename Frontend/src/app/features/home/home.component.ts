@@ -21,6 +21,9 @@ export class HomeComponent {
   contactoForm: FormGroup;
   mostrarModalContacto: boolean = false;
   mensajeContactoExito: boolean = false;
+  enviando: boolean = false;
+  mensajeError: string | null = null;
+  private apiService = inject(ApiService);
 
   constructor() {
     this.contactoForm = this.fb.group({
@@ -43,13 +46,24 @@ export class HomeComponent {
 
   enviarContacto(): void {
     if (this.contactoForm.valid) {
-      // Simular envío de email
-      console.log('Enviando email de contacto:', this.contactoForm.value);
-      this.mensajeContactoExito = true;
-      setTimeout(() => {
-        this.mensajeContactoExito = false;
-        this.cerrarModalContacto();
-      }, 3000);
+      this.enviando = true;
+      this.mensajeError = null;
+      
+      this.apiService.enviarContacto(this.contactoForm.value).subscribe({
+        next: (res) => {
+          this.enviando = false;
+          this.mensajeContactoExito = true;
+          setTimeout(() => {
+            this.mensajeContactoExito = false;
+            this.cerrarModalContacto();
+          }, 3000);
+        },
+        error: (err) => {
+          this.enviando = false;
+          this.mensajeError = 'Hubo un error al enviar el mensaje. Inténtalo de nuevo más tarde.';
+          console.error('Error al enviar contacto', err);
+        }
+      });
     }
   }
 

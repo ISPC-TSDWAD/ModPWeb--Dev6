@@ -69,4 +69,8 @@ export class ApiService {
   actualizarRecurso(id: number, nuevoHtml: string): Observable<any> {
     return this.http.patch(`${this.baseUrl}pedagogia/recursos/${id}/`, { contenido: nuevoHtml });
   }
+
+  enviarContacto(data: {nombre: string, email: string, mensaje: string}): Observable<any> {
+    return this.http.post(`${this.baseUrl}users/contact/`, data);
+  }
 }

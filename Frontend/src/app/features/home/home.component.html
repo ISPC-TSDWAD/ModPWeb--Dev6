@@ -161,13 +161,22 @@
                 }
               </div>
 
+              @if (mensajeError) {
+                <div class="text-error text-body-sm mt-2 mb-2 font-bold">{{ mensajeError }}</div>
+              }
+
               <div class="flex justify-end gap-3 mt-4">
                 <button type="button" (click)="cerrarModalContacto()" class="px-6 py-2 text-primary font-bold hover:bg-surface-variant rounded-lg transition-colors">
                   Cancelar
                 </button>
-                <button type="submit" [disabled]="contactoForm.invalid" 
-                  class="bg-primary text-white px-6 py-2 rounded-lg font-bold disabled:opacity-50 hover:bg-primary/90 transition-colors">
-                  Enviar Mensaje
+                <button type="submit" [disabled]="contactoForm.invalid || enviando" 
+                  class="bg-primary text-white px-6 py-2 rounded-lg font-bold disabled:opacity-50 hover:bg-primary/90 transition-colors flex items-center gap-2">
+                  @if (enviando) {
+                    <span class="material-symbols-outlined animate-spin">progress_activity</span>
+                    Enviando...
+                  } @else {
+                    Enviar Mensaje
+                  }
                 </button>
               </div>
             </form>
