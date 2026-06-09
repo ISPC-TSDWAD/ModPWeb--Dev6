@@ -44,6 +44,7 @@ export class UserFormComponent implements OnInit {
     }
 
     const formValue = this.userForm.value;
+    formValue.is_staff = formValue.rol === 'admin';
 
     if (this.user) {
       this.userService.updateUser(this.user.id!, formValue).subscribe({
