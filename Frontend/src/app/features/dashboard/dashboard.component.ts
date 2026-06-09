@@ -1,4 +1,4 @@
-import { Component, inject, OnInit, ChangeDetectorRef, AfterViewChecked } from '@angular/core';
+import { Component, inject, OnInit, OnDestroy, ChangeDetectorRef, AfterViewInit } from '@angular/core';
 
 import {
   ReactiveFormsModule,
@@ -16,7 +16,7 @@ import { ApiService } from '../../core/services/api.service';
   templateUrl: './dashboard.component.html',
   styleUrl: './dashboard.component.css',
 })
-export class DashboardComponent implements OnInit, AfterViewChecked {
+export class DashboardComponent implements OnInit, AfterViewInit, OnDestroy {
   private fb = inject(FormBuilder);
   private apiService = inject(ApiService);
   private route = inject(ActivatedRoute);
@@ -49,6 +49,9 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
   // Configuración Institucional Mock
   fotoInstitucional: string | ArrayBuffer | null = null;
 
+  // Observer para mantener LTR en el editor
+  private rtlObserver: MutationObserver | null = null;
+
   setSeccion(seccion: string) {
     this.seccionActiva = seccion;
   }
@@ -56,29 +59,61 @@ export class DashboardComponent implements OnInit, AfterViewChecked {
   seleccionarRecurso(recurso: any) {
     this.recursoSeleccionado = recurso;
     if (!this.recursoSeleccionado.htmlEditado) {
-      this.recursoSeleccionado.htmlEditado = this.recursoSeleccionado.html;
+      this.recursoSeleccionado.htmlEditado = this.sanitizarRTL(this.recursoSeleccionado.html);
     }
+    setTimeout(() => this.aplicarLTRConObserver(), 50);
+  }
+
+  sanitizarRTL(html: string): string {
+    if (!html) return html;
+    // Eliminar direction:rtl y dir=rtl del HTML del recurso
+    return html
+      .replace(/direction\s*:\s*rtl/gi, 'direction:ltr')
+      .replace(/dir\s*=\s*["']rtl["']/gi, 'dir="ltr"');
   }
 
   enviarASandbox(recurso: any) {
     this.seleccionarRecurso(recurso);
     this.seccionActiva = 'sandbox';
-    setTimeout(() => this.forzarLTREnEditor(), 100);
+    setTimeout(() => this.aplicarLTRConObserver(), 150);
   }
 
-  ngAfterViewChecked(): void {
-    this.forzarLTREnEditor();
+  ngAfterViewInit(): void {
+    this.aplicarLTRConObserver();
   }
 
-  forzarLTREnEditor(): void {
-    const editor = document.getElementById('rich-editor');
-    if (editor) {
-      editor.setAttribute('dir', 'ltr');
-      editor.style.setProperty('direction', 'ltr', 'important');
-      editor.style.setProperty('unicode-bidi', 'plaintext', 'important');
-      editor.style.setProperty('text-align', 'left', 'important');
-      editor.style.setProperty('writing-mode', 'horizontal-tb', 'important');
+  ngOnDestroy(): void {
+    if (this.rtlObserver) {
+      this.rtlObserver.disconnect();
     }
+  }
+
+  aplicarLTRConObserver(): void {
+    const editor = document.getElementById('rich-editor');
+    if (!editor) return;
+
+    // Aplicar LTR directamente en el editor y todos sus hijos
+    this.forzarLTRRecursivo(editor);
+
+    // Observar cambios en el DOM del editor y re-aplicar LTR
+    if (this.rtlObserver) this.rtlObserver.disconnect();
+    this.rtlObserver = new MutationObserver(() => {
+      this.forzarLTRRecursivo(editor);
+    });
+    this.rtlObserver.observe(editor, { childList: true, subtree: true, attributes: true });
+  }
+
+  forzarLTRRecursivo(el: HTMLElement): void {
+    el.setAttribute('dir', 'ltr');
+    el.style.setProperty('direction', 'ltr', 'important');
+    el.style.setProperty('unicode-bidi', 'normal', 'important');
+    el.style.setProperty('text-align', 'left', 'important');
+    // Aplicar a todos los elementos hijos también
+    el.querySelectorAll('*').forEach((child) => {
+      const htmlChild = child as HTMLElement;
+      htmlChild.setAttribute('dir', 'ltr');
+      htmlChild.style.setProperty('direction', 'ltr', 'important');
+    });
   }
 
   constructor() {
