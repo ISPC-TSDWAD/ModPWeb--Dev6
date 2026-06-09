@@ -2,15 +2,18 @@ import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 import emailjs from '@emailjs/browser';
+import { environment } from '../../../environments/environment';
+import { I18nService } from '../../core/services/i18n.service';
+import { TranslatePipe } from '../../core/pipes/translate.pipe';
 
-const EMAILJS_SERVICE_ID  = 'service_3y3pw1p';
-const EMAILJS_TEMPLATE_ID = 'template_9vvt6sp';
-const EMAILJS_PUBLIC_KEY  = '9cN1Mkf-LhR9V2aoy';
+const EMAILJS_SERVICE_ID  = environment.emailjs.serviceId;
+const EMAILJS_TEMPLATE_ID = environment.emailjs.templateId;
+const EMAILJS_PUBLIC_KEY  = environment.emailjs.publicKey;
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [ReactiveFormsModule, RouterLink],
+  imports: [ReactiveFormsModule, RouterLink, TranslatePipe],
   templateUrl: './home.component.html',
   styleUrl: './home.component.css',
   host: {
@@ -19,6 +22,7 @@ const EMAILJS_PUBLIC_KEY  = '9cN1Mkf-LhR9V2aoy';
 })
 export class HomeComponent {
   private fb = inject(FormBuilder);
+  private i18n = inject(I18nService);
 
   contactoForm: FormGroup;
   mostrarModalContacto: boolean = false;
@@ -65,7 +69,7 @@ export class HomeComponent {
         })
         .catch((err) => {
           this.enviando = false;
-          this.mensajeError = 'Hubo un error al enviar el mensaje. Inténtalo de nuevo más tarde.';
+          this.mensajeError = this.i18n.t('home.errorSend');
           console.error('EmailJS error:', err);
         });
     }

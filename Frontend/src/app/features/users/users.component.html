@@ -1,16 +1,16 @@
 <div class="w-full px-4 md:px-8 lg:px-12 py-12 animate-fade-in flex flex-col flex-grow">
   <div class="flex flex-col md:flex-row md:items-center justify-between mb-8 gap-4">
     <div>
-      <h2 class="text-display-sm font-bold text-on-surface">Gestión de Usuarios</h2>
-      <p class="text-body-md text-on-surface-variant mt-1">Administración centralizada de cuentas y permisos del sistema.</p>
+      <h2 class="text-display-sm font-bold text-on-surface">{{ 'users.title' | translate }}</h2>
+      <p class="text-body-md text-on-surface-variant mt-1">{{ 'users.subtitle' | translate }}</p>
     </div>
-    
-    <button 
-      class="bg-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50" 
-      (click)="openNewUserForm()" 
+
+    <button
+      class="bg-primary text-white font-bold px-6 py-3 rounded-lg hover:bg-primary/90 transition-colors flex items-center gap-2 shadow-sm disabled:opacity-50"
+      (click)="openNewUserForm()"
       [disabled]="cargando">
       <span class="material-symbols-outlined text-[20px]">person_add</span>
-      Nuevo Usuario
+      {{ 'users.new' | translate }}
     </button>
   </div>
   
@@ -38,7 +38,7 @@
   @if (cargando && !showForm) {
     <div class="flex flex-col items-center justify-center py-20 gap-4">
       <span class="material-symbols-outlined text-primary text-[40px] animate-spin">sync</span>
-      <span class="text-title-md font-bold text-primary">Cargando lista de usuarios...</span>
+      <span class="text-title-md font-bold text-primary">{{ 'users.loading' | translate }}</span>
     </div>
   }
 
@@ -48,11 +48,11 @@
         <thead>
           <tr class="bg-surface-container-lowest border-b border-outline-variant text-label-lg text-on-surface">
             <th class="py-4 px-6 font-bold">ID</th>
-            <th class="py-4 px-6 font-bold">Usuario</th>
-            <th class="py-4 px-6 font-bold">Email</th>
-            <th class="py-4 px-6 font-bold">Nombre Completo</th>
-            <th class="py-4 px-6 font-bold text-center">Rol</th>
-            <th class="py-4 px-6 font-bold text-right">Acciones</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colUser' | translate }}</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colEmail' | translate }}</th>
+            <th class="py-4 px-6 font-bold">{{ 'users.colFullName' | translate }}</th>
+            <th class="py-4 px-6 font-bold text-center">{{ 'users.colRole' | translate }}</th>
+            <th class="py-4 px-6 font-bold text-right">{{ 'users.colActions' | translate }}</th>
           </tr>
         </thead>
         <tbody class="text-body-md text-on-surface divide-y divide-outline-variant">
@@ -64,27 +64,27 @@
             <td class="py-4 px-6 text-center">
               @if (u.rol === 'admin') {
                 <span class="inline-flex items-center gap-1 bg-tertiary-container text-on-tertiary-container px-3 py-1 rounded-full text-label-sm font-bold">
-                  <span class="material-symbols-outlined text-[14px]">shield_person</span> Admin
+                  <span class="material-symbols-outlined text-[14px]">shield_person</span> {{ 'users.roleAdmin' | translate }}
                 </span>
               } @else if (u.rol === 'maquetador') {
                 <span class="inline-flex items-center gap-1 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full text-label-sm font-bold">
-                  <span class="material-symbols-outlined text-[14px]">code</span> Maquetador
+                  <span class="material-symbols-outlined text-[14px]">code</span> {{ 'users.roleMaquetador' | translate }}
                 </span>
               } @else {
                 <span class="inline-flex items-center gap-1 bg-surface-container-high text-on-surface-variant px-3 py-1 rounded-full text-label-sm font-bold">
-                  <span class="material-symbols-outlined text-[14px]">school</span> Asesor
+                  <span class="material-symbols-outlined text-[14px]">school</span> {{ 'users.roleAsesor' | translate }}
                 </span>
               }
             </td>
             <td class="py-4 px-6 text-right space-x-2 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
               <button 
                 class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-secondary hover:bg-secondary-container transition-colors" 
-                (click)="editUser(u)" title="Editar">
+                (click)="editUser(u)" [title]="'users.edit' | translate">
                 <span class="material-symbols-outlined text-[20px]">edit</span>
               </button>
               <button 
                 class="inline-flex items-center justify-center w-10 h-10 rounded-lg text-error hover:bg-error-container transition-colors disabled:opacity-30 disabled:hover:bg-transparent" 
-                (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" title="Eliminar">
+                (click)="deleteUser(u.id)" [disabled]="u.username === 'admin'" [title]="'users.delete' | translate">
                 <span class="material-symbols-outlined text-[20px]">delete</span>
               </button>
             </td>
@@ -94,8 +94,8 @@
               <td colspan="6" class="py-12 text-center text-on-surface-variant">
                 <div class="flex flex-col items-center gap-2">
                   <span class="material-symbols-outlined text-[48px] opacity-50">group_off</span>
-                  <p class="text-title-md font-bold">No se encontraron usuarios</p>
-                  <p class="text-body-sm">Creá un nuevo usuario para empezar.</p>
+                  <p class="text-title-md font-bold">{{ 'users.emptyTitle' | translate }}</p>
+                  <p class="text-body-sm">{{ 'users.emptyDesc' | translate }}</p>
                 </div>
               </td>
             </tr>

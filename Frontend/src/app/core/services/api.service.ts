@@ -4,6 +4,19 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
+export interface Recurso {
+  id: number;
+  titulo: string;
+  categoria: string;
+  asignatura: string;
+  html: string;
+  url: string;
+  imagen: string;
+  icono: string;
+  /** HTML en edición dentro del sandbox (se agrega en runtime). */
+  htmlEditado?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +24,7 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  private mapRecurso(recurso: any): any {
+  private mapRecurso(recurso: any): Recurso {
     return {
       id: recurso.id,
       titulo: recurso.titulo,
@@ -44,7 +57,7 @@ export class ApiService {
     return this.http.get<any[]>(`${this.baseUrl}pedagogia/asignaturas/`);
   }
 
-  getRecursosMock(): Observable<any[]> {
+  getRecursos(): Observable<Recurso[]> {
     return this.http.get<any[]>(`${this.baseUrl}pedagogia/recursos/`).pipe(
       map(data => data.map(r => this.mapRecurso(r)))
     );
@@ -68,16 +81,5 @@ export class ApiService {
 
   actualizarRecurso(id: number, nuevoHtml: string): Observable<any> {
     return this.http.patch(`${this.baseUrl}pedagogia/recursos/${id}/`, { contenido: nuevoHtml });
-  }
-
-  enviarContacto(data: {nombre: string, email: string, mensaje: string}): Observable<any> {
-    const formData = new FormData();
-    formData.append('Nombre Completo', data.nombre);
-    formData.append('email', data.email);
-    formData.append('Mensaje', data.mensaje);
-    formData.append('_captcha', 'false'); // Evita el captcha para AJAX
-
-    // Usar FormData (multipart/form-data) sin cabeceras personalizadas evita el preflight (CORS OPTIONS)
-    return this.http.post(`https://formsubmit.co/ajax/tecnologia.sied@ucc.edu.ar`, formData);
   }
 }

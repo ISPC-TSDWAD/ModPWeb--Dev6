@@ -1,33 +1,44 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { I18nService } from '../../core/services/i18n.service';
+import { TranslatePipe } from '../../core/pipes/translate.pipe';
 
 @Component({
   selector: 'app-about',
   standalone: true,
+  imports: [TranslatePipe],
   templateUrl: './about.component.html',
-  styleUrl: './about.component.css'
+  styleUrl: './about.component.css',
 })
 export class AboutComponent {
-  hero = {
-    title: 'Sobre EduTools',
-    text: 'Potenciando el ecosistema educativo digital a través de la integración armónica entre pedagogía y diseño técnico.'
-  };
+  private i18n = inject(I18nService);
 
-  mision = {
-    title: 'Nuestra Misión',
-    icon: 'track_changes',
-    text: 'Optimizar el flujo de trabajo entre los equipos pedagógicos y de maquetación, eliminando fricciones técnicas para permitir que el contenido educativo brille. Buscamos democratizar el acceso a herramientas de autoría institucional de alta calidad.'
-  };
+  // Getters reactivos: al cambiar el idioma, el texto se recalcula solo.
+  get hero() {
+    return { title: this.i18n.t('about.heroTitle'), text: this.i18n.t('about.heroText') };
+  }
 
-  vision = {
-    title: 'Nuestra Visión',
-    icon: 'visibility',
-    text: 'Convertirnos en el estándar institucional para la creación de experiencias de aprendizaje, donde la estructura modular y la excelencia estética se unan para elevar los resultados académicos de cada estudiante.'
-  };
+  get mision() {
+    return {
+      title: this.i18n.t('about.misionTitle'),
+      icon: 'track_changes',
+      text: this.i18n.t('about.misionText'),
+    };
+  }
 
-  valores = [
-    { icon: 'lightbulb', title: 'Innovación', text: 'Desarrollo constante de herramientas que anticipan las necesidades del docente moderno.' },
-    { icon: 'accessibility', title: 'Accesibilidad', text: 'Compromiso con estándares universales para que el aprendizaje no tenga barreras.' },
-    { icon: 'verified', title: 'Calidad', text: 'Excelencia técnica y pedagógica en cada componente de nuestra librería.' },
-    { icon: 'groups', title: 'Colaboración', text: 'Fomentamos la sinergia entre diseñadores, técnicos y educadores.' }
-  ];
+  get vision() {
+    return {
+      title: this.i18n.t('about.visionTitle'),
+      icon: 'visibility',
+      text: this.i18n.t('about.visionText'),
+    };
+  }
+
+  get valores() {
+    return [
+      { icon: 'lightbulb', title: this.i18n.t('about.val1Title'), text: this.i18n.t('about.val1Text') },
+      { icon: 'accessibility', title: this.i18n.t('about.val2Title'), text: this.i18n.t('about.val2Text') },
+      { icon: 'verified', title: this.i18n.t('about.val3Title'), text: this.i18n.t('about.val3Text') },
+      { icon: 'groups', title: this.i18n.t('about.val4Title'), text: this.i18n.t('about.val4Text') },
+    ];
+  }
 }

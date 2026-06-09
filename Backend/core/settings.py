@@ -8,8 +8,12 @@ load_dotenv()
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = os.getenv('SECRET_KEY')
-DEBUG = True
-ALLOWED_HOSTS = []
+
+# DEBUG sale del .env (por defecto False = seguro). Poné DEBUG=True solo en local.
+DEBUG = os.getenv('DEBUG', 'False').strip().lower() in ('1', 'true', 'yes')
+
+# Hosts permitidos separados por coma en el .env. En local cae a localhost.
+ALLOWED_HOSTS = [h.strip() for h in os.getenv('ALLOWED_HOSTS', '127.0.0.1,localhost').split(',') if h.strip()]
 
 # Application definition
 INSTALLED_APPS = [
@@ -87,8 +91,15 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 # Modelo de usuario personalizado
 AUTH_USER_MODEL = 'users.Usuario'
 
-# CONFIGURACIÓN DE CORS (La llave maestra)
-CORS_ALLOW_ALL_ORIGINS = True
+# CONFIGURACIÓN DE CORS
+# Si CORS_ALLOWED_ORIGINS está definido en el .env, se usa esa lista (recomendado en prod).
+# Si no, en desarrollo se permite todo para no frenar el trabajo local.
+_cors_origins = [o.strip() for o in os.getenv('CORS_ALLOWED_ORIGINS', '').split(',') if o.strip()]
+if _cors_origins:
+    CORS_ALLOWED_ORIGINS = _cors_origins
+    CORS_ALLOW_ALL_ORIGINS = False
+else:
+    CORS_ALLOW_ALL_ORIGINS = True
 
 # CONFIGURACIÓN DE REST FRAMEWORK Y JWT
 REST_FRAMEWORK = {

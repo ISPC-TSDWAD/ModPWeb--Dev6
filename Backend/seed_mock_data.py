@@ -11,12 +11,17 @@ User = get_user_model()
 admin_user = User.objects.filter(username='admin').first()
 
 if not admin_user:
+    admin_password = os.getenv('SEED_ADMIN_PASSWORD', 'Admin1234!')
     admin_user = User.objects.create_superuser(
-        username='admin',
-        email='admin@edutools.edu.ar',
-        password='Admin1234!'
+        username=os.getenv('SEED_ADMIN_USERNAME', 'admin'),
+        email=os.getenv('SEED_ADMIN_EMAIL', 'admin@edutools.edu.ar'),
+        password=admin_password
     )
-    print("Superusuario 'admin' creado exitosamente.")
+    # create_superuser no setea el rol, así que el campo queda en el default
+    # 'asesor'. Lo forzamos a 'admin' para que coincida con sus permisos.
+    admin_user.rol = 'admin'
+    admin_user.save(update_fields=['rol'])
+    print("Superusuario creado exitosamente. (Cambiá SEED_ADMIN_PASSWORD en el .env)")
 
 mockData = [
       { 
