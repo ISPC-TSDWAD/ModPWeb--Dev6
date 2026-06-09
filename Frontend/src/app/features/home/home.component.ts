@@ -1,9 +1,11 @@
-import { Component, OnInit, inject } from '@angular/core';
-
+import { Component, inject } from '@angular/core';
 import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { RouterLink } from '@angular/router';
-import { ApiService } from '../../core/services/api.service';
-import { TestData } from '../../core/models/api-response.model';
+import emailjs from '@emailjs/browser';
+
+const EMAILJS_SERVICE_ID  = 'service_3y3pw1p';
+const EMAILJS_TEMPLATE_ID = 'template_9vvt6sp';
+const EMAILJS_PUBLIC_KEY  = '9cN1Mkf-LhR9V2aoy';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +25,6 @@ export class HomeComponent {
   mensajeContactoExito: boolean = false;
   enviando: boolean = false;
   mensajeError: string | null = null;
-  private apiService = inject(ApiService);
 
   constructor() {
     this.contactoForm = this.fb.group({
@@ -32,8 +33,6 @@ export class HomeComponent {
       mensaje: ['', [Validators.required, Validators.minLength(10)]]
     });
   }
-
-
 
   abrirModalContacto(): void {
     this.mostrarModalContacto = true;
@@ -48,22 +47,27 @@ export class HomeComponent {
     if (this.contactoForm.valid) {
       this.enviando = true;
       this.mensajeError = null;
-      
-      this.apiService.enviarContacto(this.contactoForm.value).subscribe({
-        next: (res) => {
+
+      const templateParams = {
+        nombre:  this.contactoForm.value.nombre,
+        email:   this.contactoForm.value.email,
+        mensaje: this.contactoForm.value.mensaje,
+      };
+
+      emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, templateParams, EMAILJS_PUBLIC_KEY)
+        .then(() => {
           this.enviando = false;
           this.mensajeContactoExito = true;
           setTimeout(() => {
             this.mensajeContactoExito = false;
             this.cerrarModalContacto();
           }, 3000);
-        },
-        error: (err) => {
+        })
+        .catch((err) => {
           this.enviando = false;
           this.mensajeError = 'Hubo un error al enviar el mensaje. Inténtalo de nuevo más tarde.';
-          console.error('Error al enviar contacto', err);
-        }
-      });
+          console.error('EmailJS error:', err);
+        });
     }
   }
 
@@ -72,3 +76,4 @@ export class HomeComponent {
     return !!control && control.invalid && (control.dirty || control.touched);
   }
 }
+
