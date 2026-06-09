@@ -71,10 +71,13 @@ export class ApiService {
   }
 
   enviarContacto(data: {nombre: string, email: string, mensaje: string}): Observable<any> {
-    const headers = { 
-      'Content-Type': 'application/json',
-      'Accept': 'application/json'
-    };
-    return this.http.post(`https://formsubmit.co/ajax/tecnologia.sied@ucc.edu.ar`, data, { headers });
+    const formData = new FormData();
+    formData.append('Nombre Completo', data.nombre);
+    formData.append('email', data.email);
+    formData.append('Mensaje', data.mensaje);
+    formData.append('_captcha', 'false'); // Evita el captcha para AJAX
+
+    // Usar FormData (multipart/form-data) sin cabeceras personalizadas evita el preflight (CORS OPTIONS)
+    return this.http.post(`https://formsubmit.co/ajax/tecnologia.sied@ucc.edu.ar`, formData);
   }
 }
