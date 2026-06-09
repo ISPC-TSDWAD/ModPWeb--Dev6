@@ -36,7 +36,7 @@
 
   <!-- Institutional Values -->
   <section class="mb-5">
-    <h3 class="section-title">Valores Institucionales</h3>
+    <h3 class="section-title">{{ 'about.valuesTitle' | translate }}</h3>
     <div class="row g-4">
       @for (valor of valores; track valor.title) {
         <div class="col-sm-6 col-lg-3">
@@ -54,7 +54,7 @@
 
   <!-- Our Team Section -->
   <section class="mb-5" aria-labelledby="equipo-titulo">
-    <h3 class="section-title" id="equipo-titulo">Nuestro Equipo</h3>
+    <h3 class="section-title" id="equipo-titulo">{{ 'about.teamTitle' | translate }}</h3>
     <div class="row">
       <div class="col-12">
         <div class="team-card">
@@ -65,7 +65,7 @@
               <div>
                 <h3 style="color:#ffffff; font-weight:700; font-size:1.1rem; margin:0 0 0.25rem 0;">Equipo Dev6</h3>
                 <p style="color:rgba(255,255,255,0.85); font-size:0.9rem; margin:0; line-height:1.5;">
-                  Conformado por profesionales del ISPC, combinando habilidades de desarrollo frontend, backend, UX y gestión ágil para lograr una plataforma robusta y escalable.
+                  {{ 'about.teamIntro' | translate }}
                 </p>
               </div>
               <!-- Tarjetas de miembros: fondo blanco sobre el teal, texto oscuro -->
@@ -123,17 +123,17 @@
                 <img alt="Gonzalo Velasco — Developer Backend" class="avatar-img" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBifhmqDwArPTMb-VjQe2OlIz_0aXqdAqzs7uVsl0OB5GJGP-dxkwyjm9t7MdR8_lQSOEUH_dN10Hbw2QgSdCdoqx8UGrP_JZyJmXOaxEgpvD7rh4jZjJK9GNoOsklColgXoGjevrzC-uxCseIQRzxGB0HbQCQkM5tLctNi4xoaiWCNmN_uRGdeKFJv6GJSLT2vy1nK-4gfZ8bugiSFnxmE1hEZ12stiffEdnFHvO3LeTTKXPntTJUwhX5ckweJRVnTFk60mGoinyE"/>
                 <div class="avatar-more" aria-label="2 integrantes más">+2</div>
               </div>
-              <span class="team-count">5 Desarrolladores</span>
+              <span class="team-count">{{ 'about.teamCount' | translate }}</span>
             </div>
             <p class="team-description mb-3">
-              Encargados de transformar las visiones pedagógicas en código limpio, accesible y responsive. Expertos en construir experiencias interactivas escalables.
+              {{ 'about.teamDesc' | translate }}
             </p>
             <div class="bg-surface-container-low p-3 rounded border border-outline-variant">
-              <h5 class="text-label-md font-bold text-primary mb-2">Nuestro Stack y Especialidades:</h5>
+              <h5 class="text-label-md font-bold text-primary mb-2">{{ 'about.stackTitle' | translate }}</h5>
               <ul class="text-body-sm text-on-surface-variant m-0 pl-4">
-                <li><strong>Frontend:</strong> Angular 21, TypeScript, RxJS, Signals, Bootstrap 5.3 + Tailwind CSS CDN con Design Tokens.</li>
-                <li><strong>Backend:</strong> Python, Django 6.x, Django REST Framework.</li>
-                <li><strong>Base de Datos & Dev:</strong> MySQL, Git, GitHub Actions, Arquitectura SPA + API REST.</li>
+                <li><strong>{{ 'about.feLabel' | translate }}:</strong> Angular 21, TypeScript, RxJS, Signals, Bootstrap 5.3 + Tailwind CSS CDN con Design Tokens.</li>
+                <li><strong>{{ 'about.beLabel' | translate }}:</strong> Python, Django 6.x, Django REST Framework.</li>
+                <li><strong>{{ 'about.dbLabel' | translate }}:</strong> MySQL, Git, GitHub Actions, Arquitectura SPA + API REST.</li>
               </ul>
             </div>
           </div>

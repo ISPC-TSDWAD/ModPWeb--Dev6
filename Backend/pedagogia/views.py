@@ -21,14 +21,14 @@ class RecursoViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         user = self.request.user
-        if getattr(user, 'rol', 'admin') in ['admin', 'maquetador']:
+        if getattr(user, 'rol', 'asesor') in ['admin', 'maquetador']:
             return Recurso.objects.all()
         # Asesores ven plantillas base y sus propias copias
         return Recurso.objects.filter(models.Q(es_plantilla_base=True) | models.Q(creado_por=user))
 
     def perform_create(self, serializer):
         user = self.request.user
-        es_plantilla = getattr(user, 'rol', 'admin') in ['admin', 'maquetador']
+        es_plantilla = getattr(user, 'rol', 'asesor') in ['admin', 'maquetador']
         serializer.save(creado_por=user, es_plantilla_base=es_plantilla)
 
     def update(self, request, *args, **kwargs):

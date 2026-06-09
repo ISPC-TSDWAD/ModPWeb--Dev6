@@ -29,5 +29,5 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     def validate(self, attrs):
         data = super().validate(attrs)
         data['is_staff'] = self.user.is_staff
-        data['rol'] = 'admin' if self.user.is_superuser else getattr(self.user, 'rol', 'admin')
+        data['rol'] = 'admin' if self.user.is_superuser else getattr(self.user, 'rol', 'asesor')
         return data

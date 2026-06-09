@@ -4,6 +4,19 @@ import { Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 import { environment } from '../../../environments/environment';
 
+export interface Recurso {
+  id: number;
+  titulo: string;
+  categoria: string;
+  asignatura: string;
+  html: string;
+  url: string;
+  imagen: string;
+  icono: string;
+  /** HTML en edición dentro del sandbox (se agrega en runtime). */
+  htmlEditado?: string;
+}
+
 @Injectable({
   providedIn: 'root'
 })
@@ -11,7 +24,7 @@ export class ApiService {
   private http = inject(HttpClient);
   private baseUrl = environment.apiUrl;
 
-  private mapRecurso(recurso: any): any {
+  private mapRecurso(recurso: any): Recurso {
     return {
       id: recurso.id,
       titulo: recurso.titulo,
@@ -44,7 +57,7 @@ export class ApiService {
     return this.http.get<any[]>(`${this.baseUrl}pedagogia/asignaturas/`);
   }
 
-  getRecursosMock(): Observable<any[]> {
+  getRecursos(): Observable<Recurso[]> {
     return this.http.get<any[]>(`${this.baseUrl}pedagogia/recursos/`).pipe(
       map(data => data.map(r => this.mapRecurso(r)))
     );
