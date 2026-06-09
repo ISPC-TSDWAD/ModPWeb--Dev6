@@ -177,7 +177,8 @@ for item in mockData:
             'categoria': cat,
             'asignatura': asig,
             'contenido': item['html'],
-            'creado_por': admin_user
+            'creado_por': admin_user,
+            'es_plantilla_base': True
         }
     )
 
