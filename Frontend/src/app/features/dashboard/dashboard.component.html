@@ -421,6 +421,8 @@
                     id="rich-editor"
                     class="bg-white text-black p-lg shadow-sm border border-outline-variant rounded min-h-[400px] outline-primary"
                     contenteditable="true"
+                    dir="ltr"
+                    style="unicode-bidi: plaintext; text-align: left;"
                     (input)="onVisualEdit($event)"
                     [innerHTML]="recursoSeleccionado?.htmlEditado"
                   ></div>
