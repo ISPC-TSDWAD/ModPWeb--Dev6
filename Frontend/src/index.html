@@ -56,6 +56,15 @@
   <style>
     .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
     body { font-family: 'Inter', sans-serif; }
+
+    /* Fix: Forzar dirección LTR en editores de texto enriquecido */
+    #rich-editor,
+    [contenteditable="true"] {
+      direction: ltr !important;
+      unicode-bidi: plaintext !important;
+      text-align: left !important;
+      writing-mode: horizontal-tb !important;
+    }
   </style>
 </head>
 <body>

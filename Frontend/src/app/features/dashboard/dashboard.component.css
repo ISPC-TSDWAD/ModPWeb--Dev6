@@ -1,1 +1,11 @@
 /* dashboard styles */
+
+/* Fix: Forzar dirección LTR (izquierda a derecha) en el editor visual del Sandbox */
+#rich-editor,
+#rich-editor *,
+[contenteditable],
+[contenteditable] * {
+  direction: ltr !important;
+  unicode-bidi: embed !important;
+  text-align: left !important;
+}
