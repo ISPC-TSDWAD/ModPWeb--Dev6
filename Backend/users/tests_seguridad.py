@@ -90,6 +90,14 @@ class EscaladaDePrivilegiosTests(BaseSeguridad):
         self.otro.refresh_from_db()
         self.assertEqual(self.otro.rol, 'maquetador')
 
+    def test_asesor_no_puede_cambiarse_el_rol_a_si_mismo(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.post(f'/api/users/{self.asesor.id}/set-role/', {'rol': 'admin'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.asesor.refresh_from_db()
+        self.assertEqual(self.asesor.rol, 'asesor')
+        self.assertFalse(self.asesor.is_staff)
+
     def test_set_role_admin_cambia_rol_e_is_staff(self):
         self.client.force_authenticate(user=self.admin)
         resp = self.client.post(f'/api/users/{self.otro.id}/set-role/', {'rol': 'admin'}, format='json')
