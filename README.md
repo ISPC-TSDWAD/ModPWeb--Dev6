@@ -106,9 +106,13 @@ python manage.py runserver
 # API disponible en: http://127.0.0.1:8000/api/
 ```
 
-**Credenciales de prueba (Superusuario Django):**
-- **Usuario:** `admin` o **Correo:** `admin@edutools.edu.ar`
-- **Contraseña:** `Admin1234!`
+**Superusuario de desarrollo:** crealo vos con una clave propia (las credenciales no se publican en el repositorio):
+
+```bash
+python manage.py createsuperuser
+```
+
+> Con `createsuperuser` el campo `rol` queda en `asesor` por defecto. Para que tenga permisos de administrador en la API, asignale `rol = 'admin'` desde `python manage.py shell`.
 
 ### Frontend (Angular)
 
