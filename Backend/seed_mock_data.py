@@ -8,12 +8,16 @@ from pedagogia.models import Categoria, Asignatura, Recurso
 from django.contrib.auth import get_user_model
 
 User = get_user_model()
-admin_user = User.objects.filter(username='admin').first()
+seed_username = os.getenv('SEED_ADMIN_USERNAME', 'admin')
+admin_user = User.objects.filter(username=seed_username).first()
 
 if not admin_user:
-    admin_password = os.getenv('SEED_ADMIN_PASSWORD', 'Admin1234!')
+    # SIN contraseña por defecto: si no la definís en el entorno, el seed se detiene.
+    admin_password = os.getenv('SEED_ADMIN_PASSWORD')
+    if not admin_password:
+        raise SystemExit('Definí SEED_ADMIN_PASSWORD en el entorno (clave fuerte) antes de correr el seed.')
     admin_user = User.objects.create_superuser(
-        username=os.getenv('SEED_ADMIN_USERNAME', 'admin'),
+        username=seed_username,
         email=os.getenv('SEED_ADMIN_EMAIL', 'admin@edutools.edu.ar'),
         password=admin_password
     )
