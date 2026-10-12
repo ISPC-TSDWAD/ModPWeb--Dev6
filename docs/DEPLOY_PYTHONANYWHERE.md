@@ -17,7 +17,7 @@ Resultado esperado: `https://<USUARIO>.pythonanywhere.com` (HTTPS incluido, sin 
 
 ## 1. Subir el código
 
-> Importante: el código de seguridad (settings, seed, README) está en la rama `feature/jonathan-guillen-sprint2`. Hay que **pushearla** antes, o el servidor no la va a encontrar.
+> Importante: el código de seguridad (settings, seed, README, logs) está en la rama `feature/jonathan-guillen`. Tiene que estar **pusheada** antes, o el servidor no la va a encontrar.
 
 En PythonAnywhere → **Consoles → Bash**:
 
@@ -25,7 +25,7 @@ En PythonAnywhere → **Consoles → Bash**:
 cd ~
 git clone https://github.com/ISPC-TSDWAD/ModPWeb--Dev6.git
 cd ModPWeb--Dev6
-git checkout feature/jonathan-guillen-sprint2     # cambiar a main cuando se mergee el PR
+git checkout feature/jonathan-guillen     # cambiar a main cuando se mergee el PR
 ```
 
 ## 2. Entorno virtual y dependencias
@@ -159,9 +159,18 @@ exit()
 import os
 import sys
 
+# Si al abrir la web aparece "ModuleNotFoundError", forzar el virtualenv (ajustar la versión de Python):
+venv_site = '/home/<USUARIO>/.virtualenvs/edutools-env/lib/python3.13/site-packages'
+if venv_site not in sys.path:
+    sys.path.insert(0, venv_site)
+
 path = '/home/<USUARIO>/ModPWeb--Dev6/Backend'
 if path not in sys.path:
     sys.path.insert(0, path)
+
+# Ruta explícita al .env: bajo uWSGI el directorio de trabajo NO es el del proyecto.
+from dotenv import load_dotenv
+load_dotenv(os.path.join(path, '.env'))
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'core.settings'
 
@@ -200,10 +209,25 @@ cd Backend
 pip install -r requirements.txt
 python manage.py migrate
 python manage.py collectstatic --noinput
-touch /var/www/<USUARIO>_pythonanywhere_com_wsgi.py     # equivale a apretar Reload
 ```
+
+Y después, en la pestaña **Web**, apretar el botón verde **Reload** (hacer `touch` al archivo WSGI **no** recarga la app en PythonAnywhere).
 
 ## 10. Mantenimiento (cuenta gratuita)
 
 - La web app gratuita **vence al mes**: entrar a la pestaña *Web* y apretar **"Run until 1 month from today"** antes de esa fecha, o la API se cae.
 - Las conexiones MySQL inactivas se cierran a los 5 minutos; `settings.py` ya lo contempla (`CONN_MAX_AGE`).
+
+## 11. Logs de seguridad
+
+La API registra eventos de seguridad en `Backend/logs/security.log` (se puede mover con la variable `LOG_DIR` del `.env`; la carpeta está en `.gitignore`). Formato: `fecha-hora | nivel | user | ip | action | resource | result`.
+
+| `action` | Cuándo se escribe |
+|---|---|
+| `LOGIN` / `LOGIN_FAILED` | inicio de sesión exitoso / fallido (solo el nombre de usuario, nunca la clave) |
+| `ACCESS_DENIED` | 401 (sin token o token inválido) y 403 (sin permiso) |
+| `ROLE_CHANGE` | un administrador cambia el rol de alguien (`POST /api/users/<id>/set-role/`) |
+| `PASSWORD_CHANGE` | cambio de contraseña propio (exitoso o fallido) |
+
+Para mirarlos en el servidor: `tail -n 30 ~/ModPWeb--Dev6/Backend/logs/security.log`.
+Nunca se registran contraseñas, tokens ni cuerpos de pedidos.

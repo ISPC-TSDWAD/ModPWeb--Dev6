@@ -2,10 +2,11 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 
-# Cargamos las variables del archivo .env
-load_dotenv()
-
 BASE_DIR = Path(__file__).resolve().parent.parent
+
+# Cargamos las variables del archivo .env (ruta explícita: en el servidor el
+# directorio de trabajo no es el del proyecto y un load_dotenv() sin ruta no lo encuentra).
+load_dotenv(BASE_DIR / '.env')
 
 # DEBUG sale del .env (por defecto False = seguro). Poné DEBUG=True solo en local.
 DEBUG = os.getenv('DEBUG', 'False').strip().lower() in ('1', 'true', 'yes')
@@ -139,7 +140,9 @@ if not DEBUG:
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': (
         'rest_framework_simplejwt.authentication.JWTAuthentication',
-    )
+    ),
+    # Registra en el log de seguridad los accesos denegados (401/403).
+    'EXCEPTION_HANDLER': 'core.exceptions.security_exception_handler',
 }
 
 from datetime import timedelta
@@ -147,4 +150,41 @@ SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(days=1),
     'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
     'AUTH_HEADER_TYPES': ('Bearer',),
+}
+
+# ---------------------------------------------------------------------------
+# Logs de seguridad
+# Archivo: Backend/logs/security.log (se puede mover con la variable LOG_DIR).
+# Formato: fecha-hora | nivel | user | ip | acción | recurso | resultado
+# NUNCA se registran contraseñas ni tokens (ver users/security_log.py).
+# ---------------------------------------------------------------------------
+LOG_DIR = Path(os.getenv('LOG_DIR') or (BASE_DIR / 'logs'))
+LOG_DIR.mkdir(parents=True, exist_ok=True)
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'security': {
+            'format': '%(asctime)s | %(levelname)s | %(message)s',
+            'datefmt': '%Y-%m-%d %H:%M:%S%z',
+        },
+    },
+    'handlers': {
+        'security_file': {
+            'class': 'logging.handlers.RotatingFileHandler',
+            'filename': str(LOG_DIR / 'security.log'),
+            'maxBytes': 1_000_000,
+            'backupCount': 5,
+            'encoding': 'utf-8',
+            'formatter': 'security',
+        },
+    },
+    'loggers': {
+        'security': {
+            'handlers': ['security_file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
 }
