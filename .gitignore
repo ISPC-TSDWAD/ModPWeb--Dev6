@@ -12,3 +12,6 @@ dist/
 .angular/
 .vscode/
 **/Frontend/.vscode/
+# Bases de datos locales (SQLite)
+*.sqlite3
+Backend/logs/
