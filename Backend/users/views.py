@@ -20,7 +20,7 @@ class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
 
     def post(self, request, *args, **kwargs):
-        # Solo se registra el nombre de usuario: la contraseña NUNCA se loguea.
+        # En el log va solo el usuario, la contraseña nunca.
         username = request.data.get('username', '') if hasattr(request.data, 'get') else ''
         try:
             response = super().post(request, *args, **kwargs)
@@ -79,9 +79,8 @@ class UsuarioViewSet(viewsets.ModelViewSet):
     @action(detail=True, methods=['post'], url_path='set-role')
     def set_role(self, request, pk=None):
         """
-        Cambia el rol de un usuario. Solo administradores (lo exige IsAdminOrOwner
-        para todo POST). Es el ÚNICO camino de la API para cambiar rol / is_staff.
-        Un rol 'admin' implica is_staff=True; los otros roles, is_staff=False.
+        Cambia el rol de un usuario. Solo lo puede hacer un admin.
+        Si el rol nuevo es admin queda is_staff=True, con otro rol queda False.
         """
         objetivo = self.get_object()
         serializer = CambioRolSerializer(data=request.data)

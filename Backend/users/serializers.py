@@ -6,7 +6,7 @@ from .models import Usuario
 
 
 def rol_efectivo(user):
-    """Rol que se informa al cliente: un superusuario siempre es 'admin'."""
+    """Si es superusuario devuelve 'admin', si no devuelve su rol."""
     return 'admin' if user.is_superuser else getattr(user, 'rol', 'asesor')
 
 
@@ -14,10 +14,9 @@ class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
         fields = ['id', 'username', 'email', 'first_name', 'last_name', 'is_staff', 'is_active', 'password', 'rol']
-        # Corrección #18 (escalada de privilegios): estos campos se pueden LEER pero
-        # nunca ESCRIBIR desde este serializer. Si el cliente los manda en un
-        # PATCH/PUT/POST, DRF los ignora. El rol solo cambia por la acción
-        # admin-only `set-role` (queda registrada en el log de seguridad).
+        # Issue #18: estos campos se pueden ver pero no cambiar desde acá.
+        # Si llegan en un PATCH/PUT/POST, DRF los ignora.
+        # El rol se cambia con la acción set-role (solo admin).
         read_only_fields = ['is_staff', 'is_active', 'rol']
         extra_kwargs = {
             'password': {'write_only': True, 'required': False}
@@ -37,16 +36,15 @@ class UsuarioSerializer(serializers.ModelSerializer):
 
 
 class CambioRolSerializer(serializers.Serializer):
-    """Entrada de POST /api/users/<id>/set-role/ (solo administradores)."""
+    """Dato que recibe set-role (solo admin)."""
     rol = serializers.ChoiceField(choices=Usuario.Rol.choices)
 
 
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
     @classmethod
     def get_token(cls, user):
-        # Corrección #19: claims reales DENTRO del JWT (firmados), no solo en el
-        # cuerpo de la respuesta. Así el cliente puede leer rol/is_staff del token
-        # y el servidor puede confiar en ellos porque van firmados con la SECRET_KEY.
+        # Issue #19: agrego rol e is_staff adentro del token.
+        # Van firmados, si alguien los toca el token deja de servir.
         token = super().get_token(user)
         token['is_staff'] = user.is_staff
         token['rol'] = rol_efectivo(user)
@@ -54,7 +52,7 @@ class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
 
     def validate(self, attrs):
         data = super().validate(attrs)
-        # Se mantienen también en el cuerpo para no romper a quien ya los lee de ahí.
+        # Los dejo también en la respuesta para no romper lo que ya los usa.
         data['is_staff'] = self.user.is_staff
         data['rol'] = rol_efectivo(self.user)
         return data

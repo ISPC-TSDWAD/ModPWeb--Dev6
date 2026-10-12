@@ -8,9 +8,9 @@ from users.security_log import registrar
 
 def security_exception_handler(exc, context):
     """
-    Igual que el manejador por defecto de DRF, pero además deja registro de los
-    accesos denegados: 401 (sin token / token inválido) y 403 (sin permiso).
-    El login fallido se registra aparte, en CustomTokenObtainPairView.
+    Hace lo mismo que el manejador de DRF y además anota en el log los
+    accesos denegados: 401 (sin token o token malo) y 403 (sin permiso).
+    El login fallido se anota aparte, en CustomTokenObtainPairView.
     """
     response = exception_handler(exc, context)
     request = context.get('request')

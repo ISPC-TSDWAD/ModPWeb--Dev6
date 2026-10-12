@@ -1,9 +1,9 @@
 """
-Pruebas de las correcciones de seguridad:
-  #18  is_staff / rol / is_active de solo lectura en UsuarioSerializer
-  #19  claims reales (is_staff, rol) dentro del JWT
-  Logs de seguridad: login fallido, acceso denegado, cambio de rol
-Ejecutar:  python manage.py test users
+Pruebas de seguridad:
+  #18  is_staff / rol / is_active solo lectura
+  #19  rol e is_staff dentro del token
+  logs: login fallido, acceso denegado, cambio de rol
+Se corren con: python manage.py test users
 """
 import logging
 
@@ -35,7 +35,7 @@ class BaseSeguridad(TestCase):
 
 
 class EscaladaDePrivilegiosTests(BaseSeguridad):
-    """#18: un usuario normal no puede ascenderse ni reactivarse por PATCH."""
+    """#18: un usuario común no puede hacerse admin con un PATCH."""
 
     def test_patch_propio_no_cambia_is_staff_rol_ni_is_active(self):
         self.client.force_authenticate(user=self.asesor)
@@ -45,7 +45,7 @@ class EscaladaDePrivilegiosTests(BaseSeguridad):
             format='json',
         )
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(resp.json()['first_name'], 'Nuevo')   # el campo de perfil SÍ cambia
+        self.assertEqual(resp.json()['first_name'], 'Nuevo')   # el nombre sí cambia
         self.assertFalse(resp.json()['is_staff'])
         self.assertEqual(resp.json()['rol'], 'asesor')
         self.assertTrue(resp.json()['is_active'])
@@ -80,7 +80,7 @@ class EscaladaDePrivilegiosTests(BaseSeguridad):
         )
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
         nuevo = User.objects.get(username='nuevo')
-        self.assertEqual(nuevo.rol, 'asesor')      # valor por defecto del modelo
+        self.assertEqual(nuevo.rol, 'asesor')      # rol por defecto
         self.assertFalse(nuevo.is_staff)
 
     def test_set_role_solo_admin(self):
@@ -120,10 +120,10 @@ class EscaladaDePrivilegiosTests(BaseSeguridad):
 
 
 class ClaimsJwtTests(BaseSeguridad):
-    """#19: el JWT firmado lleva is_staff y rol."""
+    """#19: el token lleva is_staff y rol."""
 
     def claims(self, access):
-        # Solo para inspeccionar en el test; el servidor SÍ verifica la firma al recibirlo.
+        # En el test solo leo el contenido; el servidor sí revisa la firma.
         return jwt.decode(access, options={'verify_signature': False})
 
     def test_access_token_lleva_rol_y_is_staff_de_asesor(self):

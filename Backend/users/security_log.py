@@ -1,11 +1,11 @@
 """
-Log de seguridad (auditoría).
+Log de seguridad.
 
-Cada línea del archivo security.log tiene:
-    fecha-hora | nivel | user=... | ip=... | action=... | resource=... | result=...
+Cada línea queda así:
+    fecha-hora | nivel | user | ip | action | resource | result
 
-Qué se registra: usuario, IP, acción, recurso (ruta SIN query string) y resultado.
-Qué NO se registra jamás: contraseñas, tokens (access/refresh) ni cuerpos de pedidos.
+Se guarda: usuario, IP, qué hizo, a qué ruta y cómo terminó.
+No se guarda nunca: contraseñas ni tokens.
 """
 import logging
 
@@ -13,14 +13,14 @@ logger = logging.getLogger('security')
 
 
 def _limpio(valor, largo=120):
-    """Evita 'log injection': saca saltos de línea y recorta valores largos."""
+    """Saca saltos de línea y recorta, para que nadie pueda inventar líneas en el log."""
     texto = str(valor if valor not in (None, '') else '-')
     texto = texto.replace('\r', ' ').replace('\n', ' ').replace('|', '/')
     return texto[:largo]
 
 
 def ip_cliente(request):
-    """IP real del cliente (detrás del proxy de PythonAnywhere viene en X-Forwarded-For)."""
+    """IP del cliente. En PythonAnywhere viene en X-Forwarded-For."""
     if request is None:
         return '-'
     forwarded = request.META.get('HTTP_X_FORWARDED_FOR')
@@ -30,7 +30,7 @@ def ip_cliente(request):
 
 
 def registrar(request, accion, recurso, resultado, usuario=None, nivel=logging.INFO):
-    """Escribe un evento de seguridad. `usuario` es un nombre (str) o un User."""
+    """Escribe una línea en el log. `usuario` puede ser un texto o un User."""
     if usuario is None and request is not None:
         usuario = getattr(request, 'user', None)
     if hasattr(usuario, 'is_authenticated'):
