@@ -142,6 +142,14 @@ REST_FRAMEWORK = {
     ),
     # Anota en el log los accesos denegados (401/403).
     'EXCEPTION_HANDLER': 'core.exceptions.security_exception_handler',
+    # Limite de intentos de login (politica PSM-08). Solo afecta a las vistas
+    # que declaran throttle_scope; el resto de la API queda igual.
+    'DEFAULT_THROTTLE_CLASSES': (
+        'rest_framework.throttling.ScopedRateThrottle',
+    ),
+    'DEFAULT_THROTTLE_RATES': {
+        'login': os.getenv('THROTTLE_LOGIN', '10/min'),
+    },
 }
 
 from datetime import timedelta
