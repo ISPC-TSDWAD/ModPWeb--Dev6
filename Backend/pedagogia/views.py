@@ -60,32 +60,40 @@ class RecursoViewSet(viewsets.ModelViewSet):
         instance = self.get_object()
         user = request.user
         if instance.es_plantilla_base and getattr(user, 'rol', '') == 'asesor':
-            # En lugar de actualizar, creamos una copia personal para el asesor
+            # En lugar de actualizar, creamos una copia personal para el asesor.
+            # La copia conserva todo lo que el asesor edito (titulo, descripcion,
+            # tipo, contenido, url, categoria y asignatura); lo que no mando se
+            # hereda de la plantilla. Se valida igual que en el alta, asi que el
+            # contenido con scripts tambien se rechaza aca. Los campos de solo
+            # lectura (creado_por, es_plantilla_base, copia_de) los ignora el
+            # serializer y los fijamos nosotros.
+            serializer = self.get_serializer(data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            cambios = serializer.validated_data
+
+            def valor(campo):
+                return cambios[campo] if campo in cambios else getattr(instance, campo)
+
+            titulo = cambios.get('titulo')
+            if not titulo or titulo == instance.titulo:
+                titulo = instance.titulo + " (Mi Copia)"
+
             nuevo_recurso = Recurso.objects.create(
-                titulo=instance.titulo + " (Mi Copia)",
-                descripcion=instance.descripcion,
-                tipo=instance.tipo,
-                contenido=self._contenido_pedido(request, instance),
-                url=instance.url,
-                categoria=instance.categoria,
-                asignatura=instance.asignatura,
+                titulo=titulo,
+                descripcion=valor('descripcion'),
+                tipo=valor('tipo'),
+                contenido=valor('contenido'),
+                url=valor('url'),
+                categoria=valor('categoria'),
+                asignatura=valor('asignatura'),
                 creado_por=user,
                 es_plantilla_base=False,
                 copia_de=instance
             )
-            serializer = self.get_serializer(nuevo_recurso)
-            return Response(serializer.data, status=status.HTTP_201_CREATED)
-        
-        return super().update(request, *args, **kwargs)
+            return Response(self.get_serializer(nuevo_recurso).data,
+                            status=status.HTTP_201_CREATED)
 
-    def _contenido_pedido(self, request, instance):
-        """El contenido que manda el asesor, validado igual que en el alta."""
-        contenido = request.data.get('contenido')
-        if contenido is None:
-            return instance.contenido
-        serializer = self.get_serializer(data={'contenido': contenido}, partial=True)
-        serializer.is_valid(raise_exception=True)
-        return serializer.validated_data.get('contenido', instance.contenido)
+        return super().update(request, *args, **kwargs)
 
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
