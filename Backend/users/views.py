@@ -18,6 +18,9 @@ from .serializers import (
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
+    # Corta la fuerza bruta sobre el login: 10 intentos por minuto y origen
+    # (politica PSM-08). El numero sale de DEFAULT_THROTTLE_RATES en settings.
+    throttle_scope = 'login'
 
     def post(self, request, *args, **kwargs):
         # En el log va solo el usuario, la contraseña nunca.
