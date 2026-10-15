@@ -3,6 +3,7 @@ from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
 from .models import Usuario
+from .password_rules import mensaje_password
 
 
 def rol_efectivo(user):
@@ -21,6 +22,13 @@ class UsuarioSerializer(serializers.ModelSerializer):
         extra_kwargs = {
             'password': {'write_only': True, 'required': False}
         }
+
+    def validate_password(self, valor):
+        # Vale para el alta y para la edicion: la API tambien exige la regla robusta.
+        falta = mensaje_password(valor)
+        if falta:
+            raise serializers.ValidationError(falta)
+        return valor
 
     def create(self, validated_data):
         if 'password' in validated_data:

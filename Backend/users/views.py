@@ -7,6 +7,7 @@ from rest_framework.response import Response
 from rest_framework_simplejwt.views import TokenObtainPairView
 
 from .models import Usuario
+from .password_rules import mensaje_password
 from .permissions import IsAdminOrOwner
 from .security_log import registrar
 from .serializers import (
@@ -69,11 +70,9 @@ class UsuarioViewSet(viewsets.ModelViewSet):
                 {'detail': 'La contraseña actual es incorrecta.'},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-        if len(nueva) < 6:
-            return Response(
-                {'detail': 'La nueva contraseña debe tener al menos 6 caracteres.'},
-                status=status.HTTP_400_BAD_REQUEST,
-            )
+        falta = mensaje_password(nueva)
+        if falta:
+            return Response({'detail': falta}, status=status.HTTP_400_BAD_REQUEST)
         user.set_password(nueva)
         user.save()
         registrar(request, 'PASSWORD_CHANGE', request.path, 'exitoso')

@@ -222,3 +222,84 @@ class LimiteDeLoginTests(TestCase):
             codigos.append(respuesta.status_code)
         self.assertIn(status.HTTP_429_TOO_MANY_REQUESTS, codigos)
         self.assertEqual(codigos[0], status.HTTP_401_UNAUTHORIZED)
+
+
+class CopiaDePlantillaTests(BaseSeguridadTests):
+    """Lo que el asesor edita en una plantilla base queda en su copia."""
+
+    def setUp(self):
+        super().setUp()
+        self.otra_categoria = Categoria.objects.create(nombre='Otra categoria')
+        self.otra_asignatura = Asignatura.objects.create(nombre='Otra asignatura')
+        self.plantilla = Recurso.objects.create(
+            titulo='Plantilla base', descripcion='Descripcion base', tipo='video',
+            url='https://ejemplo.com/base', contenido='<p>base</p>',
+            categoria=self.categoria, asignatura=self.asignatura,
+            creado_por=self.maquetador, es_plantilla_base=True)
+        self.client.force_authenticate(user=self.asesor)
+
+    def test_la_copia_conserva_los_cambios_permitidos_y_no_toca_la_base(self):
+        resp = self.client.put(
+            f'/api/pedagogia/recursos/{self.plantilla.id}/',
+            {'titulo': 'Mi version', 'descripcion': 'Mi descripcion', 'tipo': 'lectura',
+             'url': 'https://ejemplo.com/mia', 'contenido': '<p>mia</p>',
+             'categoria': self.otra_categoria.id, 'asignatura': self.otra_asignatura.id},
+            format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+        copia = Recurso.objects.get(id=resp.data['id'])
+        self.assertEqual(copia.titulo, 'Mi version')
+        self.assertEqual(copia.descripcion, 'Mi descripcion')
+        self.assertEqual(copia.tipo, 'lectura')
+        self.assertEqual(copia.url, 'https://ejemplo.com/mia')
+        self.assertEqual(copia.contenido, '<p>mia</p>')
+        self.assertEqual(copia.categoria, self.otra_categoria)
+        self.assertEqual(copia.asignatura, self.otra_asignatura)
+        self.assertEqual(copia.creado_por, self.asesor)
+        self.assertEqual(copia.copia_de, self.plantilla)
+        self.assertFalse(copia.es_plantilla_base)
+
+        self.plantilla.refresh_from_db()
+        self.assertEqual(self.plantilla.titulo, 'Plantilla base')
+        self.assertEqual(self.plantilla.descripcion, 'Descripcion base')
+        self.assertEqual(self.plantilla.url, 'https://ejemplo.com/base')
+        self.assertEqual(self.plantilla.categoria, self.categoria)
+        self.assertEqual(self.plantilla.contenido, '<p>base</p>')
+
+    def test_con_patch_lo_que_no_se_manda_se_hereda_de_la_plantilla(self):
+        resp = self.client.patch(
+            f'/api/pedagogia/recursos/{self.plantilla.id}/',
+            {'descripcion': 'Solo cambio esto'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        copia = Recurso.objects.get(id=resp.data['id'])
+        self.assertEqual(copia.descripcion, 'Solo cambio esto')
+        self.assertEqual(copia.titulo, 'Plantilla base (Mi Copia)')
+        self.assertEqual(copia.url, 'https://ejemplo.com/base')
+        self.assertEqual(copia.contenido, '<p>base</p>')
+        self.assertEqual(copia.categoria, self.categoria)
+
+    def test_si_manda_el_mismo_titulo_se_distingue_la_copia(self):
+        resp = self.client.put(
+            f'/api/pedagogia/recursos/{self.plantilla.id}/',
+            {'titulo': 'Plantilla base', 'categoria': self.categoria.id,
+             'asignatura': self.asignatura.id}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(resp.data['titulo'], 'Plantilla base (Mi Copia)')
+
+    def test_una_categoria_inexistente_se_rechaza_y_no_crea_nada(self):
+        cantidad = Recurso.objects.count()
+        resp = self.client.patch(
+            f'/api/pedagogia/recursos/{self.plantilla.id}/', {'categoria': 99999}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(Recurso.objects.count(), cantidad)
+
+    def test_no_puede_ascender_la_copia_mandando_campos_de_solo_lectura(self):
+        resp = self.client.patch(
+            f'/api/pedagogia/recursos/{self.plantilla.id}/',
+            {'descripcion': 'x', 'es_plantilla_base': True, 'copia_de': None,
+             'creado_por': self.maquetador.id}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        copia = Recurso.objects.get(id=resp.data['id'])
+        self.assertFalse(copia.es_plantilla_base)
+        self.assertEqual(copia.copia_de, self.plantilla)
+        self.assertEqual(copia.creado_por, self.asesor)

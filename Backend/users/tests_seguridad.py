@@ -219,3 +219,89 @@ class LogsDeSeguridadTests(BaseSeguridad):
             self.client.post('/api/token/', {'username': 'x\nfake | action=ROLE_CHANGE', 'password': 'a'}, format='json')
         for linea in cm.output:
             self.assertNotIn('\n', linea)
+
+
+class PerfilesAjenosTests(BaseSeguridad):
+    """Un usuario comun no consulta los datos de otra persona."""
+
+    def test_asesor_no_puede_leer_el_perfil_de_otro(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.get(f'/api/users/{self.otro.id}/')
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertNotIn('email', resp.json())
+
+    def test_asesor_si_puede_leer_su_propio_perfil(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.get(f'/api/users/{self.asesor.id}/')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(resp.json()['username'], 'ase_test')
+
+    def test_asesor_no_puede_listar_usuarios(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.get('/api/users/')
+        self.assertEqual(resp.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_admin_si_puede_leer_cualquier_perfil(self):
+        self.client.force_authenticate(user=self.admin)
+        resp = self.client.get(f'/api/users/{self.otro.id}/')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+
+
+class PasswordRobustaEnLaApiTests(BaseSeguridad):
+    """La regla de la app (mas de 8, letra, numero y especial) tambien la exige la API."""
+
+    DEBILES = {
+        'corta': 'Ab1!',
+        'justo_8': 'Abcde1!x',
+        'sin_numero': 'Abcdefgh!',
+        'sin_letra': '123456789!',
+        'sin_especial': 'Abcdefgh1',
+    }
+
+    def test_alta_rechaza_las_contrasenas_debiles(self):
+        self.client.force_authenticate(user=self.admin)
+        for nombre, clave in self.DEBILES.items():
+            with self.subTest(nombre):
+                resp = self.client.post(
+                    '/api/users/', {'username': f'u_{nombre}', 'password': clave}, format='json')
+                self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+                self.assertIn('password', resp.json())
+                self.assertFalse(User.objects.filter(username=f'u_{nombre}').exists())
+
+    def test_alta_acepta_una_contrasena_robusta(self):
+        self.client.force_authenticate(user=self.admin)
+        resp = self.client.post(
+            '/api/users/', {'username': 'robusto', 'password': CLAVE_TEST}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+
+    def test_edicion_rechaza_una_contrasena_debil(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.patch(
+            f'/api/users/{self.asesor.id}/', {'password': 'abcdefghi'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.asesor.refresh_from_db()
+        self.assertTrue(self.asesor.check_password(CLAVE_TEST))   # no cambio
+
+    def test_change_password_rechaza_la_de_seis_caracteres(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.post(
+            '/api/users/change-password/', {'actual': CLAVE_TEST, 'nueva': 'abc123'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.asesor.refresh_from_db()
+        self.assertTrue(self.asesor.check_password(CLAVE_TEST))
+
+    def test_change_password_dice_que_le_falta(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.post(
+            '/api/users/change-password/', {'actual': CLAVE_TEST, 'nueva': 'Abcdefgh1'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn('especial', resp.json()['detail'])
+
+    def test_change_password_acepta_una_robusta(self):
+        self.client.force_authenticate(user=self.asesor)
+        resp = self.client.post(
+            '/api/users/change-password/',
+            {'actual': CLAVE_TEST, 'nueva': 'Otra-Clave-77#'}, format='json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.asesor.refresh_from_db()
+        self.assertTrue(self.asesor.check_password('Otra-Clave-77#'))
